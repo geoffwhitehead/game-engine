@@ -16,10 +16,11 @@
 
 int r;
 
-GameAudio::GameAudio(AudioManager* am, GameEvents* ge)
+GameAudio::GameAudio(AudioManager* am, IOManager* iom, GameEvents* ge)
 {
 	this->am = am;
 	this->ge = ge;
+	this->iom = iom;
 }
 
 

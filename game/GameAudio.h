@@ -7,7 +7,7 @@ class GameAudio :
 	public SubSystem
 {
 public:
-	GameAudio(AudioManager* am, GameEvents* ge);
+	GameAudio(AudioManager* am, IOManager* iom, GameEvents* ge);
 	~GameAudio();
 
 	void init();
@@ -21,5 +21,6 @@ public:
 private:
 	AudioManager* am;
 	GameEvents* ge;
+	IOManager* iom;
 };
 

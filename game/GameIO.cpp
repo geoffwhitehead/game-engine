@@ -2,8 +2,8 @@
 
 
 
-GameIO::GameIO(CollisionManager* cm, string root_dir) : IOManager(root_dir){
-	this->cm = cm;
+GameIO::GameIO(string root_dir) : IOManager(root_dir){
+	
 }
 
 
@@ -38,23 +38,24 @@ void GameIO::loadEntities() {
 		);
 
 		e->setMass(level["entities"][i]["mass"].asFloat());
-
+		e->is_collidable = level["entities"][i]["collidable"].asBool();
 		if (level["entities"][i]["hidden"].asBool() == true) {
 			e->is_renderable = false;
 		}
 
 		if (level["entities"][i]["collidable"].asBool()) {
-			
-			if (level["entities"][i]["collision_object"].asString() == "CIRCLE")
-				cm->addObject(e, level["entities"][i]["collision_radius"].asFloat());
-			if (level["entities"][i]["collision_object"].asString() == "PLANE")
-				cm->addObject(e, e->getPhysicsObject()->getPos().Length(),
+			if (level["entities"][i]["collision_object"].asString() == "CIRCLE") {
+				e->getPhysicsObject()->setRef(new Circle(level["entities"][i]["collision_radius"].asFloat()));
+			} 
+			else if (level["entities"][i]["collision_object"].asString() == "PLANE") {
+				e->getPhysicsObject()->setRef(new Plane(e->getPhysicsObject()->getPos().Length(),
 					Vector3(
 						level["entities"][i]["normal"][0].asFloat(),
 						level["entities"][i]["normal"][1].asFloat(),
 						level["entities"][i]["normal"][2].asFloat()
-					));
-		
+					)
+				));
+			}
 		}
 		in_entity.push_back(e);
 	}

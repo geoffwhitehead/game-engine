@@ -9,6 +9,7 @@ public:
 	~EventManager();
 	void update(float);
 	void destroy();
+
 	void init();
 	void addSubSystem(SubSystem*);
 

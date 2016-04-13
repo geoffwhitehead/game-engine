@@ -3,7 +3,6 @@
 #include "../nclgl/Matrix4.h"
 #include "Mesh.h"
 #include "Shader.h"
-#include "../nclgl/OGLRenderer.h"
 #include "Camera.h"
 
 class RenderObject	{

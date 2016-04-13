@@ -4,6 +4,8 @@
 #include <vector>
 #include "../_resources/jsoncpp/include/json/json.h"
 #include "../engine-base/Entity.h"
+#include "../engine-physics/Plane.h"
+#include "../engine-physics/Circle.h"
 
 
 using namespace std;

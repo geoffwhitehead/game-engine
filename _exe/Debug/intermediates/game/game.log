@@ -1,47 +1,4 @@
 ﻿  main.cpp
 c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  GameLogic.cpp
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(3): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(59): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(73): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(86): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(102): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(112): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(122): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(142): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(152): warning C4305: 'argument': truncation from 'double' to 'const float'
-  GameInput.cpp
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gameinput.cpp(42): warning C4018: '<': signed/unsigned mismatch
-  GameIO.cpp
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gameio.cpp(15): warning C4018: '<': signed/unsigned mismatch
-  GameEvents.cpp
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gameevents.cpp(22): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gameevents.cpp(25): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gameevents.cpp(29): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gameevents.cpp(62): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gameevents.cpp(79): warning C4018: '<': signed/unsigned mismatch
-  GameAudio.cpp
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gameaudio.cpp(41): warning C4018: '<': signed/unsigned mismatch
-  CollisionResponse.cpp
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\collisionresponse.cpp(37): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-GameIO.obj : error LNK2019: unresolved external symbol "public: __thiscall IOManager::IOManager(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (??0IOManager@@QAE@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) referenced in function "public: __thiscall GameIO::GameIO(class CollisionManager *,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (??0GameIO@@QAE@PAVCollisionManager@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
-GameIO.obj : error LNK2019: unresolved external symbol "public: virtual __thiscall IOManager::~IOManager(void)" (??1IOManager@@UAE@XZ) referenced in function "public: virtual __thiscall GameIO::~GameIO(void)" (??1GameIO@@UAE@XZ)
-GameIO.obj : error LNK2019: unresolved external symbol "public: unsigned int __thiscall IOManager::findTexture(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?findTexture@IOManager@@QAEIV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) referenced in function "public: virtual void __thiscall GameIO::loadEntities(void)" (?loadEntities@GameIO@@UAEXXZ)
-GameIO.obj : error LNK2019: unresolved external symbol "public: class Mesh * __thiscall IOManager::findMesh(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?findMesh@IOManager@@QAEPAVMesh@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) referenced in function "public: virtual void __thiscall GameIO::loadEntities(void)" (?loadEntities@GameIO@@UAEXXZ)
-GameIO.obj : error LNK2019: unresolved external symbol "public: class Shader * __thiscall IOManager::findShader(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?findShader@IOManager@@QAEPAVShader@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) referenced in function "public: virtual void __thiscall GameIO::loadEntities(void)" (?loadEntities@GameIO@@UAEXXZ)
-engine-base.lib(GameManager.obj) : error LNK2019: unresolved external symbol "public: void __thiscall IOManager::load(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?load@IOManager@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) referenced in function "public: void __thiscall GameManager::loadLevel(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?loadLevel@GameManager@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
-C:\Users\Geoff\Source\Repos\game-engine\\_exe\Debug\game.exe : fatal error LNK1120: 6 unresolved externals
+  game.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\\_exe\Debug\game.exe

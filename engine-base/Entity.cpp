@@ -7,24 +7,27 @@ Entity::Entity(){
 	this->physicsObject = nullptr;
 }
 
-Entity::Entity(string name, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel, Mesh* mesh, Shader* shader, GLuint texture){
+Entity::Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel, Mesh* mesh, Shader* shader, GLuint texture){
 	
 	this->name = name;
 	this->group = group;
+	this->str_parent = str_parent;
 	this->sub_group = sub_group;
 	this->renderObject = new RenderObject(pos, mesh, shader, texture);;
 	this->physicsObject = new PhysicsObject(pos, acc, vel, renderObject);
 }
 
-Entity::Entity(string name, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel, Mesh* mesh, Shader* shader){
+Entity::Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel, Mesh* mesh, Shader* shader){
 	this->name = name;
+	this->str_parent = str_parent;
 	this->group = group;
 	this->sub_group = sub_group;
 	this->renderObject = new RenderObject(pos, mesh, shader);;
 	this->physicsObject = new PhysicsObject(pos, acc, vel, renderObject);
 }
-Entity::Entity(string name, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel){
+Entity::Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel){
 	this->name = name;
+	this->str_parent = str_parent;
 	this->group = group;
 	this->sub_group = sub_group;
 	this->renderObject = nullptr;
@@ -75,7 +78,7 @@ void Entity::render(Renderer* renderer){
 
 void Entity::addChild(Entity *child) {
 	children.push_back(child);
-	child->parent = this;
+	child->e_parent = this;
 	child->renderObject->setParent(this->renderObject);
 }
 vector<Entity*> Entity::getChildren(){

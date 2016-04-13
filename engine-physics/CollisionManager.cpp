@@ -1,8 +1,8 @@
 #include "CollisionManager.h"
 
 
-CollisionManager::CollisionManager()
-{
+CollisionManager::CollisionManager(GameManager* gm){
+	this->gm = gm;
 }
 
 
@@ -10,7 +10,21 @@ CollisionManager::~CollisionManager()
 {
 }
 
+void CollisionManager::searchForCollidableEntities(vector<Entity*> entities) {
+	for (int i = 0; i < entities.size(); i++) {
+		if (entities[i]->getChildren().size() > 0) {
+			searchForCollidableEntities(entities[i]->getChildren());
+		}
+		if (entities[i]->is_collidable) {
+			addObject(entities[i]);
+		}
+	}
+}
+
 void CollisionManager::init(){
+
+	searchForCollidableEntities(gm->entities);
+
 	for (int i = 0; i < sub_systems.size(); i++) {
 		sub_systems[i]->init();
 	}
@@ -138,6 +152,22 @@ void CollisionManager::destroy(){
 
 }
 
+// determine where to place based on whether exist 
+void CollisionManager::addObject(Entity* entity) {
+
+	if (typeid(*entity->getPhysicsObject()->getRef()) == typeid(Circle)) {
+		collidableSpheres.push_back(entity);
+	}
+	else if (typeid(*entity->getPhysicsObject()->getRef()) == typeid(Plane)) {
+		collidablePlanes.push_back(entity);
+	}
+	else {
+		cout << "collidable type not found";
+		exit(1);
+	}
+}
+
+/*
 // add circle to the collision manager to enable it to be factored into collision checks
 void CollisionManager::addObject(Entity* entity, float radius){
 	Shape* s = new Circle(radius);
@@ -151,7 +181,7 @@ void CollisionManager::addObject(Entity* entity, float distance, Vector3 normal)
 	entity->getPhysicsObject()->setRef(p);
 	collidablePlanes.push_back(entity);
 }
-
+*/
 // remove an entity from the collision manager so that it isnt factored into collision checks
 void CollisionManager::removeEntity(Entity* e){
 	collidableSpheres.erase(std::remove(collidableSpheres.begin(), collidableSpheres.end(), e), collidableSpheres.end());

@@ -35,8 +35,20 @@ void GameManager::loadLevel(string file_name) {
 	iom->load(file_name);
 
 	// register entities
-	for (auto iterator = iom->in_entity.begin(); iterator != iom->in_entity.end(); iterator++)
-		addEntity(*iterator);
+
+	for (int i = 0; i < iom->in_entity.size(); i++) {
+		if (iom->in_entity[i]->str_parent == "") { // no parent
+			addEntity(iom->in_entity[i]);
+		}
+		else {
+			for (int j = 0; j < iom->in_entity.size(); j++) {
+				if (iom->in_entity[j]->name == iom->in_entity[i]->str_parent){ // no parent
+					iom->in_entity[j]->addChild(iom->in_entity[i]);
+					break;
+				}
+			}
+		}
+	}
 }
 
 Entity* GameManager::getEntityByName(string name_to_find, string parent_name) {
