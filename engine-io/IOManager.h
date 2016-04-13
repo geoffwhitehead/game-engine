@@ -1,16 +1,15 @@
 #pragma once
-//#include "../engine-base/Entity.h"
-#include "../_resources/jsoncpp/dist/json/json.h"
+
 #include <string>
 #include <vector>
-#include "../engine-base/Mesh.h"
-#include "../engine-base/Shader.h"
+#include "../_resources/jsoncpp/include/json/json.h"
+#include "../engine-base/Entity.h"
+
 
 using namespace std;
 
-class Entity;
-
 class IOManager {
+	
 	
 public:
 	struct AudioObject {

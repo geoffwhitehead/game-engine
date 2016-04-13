@@ -59,7 +59,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>irrKlang.lib;engine-audio.lib;engine-base.lib;engine-input.lib;engine-physics.lib;nclgl.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>engine-io.lib;irrKlang.lib;engine-audio.lib;engine-base.lib;engine-input.lib;engine-physics.lib;nclgl.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CollisionResponse.h" />
+    <ClInclude Include="derived.h" />
     <ClInclude Include="GameAudio.h" />
     <ClInclude Include="GameEvents.h" />
     <ClInclude Include="GameInput.h" />
@@ -88,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionResponse.cpp" />
+    <ClCompile Include="derived.cpp" />
     <ClCompile Include="GameAudio.cpp" />
     <ClCompile Include="GameEvents.cpp" />
     <ClCompile Include="GameInput.cpp" />

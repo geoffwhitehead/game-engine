@@ -1,13 +1,10 @@
 #pragma once
-#include <vector>
-#include "../engine-base/SystemManager.h"
-#include "../engine-base/SubSystem.h"
 #include "../engine-base/Entity.h"
-#include <algorithm>
-#include "Circle.h"
-#include "Rectangle.h"
-#include "Plane.h"
+#include "../engine-base/SystemManager.h"
 #include <map>
+#include "Circle.h"
+#include "Plane.h"
+#include <algorithm>
 
 class CollisionManager :
 	public SystemManager

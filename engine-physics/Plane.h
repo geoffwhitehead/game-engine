@@ -1,6 +1,6 @@
 #pragma once
 #include "Shape.h"
-#include "../engine-base/PhysicsObject.h"
+#include "../nclgl/Vector3.h"
 class Plane :
 	public Shape
 {

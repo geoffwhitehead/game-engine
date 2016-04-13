@@ -1,7 +1,7 @@
 #pragma once
 #include "../engine-io/IOManager.h"
 #include "../engine-base/Entity.h"
-//#include "../engine-physics/CollisionManager.h"
+#include "../engine-physics/CollisionManager.h"
 
 class CollisionManager;
 

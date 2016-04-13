@@ -11,10 +11,10 @@ GameIO::~GameIO() {
 }
 
 void GameIO::loadEntities() {
-
 	for (int i = 0; i < level["entities"].size(); i++) {
 		Entity *e = new Entity(
 			level["entities"][i]["name"].asString(),
+			level["entities"][i]["parent"].asString(),
 			level["entities"][i]["group"].asString(),
 			level["entities"][i]["subgroup"].asString(),
 			Vector3(
@@ -32,9 +32,9 @@ void GameIO::loadEntities() {
 				level["entities"][i]["velocity"][1].asFloat(),
 				level["entities"][i]["velocity"][2].asFloat()
 			),
-			IOManager::findMesh(level["entities"][i]["mesh"].asString()),
-			IOManager::findShader(level["entities"][i]["shader"].asString()),
-			IOManager::findTexture(level["entities"][i]["texture"].asString())
+			findMesh(level["entities"][i]["mesh"].asString()),
+			findShader(level["entities"][i]["shader"].asString()),
+			findTexture(level["entities"][i]["texture"].asString())
 		);
 
 		e->setMass(level["entities"][i]["mass"].asFloat());
@@ -44,7 +44,7 @@ void GameIO::loadEntities() {
 		}
 
 		if (level["entities"][i]["collidable"].asBool()) {
-			/*
+			
 			if (level["entities"][i]["collision_object"].asString() == "CIRCLE")
 				cm->addObject(e, level["entities"][i]["collision_radius"].asFloat());
 			if (level["entities"][i]["collision_object"].asString() == "PLANE")
@@ -54,13 +54,8 @@ void GameIO::loadEntities() {
 						level["entities"][i]["normal"][1].asFloat(),
 						level["entities"][i]["normal"][2].asFloat()
 					));
-		*/
+		
 		}
-		/*
-		if (level["entities"][i]["parent"].asString() == "")
-			map_entities.insert(pair<string, Entity*>(level["entities"][i]["name"].asString(), e));
-		else
-			map_entities[level["entities"][i]["parent"].asString()]->addChild(e);
-		*/
+		in_entity.push_back(e);
 	}
 }

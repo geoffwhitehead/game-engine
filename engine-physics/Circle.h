@@ -1,6 +1,5 @@
 #pragma once
 #include "Shape.h"
-#include "../engine-base/PhysicsObject.h"
 
 class Circle : public Shape
 {

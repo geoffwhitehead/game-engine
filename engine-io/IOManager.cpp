@@ -49,22 +49,19 @@ void IOManager::loadMeshes() {
 			float y = level["meshes"][i]["y"].asFloat();
 			mesh = Mesh::GenerateQuad(x, y);
 		}
-
 		in_mesh.push_back(pair<string, Mesh*>(level["meshes"][i]["name"].asString(), mesh));
 	}
 }
 
 void IOManager::loadShaders() {
 	for (int i = 0; i < level["shaders"].size(); i++) {
-
-
 		Shader* shader;
 
 		string name = level["shaders"][i]["name"].asString();
 		string vert = level["shaders"][i]["vert"].asString();
 		string frag = level["shaders"][i]["frag"].asString();
 
-		in_shader.push_back(pair<string, Shader*>(name, shader));
+		in_shader.push_back(pair<string, Shader*>(name, new Shader(vert, frag)));
 	}
 }
 
@@ -82,15 +79,16 @@ void IOManager::loadAudio() {
 void IOManager::load(string file_name) {
 	//clearLevel();
 	setLevel(file_name);
-	loadAudio;
-	loadEntities;
-	loadMeshes;
-	loadShaders;
-	loadTextures;
+	loadAudio();
+	loadMeshes();
+	loadShaders();
+	loadTextures();
+	loadEntities(); // load entities last as it requires the others
 }
 
 void IOManager::setLevel(std::string path_to_level) {
-	std::string data = root_dir + level_path;
+	//std::string data = root_dir + level_path;
+	std::string data = "./levels/data.json";
 	Json::Reader reader;
 	ifstream fs(data);
 	if (!fs) cout << "Failed to read from path.";
@@ -146,25 +144,37 @@ GLuint IOManager::LoadTexture(const char* filename, bool textureRepeating) {
 }
 
 GLuint IOManager::findTexture(string name) {
-	for (int i = 0; i < in_tex.size(); i++) {
-		if (in_tex[i].first == name) {
-			return in_tex[i].second;
+	if (name != "") {
+		for (int i = 0; i < in_tex.size(); i++) {
+			if (in_tex[i].first == name) {
+				return in_tex[i].second;
+			}
 		}
+		cout << "a texture of this name wasnt found - exiting" << endl;
+		exit(1);
 	}
 }
 
 Mesh* IOManager::findMesh(string name) {
-	for (int i = 0; i < in_mesh.size(); i++) {
-		if (in_mesh[i].first == name) {
-			return in_mesh[i].second;
+	if (name != "") {
+		for (int i = 0; i < in_mesh.size(); i++) {
+			if (in_mesh[i].first == name) {
+				return in_mesh[i].second;
+			}
 		}
+		cout << "a mesh of this name wasnt found - exiting" << endl;
+		exit(1);
 	}
 }
 
 Shader* IOManager::findShader(string name) {
-	for (int i = 0; i < in_shader.size(); i++) {
-		if (in_shader[i].first == name) {
-			return in_shader[i].second;
+	if (name != "") {
+		for (int i = 0; i < in_shader.size(); i++) {
+			if (in_shader[i].first == name) {
+				return in_shader[i].second;
+			}
 		}
+		cout << "a shader of this name wasnt found - exiting" << endl;
+		exit(1);
 	}
 }
