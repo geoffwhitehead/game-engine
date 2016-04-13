@@ -1,0 +1,5 @@
+﻿  GameAudio.cpp
+c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gameaudio.cpp(41): warning C4018: '<': signed/unsigned mismatch
+  game.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\\_exe\Debug\game.exe
