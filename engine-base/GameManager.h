@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Renderer.h"
 #include "SystemManager.h"
+#include "../engine-io/IOManager.h"
 
 // init gm with reference to input handler, ui, camera, audio, memory manager 
 
@@ -19,16 +20,24 @@ public:
 	Window* getWindow();
 	vector<Entity*>* getEntities();
 	Entity* getEntityByName(string child_name, string parent_name = "");
-
-	GLuint LoadTexture(const char* filename, bool textureRepeating = true);
+	void addFileInput(IOManager* iom);
+	void loadLevel(string file_name);
 
 private:
 	Window window;
 	Renderer renderer;
-	vector<Entity*> entities;
-	vector<GLuint> textures;
+	IOManager* iom;
+
+
 	vector<SystemManager*> system_managers;
 
-	
+	// these are storage containers that are rarely used, for this reason ive used maps
+
+
+	vector<Mesh*> meshes;
+	vector<std::pair<string, GLuint>> textures;
+	vector<Shader*> shaders;
+	vector<Entity*> entities;
+	vector<IOManager::AudioObject> audio;
 };
 

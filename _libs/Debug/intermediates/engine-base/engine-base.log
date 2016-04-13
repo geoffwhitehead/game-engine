@@ -1,4 +1,8 @@
-﻿  Entity.cpp
+﻿  GameManager.cpp
 c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(4): warning C4244: 'argument': conversion from 'float' to 'uint', possible loss of data
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(44): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(51): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(53): warning C4018: '<': signed/unsigned mismatch
   engine-base.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-base.lib

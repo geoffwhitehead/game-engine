@@ -27,6 +27,18 @@ vector<Entity*>* GameManager::getEntities() {
 	return &entities;
 }
 
+void GameManager::addFileInput(IOManager* iom) {
+	this->iom = iom;
+}
+
+void GameManager::loadLevel(string file_name) {
+	iom->load(file_name);
+
+	// register entities
+	for (auto iterator = iom->in_entity.begin(); iterator != iom->in_entity.end(); iterator++)
+		addEntity(*iterator);
+}
+
 Entity* GameManager::getEntityByName(string name_to_find, string parent_name) {
 	if (parent_name == "") {
 		for (int i = 0; i < entities.size(); i++) {
@@ -51,6 +63,8 @@ Entity* GameManager::getEntityByName(string name_to_find, string parent_name) {
 
 void GameManager::run(){
 	
+	
+
 	for (vector<SystemManager*>::iterator system = system_managers.begin(); system != system_managers.end(); ++system)
 		(*system)->init();
 
@@ -78,27 +92,3 @@ void GameManager::run(){
 		(*system)->destroy();
 }
 
-GLuint GameManager::LoadTexture(const char* filename, bool textureRepeating){
-	GLuint texture = SOIL_load_OGL_texture(filename,
-		SOIL_LOAD_AUTO,
-		SOIL_CREATE_NEW_ID,
-		SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_MULTIPLY_ALPHA
-		);
-
-	if (texture == NULL){
-		printf("[Texture loader] \"%s\" failed to load!\n", filename);
-		return 0;
-	}
-	else
-	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, textureRepeating ? GL_REPEAT : GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, textureRepeating ? GL_REPEAT : GL_CLAMP);
-
-		glActiveTexture(0);
-		textures.push_back(texture);
-		return texture;
-	}
-}
