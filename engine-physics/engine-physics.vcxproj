@@ -43,7 +43,7 @@
     <OutDir>$(SolutionDir)_libs\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)_libs\$(Configuration)\intermediates\$(ProjectName)\</IntDir>
     <LibraryPath>..\_libs\$(Configuration)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
-    <IncludePath>..\engine-base\;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\_resources\Box2D\Box2D\;..\engine-base\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)_libs\$(Configuration)\</OutDir>
@@ -81,6 +81,7 @@
     <ClCompile Include="Circle.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Shape.cpp" />
@@ -89,6 +90,7 @@
     <ClInclude Include="Circle.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Physics.h" />
+    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Shape.h" />

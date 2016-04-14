@@ -152,7 +152,7 @@ void CollisionManager::destroy(){
 
 }
 
-// determine where to place based on whether exist 
+// determine where to place based on objects reference type
 void CollisionManager::addObject(Entity* entity) {
 
 	if (typeid(*entity->getPhysicsObject()->getRef()) == typeid(Circle)) {
@@ -167,7 +167,7 @@ void CollisionManager::addObject(Entity* entity) {
 	}
 }
 
-/*
+
 // add circle to the collision manager to enable it to be factored into collision checks
 void CollisionManager::addObject(Entity* entity, float radius){
 	Shape* s = new Circle(radius);
@@ -181,7 +181,7 @@ void CollisionManager::addObject(Entity* entity, float distance, Vector3 normal)
 	entity->getPhysicsObject()->setRef(p);
 	collidablePlanes.push_back(entity);
 }
-*/
+
 // remove an entity from the collision manager so that it isnt factored into collision checks
 void CollisionManager::removeEntity(Entity* e){
 	collidableSpheres.erase(std::remove(collidableSpheres.begin(), collidableSpheres.end(), e), collidableSpheres.end());

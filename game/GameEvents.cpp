@@ -63,6 +63,7 @@ void GameEvents::handleInputEvents() {
 		switch (out_input_events[i]) {
 		case GameEvents::eInputEvents::IE_STRIKE_CUE:
 			in_sound_events.push_back(eSoundEvents::SE_STRIKE_CUE);
+			
 
 			break;
 		case GameEvents::eInputEvents::IE_WHITE_PLACED:

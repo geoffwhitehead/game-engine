@@ -45,8 +45,7 @@ void main(void) {
 	Camera* camera = new Camera(0.0f, 0.0f, Vector3(0, 0, 400), W_X, W_Y);
 	Camera::projMatrix = Matrix4::Orthographic(1, 1000, W_X/4.0f, -W_X/4.0f, W_Y/4.0f, -W_Y/4.0f);
 	//Camera::viewMatrix = Matrix4::BuildCamera(Vector3(0.0, 50.0, 20.0), Vector3(0.0, 0.0, 0.0));
-		
-		//camera->BuildViewMatrix();
+	//camera->BuildViewMatrix();
 	
 	GameInput* gi = new GameInput(gm, ge, camera);
 	GameAudio* ga = new GameAudio(am, gio, ge);
