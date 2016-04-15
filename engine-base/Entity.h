@@ -7,6 +7,7 @@
 #include "../engine-base/RenderObject.h"
 #include "../engine-base/PhysicsObject.h"
 #include "Renderer.h"
+#include <Box2D\Box2D.h>
 
 using namespace std;
 
@@ -47,8 +48,13 @@ public:
 	bool is_collidable = true;
 	bool is_renderable = true;
 
+
+
+protected:
+	b2Body* body;
+
 private:
-	PhysicsObject* physicsObject;
+
 	RenderObject* renderObject;
 	Entity*	e_parent;
 	vector<Entity*> children;
