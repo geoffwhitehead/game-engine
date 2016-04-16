@@ -5,9 +5,9 @@
 #include "../engine-base/Mesh.h"
 #include "../engine-base/Shader.h"
 #include "../engine-base/RenderObject.h"
-#include "../engine-base/PhysicsObject.h"
 #include "Renderer.h"
 #include <Box2D\Box2D.h>
+#include "../engine-physics/PhysicsObject.h"
 
 using namespace std;
 
@@ -15,18 +15,11 @@ class Entity
 {
 public:
 	Entity();
-	Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel, Mesh* mesh, Shader* shader, GLuint texture);
-	Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel, Mesh* mesh, Shader* shader);
-	Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel);
+	Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Mesh* mesh, Shader* shader, GLuint texture, bool is_renderable, bool is_physical, float pixels_per_m, b2World* world);
+	Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Mesh* mesh, Shader* shader, bool is_renderable, bool is_physical, float pixels_per_m, b2World* world);
+	Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, float pixels_per_m, b2World* world);
 
 	virtual ~Entity();
-
-	void setPos(Vector3);
-	void setAcc(Vector3);
-	void setVel(Vector3);
-	void setMass(float);
-
-	
 
 	RenderObject* getRenderObject() const;
 	PhysicsObject* getPhysicsObject() const;
@@ -45,17 +38,15 @@ public:
 	string group;
 	string sub_group;
 	string str_parent; // need this to hold the result from the tet
-	bool is_collidable = true;
-	bool is_renderable = true;
+	bool is_physical;
+	bool is_renderable;
 
 
 
 protected:
-	b2Body* body;
-
-private:
 
 	RenderObject* renderObject;
+	PhysicsObject* physicsObject;
 	Entity*	e_parent;
 	vector<Entity*> children;
 	

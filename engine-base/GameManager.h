@@ -32,7 +32,7 @@ private:
 	Window window;
 	Renderer renderer;
 	IOManager* iom;
-
+	b2World* world;
 	vector<SystemManager*> system_managers;
 
 	vector<Mesh*> meshes;

@@ -15,6 +15,7 @@ GameManager::~GameManager(){
 void GameManager::addEntity(Entity* e){
 	entities.push_back(e);
 }
+
 void GameManager::addSystemManager(SystemManager* sm) {
 	system_managers.push_back(sm);
 }

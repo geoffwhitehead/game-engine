@@ -4,66 +4,62 @@
 Entity::Entity(){
 	this->name = "default";
 	this->renderObject = nullptr;
-	this->physicsObject = nullptr;
 }
 
-Entity::Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel, Mesh* mesh, Shader* shader, GLuint texture){
+Entity::Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Mesh* mesh, Shader* shader, GLuint texture, bool is_renderable, bool is_physical, float pixels_per_m, b2World* world){
 	
 	this->name = name;
 	this->group = group;
 	this->str_parent = str_parent;
 	this->sub_group = sub_group;
-	this->renderObject = new RenderObject(pos, mesh, shader, texture);;
-	this->physicsObject = new PhysicsObject(pos, acc, vel, renderObject);
+	this->renderObject = new RenderObject(pos, mesh, shader, texture);
+	this->physicsObject = new PhysicsObject(world, pos, renderObject, pixels_per_m);
+	this->is_renderable = is_renderable;
+	this->is_physical = is_physical;
 }
 
-Entity::Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel, Mesh* mesh, Shader* shader){
+Entity::Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Mesh* mesh, Shader* shader, bool is_renderable, bool is_physical, float pixels_per_m, b2World* world){
 	this->name = name;
 	this->str_parent = str_parent;
 	this->group = group;
 	this->sub_group = sub_group;
-	this->renderObject = new RenderObject(pos, mesh, shader);;
-	this->physicsObject = new PhysicsObject(pos, acc, vel, renderObject);
+	this->renderObject = new RenderObject(pos, mesh, shader);
+	this->physicsObject = new PhysicsObject(world, pos, renderObject, pixels_per_m);
+	this->is_renderable = is_renderable;
+	this->is_physical = is_physical;
 }
-Entity::Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Vector3 acc, Vector3 vel){
+
+Entity::Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, float pixels_per_m, b2World* world){
 	this->name = name;
 	this->str_parent = str_parent;
 	this->group = group;
 	this->sub_group = sub_group;
 	this->renderObject = nullptr;
-	this->physicsObject = new PhysicsObject(pos, acc, vel);
+	this->physicsObject = new PhysicsObject(world, pos, pixels_per_m);
+	this->is_renderable == false;
+	this->is_physical = true;
 }
-
-void Entity::setPos(Vector3 pos){ this->physicsObject->setPos(pos); }
-void Entity::setAcc(Vector3 dir){ this->physicsObject->setAcc(dir); }
-void Entity::setVel(Vector3 vel){ this->physicsObject->setVel(vel); }
-void Entity::setMass(float mass){ this->physicsObject->setMass(mass); };
-
 
 //destuctor
 Entity::~Entity()
 {
 	if (renderObject) delete renderObject;
-	delete physicsObject;
 }
 
 RenderObject* Entity::getRenderObject() const {
 	return this->renderObject;
 }
 
-PhysicsObject* Entity::getPhysicsObject() const {
-	return this->physicsObject;
-}
-
 void Entity::update(float dt){
-	if (is_collidable) {
-		this->physicsObject->update(dt);
+	
+	this->renderObject->update(dt);
+	if (is_physical) {
+			this->physicsObject->update(dt);
 	}
-	if (is_renderable) {
-		this->renderObject->update(dt);
-	}
+	
 	for (vector<Entity*>::iterator i = children.begin(); i != children.end(); ++i)
 		(*i)->update(dt);	
+
 }
 
 void Entity::render(Renderer* renderer){
@@ -85,3 +81,6 @@ vector<Entity*> Entity::getChildren(){
 	return this->children;
 }
 
+PhysicsObject* Entity::getPhysicsObject() const {
+	return physicsObject;
+}

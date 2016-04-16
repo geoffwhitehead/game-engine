@@ -4,8 +4,6 @@
 #include <vector>
 #include "../_resources/jsoncpp/include/json/json.h"
 #include "../engine-base/Entity.h"
-#include "../engine-physics/Plane.h"
-#include "../engine-physics/Circle.h"
 
 
 using namespace std;
@@ -19,10 +17,15 @@ public:
 		string path;
 		float default_volume;
 	};
+	b2World* b2_world;
+	float pixels_per_m;
 
 
-	IOManager(string root_dir);
+
+	IOManager(string root_dir, b2World* b2_world, float pixels_per_m);
 	virtual ~IOManager();
+
+	
 
 	void load(string file_name);
 	GLuint LoadTexture(const char* filename, bool textureRepeating = true);

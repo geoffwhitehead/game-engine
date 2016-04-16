@@ -1,11 +1,4 @@
-﻿  CollisionManager.cpp
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\engine-physics\physics.h(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\engine-physics\collisionmanager.cpp(14): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-physics\collisionmanager.cpp(28): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-physics\collisionmanager.cpp(42): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-physics\collisionmanager.cpp(53): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-physics\collisionmanager.cpp(56): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-physics\collisionmanager.cpp(103): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-physics\collisionmanager.cpp(105): warning C4018: '<': signed/unsigned mismatch
+﻿  PhysicsObject.cpp
+c:\users\geoff\source\repos\game-engine\engine-physics\physicsobject.cpp(81): warning C4305: '=': truncation from 'double' to 'float32'
+c:\users\geoff\source\repos\game-engine\engine-physics\physicsobject.cpp(25): warning C4172: returning address of local variable or temporary
   engine-physics.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-physics.lib

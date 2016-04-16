@@ -2,8 +2,10 @@
 
 
 
-IOManager::IOManager(string root_dir) {
+IOManager::IOManager(string root_dir, b2World* b2_world, float pixels_per_m) {
 	this->root_dir = root_dir;
+	this->b2_world = b2_world;
+	this->pixels_per_m = pixels_per_m;
 }
 
 

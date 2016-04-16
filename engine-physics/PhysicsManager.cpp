@@ -1,12 +1,15 @@
 #include "PhysicsManager.h"
+#include <assert.h>
 
 
-
-PhysicsManager::PhysicsManager(b2World* b2_world, float b2_gravity) {
-	createWorld(b2_world, b2_gravity);
+PhysicsManager::PhysicsManager(GameManager* gm, float b2_gravity, float pixels_per_m) {
+	assert(b2_gravity != 0 || pixels_per_m != 0);
+	createWorld(b2_gravity);
+	this->pixels_per_m = pixels_per_m;
+	this->gm = gm;
 }
 
-void PhysicsManager::createWorld(b2World* b2_world, float b2_gravity) {
+void PhysicsManager::createWorld(float b2_gravity) {
 	this->b2_world = new b2World(b2Vec2(0.0f, b2_gravity));
 	this->b2_gravity = b2_gravity;
 	b2_world->SetAllowSleeping(true);
@@ -15,18 +18,39 @@ void PhysicsManager::createWorld(b2World* b2_world, float b2_gravity) {
 }
 
 PhysicsManager::~PhysicsManager() {
-}
-
-void update(float) {
 
 }
-void destroy() {
+
+void PhysicsManager::update(float msec) {
+	
+	updateWorld(msec);
 
 }
-void init() {
+void PhysicsManager::destroy() {
 
 }
-void addSubSystem(SubSystem*) {
+void PhysicsManager::init() {
+
+	//for (int i = 0; i < gm->entities.size(); i++) {
+//		gm->entities[i]->getPhysicsObject()->addBodyToWorld(b2_world);
+	//}
+}
+void PhysicsManager::addSubSystem(SubSystem*) {
+
+}
+
+void PhysicsManager::updateWorld(float msec) {
+	// determine the amount of time elapsed since our last update
+	double frameTime = msec;
+	accumulator += msec;
+
+	// update the world with the same seconds per update
+	while (accumulator > sec_per_update) {
+		accumulator -= sec_per_update;
+
+		// perform a single step of the physics simulation
+		b2_world->Step(sec_per_update, 8, 1);
+	}
 
 }
 

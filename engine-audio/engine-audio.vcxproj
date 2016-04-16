@@ -42,8 +42,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)_libs\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)_libs\$(Configuration)\intermediates\$(ProjectName)\</IntDir>
-    <IncludePath>..\_resources\irrKlang-1.5.0\include;..\engine-base\;$(LibraryPath);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>..\_resources\irrKlang-1.5.0\lib\Win32-visualStudio\;..\_libs\$(Configuration)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+    <IncludePath>..\_resources\Box2D\;..\_resources\irrKlang-1.5.0\include;..\engine-base\;$(LibraryPath);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>..\_resources\Box2D\Build\Box2D\$(Configuration)\;..\_resources\irrKlang-1.5.0\lib\Win32-visualStudio\;..\_libs\$(Configuration)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)_libs\$(Configuration)\</OutDir>

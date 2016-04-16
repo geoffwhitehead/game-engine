@@ -7,7 +7,15 @@ class GameLogic :
 	public SubSystem
 {
 public:
-	GameLogic(GameLogicManager* glm, GameEvents* ge);
+
+	enum eGameState { PLAYER_1, PLAYER_2 };
+	enum eInputEvents { LEFT_CLICK };
+
+	eGameState game_state;
+
+	vector<eInputEvents> input_events;
+
+	GameLogic(GameManager* gm, GameLogicManager* glm);
 	~GameLogic();
 
 	void init();
@@ -17,13 +25,10 @@ public:
 	void handleEvents();
 	void handleStates();
 
-	bool isLegalPosition();
-	void resolvePot(string name);
 	void editEntity(string name, string parent, bool is_collidable, bool is_renderable);
-	void resetBall(string name, Vector3 pos);
-
+	Vector3 getMousePos3D();
 private:
 	GameLogicManager* glm;
-	GameEvents* ge;
+	GameManager* gm;
 };
 

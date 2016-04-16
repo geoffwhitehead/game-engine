@@ -1,9 +1,11 @@
 #include "GameIO.h"
+#include <Box2D\Box2D.h>
+#include "Player.h"
 
 
 
-GameIO::GameIO(string root_dir) : IOManager(root_dir){
-	
+GameIO::GameIO(string root_dir, b2World* b2_world, float ppm) : IOManager(root_dir, b2_world, ppm){
+
 }
 
 
@@ -11,52 +13,33 @@ GameIO::~GameIO() {
 }
 
 void GameIO::loadEntities() {
+
+	
 	for (int i = 0; i < level["entities"].size(); i++) {
-		Entity *e = new Entity(
-			level["entities"][i]["name"].asString(),
-			level["entities"][i]["parent"].asString(),
-			level["entities"][i]["group"].asString(),
-			level["entities"][i]["subgroup"].asString(),
-			Vector3(
-				level["entities"][i]["position"][0].asFloat(),
-				level["entities"][i]["position"][1].asFloat(),
-				level["entities"][i]["position"][2].asFloat()
-			),
-			Vector3(
-				level["entities"][i]["acceleration"][0].asFloat(),
-				level["entities"][i]["acceleration"][1].asFloat(),
-				level["entities"][i]["acceleration"][2].asFloat()
-			),
-			Vector3(
-				level["entities"][i]["velocity"][0].asFloat(),
-				level["entities"][i]["velocity"][1].asFloat(),
-				level["entities"][i]["velocity"][2].asFloat()
-			),
-			findMesh(level["entities"][i]["mesh"].asString()),
-			findShader(level["entities"][i]["shader"].asString()),
-			findTexture(level["entities"][i]["texture"].asString())
+		string name = level["entities"][i]["name"].asString();
+		string parent = level["entities"][i]["parent"].asString();
+		string group = level["entities"][i]["group"].asString();
+		string subgroup = level["entities"][i]["subgroup"].asString();
+		Vector3 pos = Vector3(
+			level["entities"][i]["position"][0].asFloat(),
+			level["entities"][i]["position"][1].asFloat(),
+			level["entities"][i]["position"][2].asFloat()
 		);
+		Mesh* m = findMesh(level["entities"][i]["mesh"].asString());
+		Shader* s = findShader(level["entities"][i]["shader"].asString());
+		GLuint t = findTexture(level["entities"][i]["texture"].asString());
+		bool is_renderable = level["entities"][i]["is_renderable"].asBool();
+		bool is_physical = level["entities"][i]["is_physical"].asBool();
+		float radius = level["entities"][i]["collision_radius"].asFloat();
+		float density = level["entities"][i]["density"].asFloat();
+		float friction = level["entities"][i]["friction"].asFloat();
 
-		e->setMass(level["entities"][i]["mass"].asFloat());
-		e->is_collidable = level["entities"][i]["collidable"].asBool();
-		if (level["entities"][i]["hidden"].asBool() == true) {
-			e->is_renderable = false;
+		if (level["entities"][i]["class"].asString() == "player") {
+			in_entity.push_back(
+				new Player(name, parent, group, subgroup, pos, m, s, t, is_renderable, is_physical, pixels_per_m, radius, b2_world, friction, density)
+			);
+		
 		}
 
-		if (level["entities"][i]["collidable"].asBool()) {
-			if (level["entities"][i]["collision_object"].asString() == "CIRCLE") {
-				e->getPhysicsObject()->setRef(new Circle(level["entities"][i]["collision_radius"].asFloat()));
-			} 
-			else if (level["entities"][i]["collision_object"].asString() == "PLANE") {
-				e->getPhysicsObject()->setRef(new Plane(e->getPhysicsObject()->getPos().Length(),
-					Vector3(
-						level["entities"][i]["normal"][0].asFloat(),
-						level["entities"][i]["normal"][1].asFloat(),
-						level["entities"][i]["normal"][2].asFloat()
-					)
-				));
-			}
-		}
-		in_entity.push_back(e);
 	}
 }

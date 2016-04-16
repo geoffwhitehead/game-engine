@@ -134,9 +134,3 @@ void GameEvents::out_clearEvents(eEventType et) {
 	}
 }
 
-// return the 3d mouse position.
-Vector3 GameEvents::getMousePos3D() {
-	Vector2 pos = gm->getWindow()->GetOSMousePosition();
-	Vector2 mPos = gm->getWindow()->convertToScreenCoords(pos);
-	return Vector3(mPos.x, mPos.y, 5.0f);
-}
