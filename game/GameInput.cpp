@@ -1,7 +1,7 @@
 #include "GameInput.h"
 
-bool white_needs_placing = true;
 bool last_frame_mleft_pressed = false;
+bool enter_pressed_last_frame = false;
 
 GameInput::GameInput(GameLogic* gl,  Camera * cam)
 {
@@ -19,12 +19,10 @@ GameInput::~GameInput(){
 
 void GameInput::update(float msec) {
 	
-	//gl->input_events(GameEvents::ET_INPUT);
+	gl->in_input_events.clear();
 
 	handleControls();
 	handleEvents();
-
-	//ge->in_clearEvents(GameEvents::ET_INPUT);
 }
 
 void GameInput::destroy() {
@@ -34,6 +32,7 @@ void GameInput::destroy() {
 // currently just handles mouse, add keyboard or other devices here
 void GameInput::handleControls() {
 	handleMouse();
+	handleKeyboard();
 }
 
 // handle any events that affect how the controls are used
@@ -44,6 +43,13 @@ void GameInput::handleEvents() {
 			break;
 		}
 	}*/
+}
+
+void GameInput::handleKeyboard() {
+	
+	if (Keyboard::KeyTriggered(KeyboardKeys(KEY_RETURN))) {
+		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_ENTER);
+	}
 }
 
 Vector3 GameInput::getMousePos3D() {
@@ -59,7 +65,7 @@ void GameInput::handleMouse() {
 	
 	if (mouse_left_button_down && !last_frame_mleft_pressed) {
 
-		gl->input_events.push_back(GameLogic::eInputEvents::LEFT_CLICK);
+		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_LEFT_CLICK);
 		last_frame_mleft_pressed = true;
 	}
 	else if (!mouse_left_button_down) {

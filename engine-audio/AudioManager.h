@@ -26,7 +26,8 @@ public:
 	ISoundSource* loadSound(string name, const ik_c8* path, float default_volume = 1.0f);
 	ISoundSource* getSoundSource(string name);
 	void play2D(string name);
-
+	
+	ISoundEngine* getSoundEngine();
 private:
 	ISoundEngine* se;
 	map<string, ISoundSource*> audio;

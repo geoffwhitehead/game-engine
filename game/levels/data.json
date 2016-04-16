@@ -50,7 +50,7 @@
       "is_physical": true,
       "is_dynamic": true,
       "density": 1.0,
-      "friction": 0.1,
+      "friction": 1.0,
       "collision_radius": 0.15625
     },
      {
@@ -69,7 +69,7 @@
       "is_physical": true,
       "is_dynamic": true,
       "density": 1.0,
-      "friction": 0.1,
+      "friction": 1.0,
       "collision_radius": 0.15625
     }
   ],
@@ -77,6 +77,11 @@
     {
       "name": "bg_music",
       "path": "./audio/MF-W-90.XM",
+      "default_volume": 0.3
+    },
+    {
+      "name": "swap",
+      "path": "./audio/bell.wav",
       "default_volume": 0.3
     }
   ]

@@ -1,11 +1,4 @@
-﻿  GameManager.cpp
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(4): warning C4244: 'argument': conversion from 'float' to 'uint', possible loss of data
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(40): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(45): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(57): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(64): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(66): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-  Skipping... (no relevant changes detected)
+﻿  Skipping... (no relevant changes detected)
+  GameManager.cpp
   Entity.cpp
   engine-base.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-base.lib

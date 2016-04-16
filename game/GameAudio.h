@@ -2,12 +2,13 @@
 #include "../engine-base/SubSystem.h"
 #include "../engine-audio/AudioManager.h"
 #include "GameEvents.h"
+#include "GameLogic.h"
 
 class GameAudio :
 	public SubSystem
 {
 public:
-	GameAudio(AudioManager* am, IOManager* iom, GameEvents* ge);
+	GameAudio(GameLogic* gl, AudioManager* am);
 	~GameAudio();
 
 	void init();
@@ -18,9 +19,8 @@ public:
 	void handleEvents();
 	void handleStates();
 
-private:
+	GameLogic* gl;
 	AudioManager* am;
-	GameEvents* ge;
-	IOManager* iom;
+private:
 };
 

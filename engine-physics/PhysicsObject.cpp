@@ -22,7 +22,7 @@ PhysicsObject::~PhysicsObject(){
 }
 
 Vector3& PhysicsObject::getPos() { 
-	return Vector3(body->GetPosition().x, body->GetPosition().y, 0.0);
+	return Vector3(body->GetPosition().x, body->GetPosition().y, start_pos.z);
 }
 
 
@@ -78,6 +78,5 @@ void PhysicsObject::addBodyToWorld(b2World* world) {
 	bodyDef.type = b2_dynamicBody; //this will be a dynamic body
 	bodyDef.userData = this;
 	bodyDef.fixedRotation = true;
-	bodyDef.linearDamping = 0.001;
 	this->body = b2_world->CreateBody(&bodyDef);
 }

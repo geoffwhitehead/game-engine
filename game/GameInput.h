@@ -21,6 +21,7 @@ public:
 	Vector3 getMousePos3D();
 	void handleMouse();
 	void handleEvents();
+	void handleKeyboard();
 
 	GameManager* gm;
 	Camera * cam;

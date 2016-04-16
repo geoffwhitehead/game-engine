@@ -19,7 +19,11 @@ public:
 	void updateWorld(float msec);
 	b2World* b2_world;
 	float pixels_per_m;
+	void addListener(b2ContactListener* cl);
+	b2ContactListener* contact_listener;
 
+	//in FooTest constructor
+	
 private:
 	float b2_gravity;
 	//const float update_interval = 1.0f / 60.0f; // 60hz

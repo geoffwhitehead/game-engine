@@ -2,20 +2,24 @@
 #include "../engine-base/SubSystem.h"
 #include "../engine-base/GameLogicManager.h"
 #include "GameEvents.h"
+#include "Player.h"
+#include "../engine-audio/AudioManager.h"
 
 class GameLogic :
 	public SubSystem
 {
 public:
 
-	enum eGameState { PLAYER_1, PLAYER_2 };
-	enum eInputEvents { LEFT_CLICK };
-
+	enum ePlayerTurn { GS_PLAYER_1, GS_PLAYER_2 };
+	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING };
+	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER };
+	enum eAudioEvents { AE_TURN_SWAP };
+	
 	eGameState game_state;
+	ePlayerTurn player_turn;
 
-	vector<eInputEvents> input_events;
 
-	GameLogic(GameManager* gm, GameLogicManager* glm);
+	GameLogic(GameManager* gm, GameLogicManager* glm, b2World* world, AudioManager* am, Camera* cam);
 	~GameLogic();
 
 	void init();
@@ -24,11 +28,27 @@ public:
 
 	void handleEvents();
 	void handleStates();
+	void checkContacts();
+	void endTurn();
+
+
+
+
+
 
 	void editEntity(string name, string parent, bool is_collidable, bool is_renderable);
 	Vector3 getMousePos3D();
+
+	b2World* world;
+
+	vector<eInputEvents> in_input_events;
+	vector<eAudioEvents> out_audio_events;
+	vector<pair<Entity*, Entity*>> in_contact_events;
+
 private:
 	GameLogicManager* glm;
 	GameManager* gm;
+	AudioManager* am;
+	Camera* cam;
 };
 

@@ -7,6 +7,7 @@
 #include "../engine-base/GameLogicManager.h"
 #include "../engine-physics/PhysicsManager.h"
 
+#include "ContactListener.h"
 #include "GameInput.h"
 #include "GameAudio.h"
 #include "GameEvents.h"
@@ -31,33 +32,36 @@ void main(void) {
 
 	// GAME MANAGER
 	GameManager *gm = new GameManager(W_X, W_Y);
+
+	// PHYSICS
 	PhysicsManager* pm = new PhysicsManager(gm, gravity, pixels_per_m);
+
 	// FILE IO
 	GameIO* gio = new GameIO("./levels/", pm->b2_world, pm->pixels_per_m);
 	gm->addFileInput(gio);
 	gm->loadLevel("data.json");
 
-	//ADD SYSTEM MANAGERS
-	//AudioManager* am = new AudioManager(gio); // init with file input to cause it to load audio from file
-	InputManager* im = new InputManager();
-	GameLogicManager* glm = new GameLogicManager();
-
-	//CREATE SUB SYSTEMS
+	// CAMERA
 	Camera* camera = new Camera(0.0f, 0.0f, Vector3(0, 0, 400), W_X, W_Y);
-	Camera::projMatrix = Matrix4::Orthographic(1, 1000, W_X/4.0f, -W_X/4.0f, W_Y/4.0f, -W_Y/4.0f);
+	Camera::projMatrix = Matrix4::Orthographic(1, 1000, W_X / 4.0f, -W_X / 4.0f, W_Y / 4.0f, -W_Y / 4.0f);
 	//Camera::viewMatrix = Matrix4::BuildCamera(Vector3(0.0, 50.0, 20.0), Vector3(0.0, 0.0, 0.0));
 	//camera->BuildViewMatrix();
+
+	//ADD SYSTEM MANAGERS
+	AudioManager* am = new AudioManager(gio); // init with file input to cause it to load audio from file
+	InputManager* im = new InputManager();
+	GameLogicManager* glm = new GameLogicManager();
 	
-	GameLogic* gl = new GameLogic(gm, glm);
+	//CREATE SUB SYSTEMS
+	GameLogic* gl = new GameLogic(gm, glm, pm->b2_world, am, camera);
 	GameInput* gi = new GameInput(gl, camera);
-	//GameAudio* ga = new GameAudio(am, gio, ge);
-	
+	ContactListener* cl = new ContactListener(gl);
+	GameAudio* ga = new GameAudio(gl, am); // created to seperate audio from game
 	
 	//register managers
-	//gm->addSystemManager(am);
-
+	gm->addSystemManager(am);
+	pm->addListener(cl);
 	gm->addSystemManager(im);
-	//gm->addSystemManager(em);
 	gm->addSystemManager(glm);
 	gm->addSystemManager(pm);
 
@@ -65,8 +69,7 @@ void main(void) {
 	im->addSubSystem(camera);
 	glm->addSubSystem(gl);
 	im->addSubSystem(gi);
-	//am->addSubSystem(ga);
-	
+	am->addSubSystem(ga); // register with audio manager so updates are called
 	gm->run();
 
 }

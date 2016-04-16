@@ -1,18 +1,2 @@
-﻿  GameIO.cpp
-c:\users\geoff\source\repos\game-engine\game\gameio.cpp(18): warning C4018: '<': signed/unsigned mismatch
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewAttachShader imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewBindAttribLocation imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewCompileShader imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewCreateProgram imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewCreateShader imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewDeleteProgram imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewDeleteShader imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewDetachShader imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewGetProgramInfoLog imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewGetProgramiv imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewGetShaderiv imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewLinkProgram imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewShaderSource imported
-engine-base.lib(Shader.obj) : warning LNK4049: locally defined symbol ___glewGetInfoLogARB imported
-glew32sd.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32sd.lib(glew.obj)' or at 'C:\Users\Geoff\Source\Repos\game-engine\_exe\Debug\vc120.pdb'; linking object as if no debug info
+﻿  GameInput.cpp
   game.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\\_exe\Debug\game.exe

@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ContactListener.h" />
     <ClInclude Include="derived.h" />
     <ClInclude Include="GameAudio.h" />
     <ClInclude Include="GameEvents.h" />
@@ -88,6 +89,7 @@
     <ClInclude Include="SnookerBall.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ContactListener.cpp" />
     <ClCompile Include="derived.cpp" />
     <ClCompile Include="GameAudio.cpp" />
     <ClCompile Include="GameEvents.cpp" />

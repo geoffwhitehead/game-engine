@@ -14,7 +14,7 @@ void PhysicsManager::createWorld(float b2_gravity) {
 	this->b2_gravity = b2_gravity;
 	b2_world->SetAllowSleeping(true);
 	b2_world->SetContinuousPhysics(true);
-	//b2_world->SetContactListener(this);
+	
 }
 
 PhysicsManager::~PhysicsManager() {
@@ -26,14 +26,18 @@ void PhysicsManager::update(float msec) {
 	updateWorld(msec);
 
 }
+
+void PhysicsManager::addListener(b2ContactListener* cl) {
+	this->contact_listener = cl;
+	b2_world->SetContactListener(contact_listener);
+}
+
+
 void PhysicsManager::destroy() {
 
 }
 void PhysicsManager::init() {
 
-	//for (int i = 0; i < gm->entities.size(); i++) {
-//		gm->entities[i]->getPhysicsObject()->addBodyToWorld(b2_world);
-	//}
 }
 void PhysicsManager::addSubSystem(SubSystem*) {
 

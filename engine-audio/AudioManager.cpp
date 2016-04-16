@@ -10,7 +10,9 @@ AudioManager::AudioManager(IOManager* iom) {
 	this->iom = iom;
 	createSoundDevice();
 }
-
+ISoundEngine* AudioManager::getSoundEngine() {
+	return se;
+}
 void AudioManager::createSoundDevice() {
 	// Create the sound engine
 	se = createIrrKlangDevice();
