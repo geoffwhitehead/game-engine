@@ -1,3 +1,6 @@
 ﻿  PhysicsObject.cpp
-c:\users\geoff\source\repos\game-engine\engine-physics\physicsobject.cpp(25): warning C4172: returning address of local variable or temporary
+  Generating Code...
+c:\users\geoff\source\repos\game-engine\engine-physics\physicsobject.cpp(26): warning C4172: returning address of local variable or temporary
+  Skipping... (no relevant changes detected)
+  PhysicsManager.cpp
   engine-physics.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-physics.lib

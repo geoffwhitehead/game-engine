@@ -1,0 +1,184 @@
+{
+  "meshes": [
+    {
+      "name": "mesh_arena",
+      "function": "GenerateQuad",
+      "x": 1000.0,
+      "y": 1000.0
+    },
+    {
+      "name": "mesh_player",
+      "function": "GenerateTriFan",
+      "radius": 8.0,
+      "x": 1.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 0.5
+    },
+    {
+      "name": "mesh_bomb",
+      "function": "GenerateTriFan",
+      "radius": 4.0,
+      "x": 1.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 0.5
+    },
+    {
+      "name": "mesh_explosion",
+      "function": "GenerateTriFan",
+      "radius": 16.0,
+      "x": 1.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 0.5
+    }
+
+  ],
+  "textures": [
+    {
+      "name": "rust",
+      "path": "./textures/rust.png"
+    },
+    {
+      "name": "sky",
+      "path": "./textures/sky.png"
+    }
+    /*,
+    {
+      "name": "fire",
+      "path": "./textures/fire.png"
+    }*/
+  ],
+  "shaders": [
+    {
+      "name": "basic",
+      "vert": "./shaders/BasicVert.glsl",
+      "frag": "./shaders/BasicFrag.glsl"
+    },
+    {
+      "name": "simple",
+      "vert": "./shaders/TextureVert.glsl",
+      "frag": "./shaders/TextureFrag.glsl"
+    }
+  ],
+  "entities": [
+ 
+    {
+      "class": "player",
+      "name": "player_1",
+      "group": "players",
+      "subgroup": "",
+      "parent": "",
+      "position": [ -5000, 0.0, -7.5 ],
+      "acceleration": [ 0.0, 0.0, 0.0 ],
+      "velocity": [ 0.0, 0.0, 0.0 ],
+      "mesh": "mesh_player",
+      "shader": "basic",
+      "texture": "rust",
+      "is_renderable": true,
+      "is_physical": true,
+      "is_dynamic": true,
+      "is_sensor": false,
+      "density": 1.0,
+      "friction": 0.5,
+      "collision_radius": 0.15625,
+      "health": 2.0
+    },
+    {
+      "class": "player",
+      "name": "player_2",
+      "group": "players",
+      "subgroup": "",
+      "parent": "",
+      "position": [ 5000, 0.0, -7.5 ],
+      "acceleration": [ 0.0, 0.0, 0.0 ],
+      "velocity": [ 0.0, 0.0, 0.0 ],
+      "mesh": "mesh_player",
+      "shader": "basic",
+      "texture": "rust",
+      "is_renderable": true,
+      "is_physical": true,
+      "is_dynamic": true,
+      "is_sensor": false,
+      "density": 1.0,
+      "friction": 0.5,
+      "collision_radius": 0.15625,
+      "health": 2.0
+    },
+    {
+      "class": "bomb",
+      "name": "bomb",
+      "group": "weapon",
+      "subgroup": "",
+      "parent": "",
+      "position": [ 0.0, 0.0, -7.5 ],
+      "acceleration": [ 0.0, 0.0, 0.0 ],
+      "velocity": [ 0.0, 0.0, 0.0 ],
+      "mesh": "mesh_bomb",
+      "shader": "basic",
+      "texture": "rust",
+      "is_renderable": false,
+      "is_physical": true,
+      "is_dynamic": true,
+      "is_sensor": false,
+      "density": 1.0,
+      "friction": 0.5,
+      "collision_radius": 0.125,
+      "damage": 1.0
+    },
+    {
+      "class": "explosion",
+      "name": "bomb_explosion",
+      "group": "weapon",
+      "subgroup": "",
+      "parent": "",
+      "position": [ 0.0, 0.0, -7.5 ],
+      "acceleration": [ 0.0, 0.0, 0.0 ],
+      "velocity": [ 0.0, 0.0, 0.0 ],
+      "mesh": "mesh_explosion",
+      "shader": "basic",
+      "texture": "rust",
+      "is_renderable": false,
+      "is_physical": true,
+      "is_dynamic": true,
+      "is_sensor": true,
+      "density": 1.0,
+      "friction": 0.5,
+      "collision_radius": 0.5,
+      "lifetime": 120
+    },
+    {
+      "class": "arena",
+      "name": "arena",
+      "group": "",
+      "subgroup": "",
+      "parent": "",
+      "position": [ 0.0, 0.0, -10.0 ],
+      "acceleration": [ 0.0, 0.0, 0.0 ],
+      "velocity": [ 0.0, 0.0, 0.0 ],
+      "mesh": "mesh_arena",
+      "shader": "simple",
+      "texture": "rust",
+      "is_renderable": true,
+      "is_physical": false,
+      "is_dynamic": false,
+      "is_sensor": false,
+      "density": 1.0,
+      "friction": 0.5,
+      "collision_radius": 0.5
+    }
+  ],
+  "audio": [
+    {
+      "name": "bg_music",
+      "path": "./audio/MF-W-90.XM",
+      "default_volume": 0.3
+    },
+    {
+      "name": "swap",
+      "path": "./audio/beep1.wav",
+      "default_volume": 0.3
+    }
+  ]
+}

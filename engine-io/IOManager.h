@@ -28,7 +28,7 @@ public:
 	
 
 	void load(string file_name);
-	GLuint LoadTexture(const char* filename, bool textureRepeating = true);
+	GLuint LoadTexture(const char* filename, bool textureRepeating);
 
 	void init();
 	void destroy();

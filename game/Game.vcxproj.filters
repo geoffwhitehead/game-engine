@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SnookerBall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -33,13 +30,19 @@
     <ClInclude Include="GameIO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="derived.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContactListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Arena.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,9 +51,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SnookerBall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameAudio.cpp">
@@ -65,18 +65,23 @@
     <ClCompile Include="GameIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="derived.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ContactListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Arena.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="levels\data.json" />
     <None Include="shaders\BasicVert.glsl" />
     <None Include="shaders\BasicFrag.glsl" />
     <None Include="shaders\textureVert.glsl" />

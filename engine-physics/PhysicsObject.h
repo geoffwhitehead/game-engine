@@ -20,8 +20,8 @@ private:
 public:
 	b2World* b2_world;
 
-	PhysicsObject(b2World* world, Vector3 start_pos, float pixels_per_m);
-	PhysicsObject(b2World* world, Vector3 start_pos, RenderObject *r, float pixels_per_m);
+	PhysicsObject(b2World* world, Vector3 start_pos, float pixels_per_m );
+	PhysicsObject(b2World* world, Vector3 start_pos, RenderObject *r, float pixels_per_m );
 	~PhysicsObject();
 
 	Vector3& getPos() ;
@@ -32,10 +32,10 @@ public:
 	float pixels_per_m;
 	b2World* world;
 
-	void addCircularFixtureToBody(float radius);
-	void addRectangularFixtureToBody(float width, float height);
-	void createFixture(b2Shape* shape);
-	void addBodyToWorld(b2World* world);
+	void addCircularFixtureToBody(float radius, bool is_sensor);
+	void addRectangularFixtureToBody(float width, float height, bool is_sensor);
+	void createFixture(b2Shape* shape, bool is_sensor);
+	void addBodyToWorld(b2World* world, bool is_dynamic);
 
 
 	b2Body* body;

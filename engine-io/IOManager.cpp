@@ -14,8 +14,6 @@ IOManager::~IOManager() {
 
 }
 
-
-
 void IOManager::init() {
 
 }
@@ -28,7 +26,7 @@ void IOManager::loadTextures() {
 	for (int i = 0; i < level["textures"].size(); i++) {
 		string name = level["textures"][i]["name"].asString();
 		string path = level["textures"][i]["path"].asCString();
-		in_tex.push_back(pair<string, GLuint>(name, LoadTexture(path.c_str())));
+		in_tex.push_back(pair<string, GLuint>(name, LoadTexture(path.c_str(), true)));
 	}
 }
 
@@ -79,7 +77,8 @@ void IOManager::loadAudio() {
 }
 
 void IOManager::load(string file_name) {
-	//clearLevel();
+	//clearLevel(); TODO: impleent this
+	level_path = file_name;
 	setLevel(file_name);
 	loadAudio();
 	loadMeshes();
@@ -89,8 +88,7 @@ void IOManager::load(string file_name) {
 }
 
 void IOManager::setLevel(std::string path_to_level) {
-	//std::string data = root_dir + level_path;
-	std::string data = "./levels/data.json";
+	std::string data = root_dir + path_to_level;
 	Json::Reader reader;
 	ifstream fs(data);
 	if (!fs) cout << "Failed to read from path.";
@@ -122,7 +120,7 @@ void IOManager::clearLevel() {
 	in_tex.clear();
 }
 
-GLuint IOManager::LoadTexture(const char* filename, bool textureRepeating) {
+GLuint IOManager::LoadTexture(const char* filename, bool textureRepeating = true) {
 	GLuint texture = SOIL_load_OGL_texture(filename,
 		SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID,

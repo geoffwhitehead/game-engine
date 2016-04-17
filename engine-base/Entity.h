@@ -17,8 +17,7 @@ public:
 	Entity();
 	Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Mesh* mesh, Shader* shader, GLuint texture, bool is_renderable, bool is_physical, float pixels_per_m, b2World* world);
 	Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, Mesh* mesh, Shader* shader, bool is_renderable, bool is_physical, float pixels_per_m, b2World* world);
-	Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, float pixels_per_m, b2World* world);
-
+	
 	virtual ~Entity();
 
 	RenderObject* getRenderObject() const;

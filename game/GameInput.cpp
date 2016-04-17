@@ -45,11 +45,17 @@ void GameInput::handleEvents() {
 	}*/
 }
 
+//Keyboard
 void GameInput::handleKeyboard() {
 	
 	if (Keyboard::KeyTriggered(KeyboardKeys(KEY_RETURN))) {
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_ENTER);
 	}
+
+	if (Keyboard::KeyTriggered(KeyboardKeys(KEY_SPACE))) {
+		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_SPACE);
+	}
+
 }
 
 Vector3 GameInput::getMousePos3D() {
@@ -61,6 +67,7 @@ Vector3 GameInput::getMousePos3D() {
 
 // handle mouse buttons
 void GameInput::handleMouse() {
+	
 	bool mouse_left_button_down = Mouse::ButtonDown(MouseButtons(MOUSE_LEFT));
 	
 	if (mouse_left_button_down && !last_frame_mleft_pressed) {

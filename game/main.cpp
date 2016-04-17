@@ -19,8 +19,8 @@
 
 
 
-#define W_X 1024.0f
-#define W_Y 768.0f
+#define W_X 1600.0f
+#define W_Y 900.0f
 
 
 const float pixels_per_m = 32.0f;
@@ -39,7 +39,7 @@ void main(void) {
 	// FILE IO
 	GameIO* gio = new GameIO("./levels/", pm->b2_world, pm->pixels_per_m);
 	gm->addFileInput(gio);
-	gm->loadLevel("data.json");
+	gm->loadLevel("level_1.json");
 
 	// CAMERA
 	Camera* camera = new Camera(0.0f, 0.0f, Vector3(0, 0, 400), W_X, W_Y);

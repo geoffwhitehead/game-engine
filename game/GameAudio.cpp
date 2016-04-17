@@ -29,8 +29,9 @@ void GameAudio::handleEvents() {
 	for (int i = 0; i < gl->out_audio_events.size(); i++) {
 		switch (gl->out_audio_events[i]) {
 		case GameLogic::eAudioEvents::AE_TURN_SWAP:
-			am->play2D(TURN_SWAP);
 
+
+			am->play2D(TURN_SWAP);
 			break;
 		}
 	}

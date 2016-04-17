@@ -1,9 +1,10 @@
 #include "GameLogic.h"
+#include "Explosion.h"
 
 #define VEC_STILL Vector3(0.0,0.0,5.0)
 #define CAM_OFFSET 20.0f
-
-
+#define DAMPING 0.0005f
+#define FRAMES_EXPLODING 120
 GameLogic::GameLogic(GameManager* gm, GameLogicManager* glm, b2World* world, AudioManager* am, Camera* cam){
 	this->glm = glm;
 	this->gm = gm;
@@ -23,11 +24,11 @@ void GameLogic::init() {
 	player_turn = ePlayerTurn::GS_PLAYER_1;
 	game_state = eGameState::GS_PLAYING;
 
-	Entity* player_1 = gm->getEntityByName("player_1", "");
-	player_1->getPhysicsObject()->body->SetLinearDamping(0.0012);
-
-	Entity* player_2 = gm->getEntityByName("player_2", "");
-	player_2->getPhysicsObject()->body->SetLinearDamping(0.0005);
+	gm->getEntityByName("player_1", "")->getPhysicsObject()->body->SetLinearDamping(DAMPING);
+	gm->getEntityByName("player_2", "")->getPhysicsObject()->body->SetLinearDamping(DAMPING);
+	gm->getEntityByName("bomb", "")->getPhysicsObject()->body->SetLinearDamping(DAMPING);
+	gm->getEntityByName("bomb", "")->getPhysicsObject()->body->SetActive(false);
+	gm->getEntityByName("bomb_explosion", "")->getPhysicsObject()->body->SetActive(false);
 }
 
 void GameLogic::update(float msec) {
@@ -38,6 +39,13 @@ void GameLogic::update(float msec) {
 
 }
 
+
+b2Filter GameLogic::getFixture(enum eFilter f, enum eMask m) {
+	b2Filter filter;
+	filter.categoryBits = f;
+	filter.maskBits = m;
+	return filter;
+}
 
 void GameLogic::destroy() {
 
@@ -57,23 +65,43 @@ void GameLogic::handleEvents() {
 	for (int i = 0; i < in_input_events.size(); i++) {
 		switch (in_input_events[i]) {
 			Entity* e;
-		case eInputEvents::IE_LEFT_CLICK:
-			cout << "left click" << endl;
-			e = gm->getEntityByName("player_1", "");
-			e->getPhysicsObject()->body->ApplyForce(b2Vec2(0.0, 1.0), e->getPhysicsObject()->body->GetWorldCenter(), true);
-			out_audio_events.push_back(eAudioEvents::AE_TURN_SWAP);
-			break;
-
-		case eInputEvents::IE_ENTER:
 			if (game_state == eGameState::GS_PLAYING) {
-				endTurn();
-			}
-			break;
 
+
+				case eInputEvents::IE_LEFT_CLICK:
+					cout << "left click" << endl;
+					e = gm->getEntityByName("player_1", "");
+					e->getPhysicsObject()->body->ApplyForce(b2Vec2(0.1, 0.01), e->getPhysicsObject()->body->GetWorldCenter(), true);
+					out_audio_events.push_back(eAudioEvents::AE_TURN_SWAP);
+					break;
+
+				case eInputEvents::IE_ENTER:
+					if (game_state == eGameState::GS_PLAYING) {
+						out_audio_events.push_back(eAudioEvents::AE_TURN_SWAP);
+						endTurn();
+
+					}
+					break;
+
+				case eInputEvents::IE_SPACE:
+					if (game_state == eGameState::GS_PLAYING) {
+						game_state = eGameState::GS_FIRING;
+						fireWeapon();
+					}
+
+			}
 		}
 	}
 }
 
+void GameLogic::fireWeapon() {
+	Entity* bomb = gm->getEntityByName("bomb", "");
+	bomb->is_renderable = true;
+	bomb->getPhysicsObject()->body->SetActive(true);
+	bomb->getPhysicsObject()->body->GetFixtureList()->SetFilterData(getFixture(eFilterSolid, eCollide));
+	bomb->getPhysicsObject()->body->ApplyForce(b2Vec2(-0.1, 0.001), bomb->getPhysicsObject()->body->GetWorldCenter(), true);
+	
+}
 
 void GameLogic::endTurn() {
 	
@@ -81,7 +109,6 @@ void GameLogic::endTurn() {
 		player_turn = ePlayerTurn::GS_PLAYER_2;
 		Vector3 player_pos = gm->getEntityByName("player_2", "")->getPhysicsObject()->getPos();
 		cam->SetPosition(Vector3(player_pos.x, player_pos.y, CAM_OFFSET));
-
 	}
 	else {
 		player_turn = ePlayerTurn::GS_PLAYER_1;
@@ -89,16 +116,45 @@ void GameLogic::endTurn() {
 		cam->SetPosition(Vector3(player_pos.x, player_pos.y, CAM_OFFSET));
 	}
 }
-// actions that occur every frame when in a particular state
+
+
 void GameLogic::handleStates() {
 	switch (game_state) {
-	case eGameState::GS_PLAYING:
-		//Entity* white = ge->gm->getEntityByName("white", "table");
-		//cout << "player" << endl;
+	case eGameState::GS_FIRING:
+		if (!isAwake("bomb", "")) {
+			cout << "EXPLODE" << endl;
+			game_state = eGameState::GS_EXPLODING;
+		}
 		break;
 
+	case eGameState::GS_EXPLODING:
+		Explosion* e = static_cast<Explosion*>(gm->getEntityByName("bomb_explosion", ""));
+		if (e->current_life > 0) {
+			PhysicsObject* bomb = gm->getEntityByName("bomb", "")->getPhysicsObject();
+			gm->getEntityByName("bomb_explosion", "")->getPhysicsObject()->body->SetTransform(b2Vec2(bomb->getPos().x, bomb->getPos().y), 0.0f);
+			gm->getEntityByName("bomb_explosion", "")->getPhysicsObject()->body->SetActive(true);
+			gm->getEntityByName("bomb_explosion", "")->is_renderable = true;
+			e->current_life--;
+		}
+		else {
+			e->current_life = e->lifetime;
+			gm->getEntityByName("bomb_explosion", "")->getPhysicsObject()->body->SetActive(false);
+			gm->getEntityByName("bomb_explosion", "")->is_renderable = false;
+			game_state = GS_PLAYING;
+		}
+		break;
 	}
 }
+
+
+
+
+
+
+bool GameLogic::isAwake(string name, string parent) {
+	return gm->getEntityByName("bomb", "")->getPhysicsObject()->body->IsAwake();
+}
+
 
 // return the 3d mouse position.
 Vector3 GameLogic::getMousePos3D() {
@@ -109,24 +165,39 @@ Vector3 GameLogic::getMousePos3D() {
 
 void GameLogic::checkContacts() {
 	for (b2Contact* contact = world->GetContactList(); contact; contact = contact->GetNext()) {
+		
 		//check if fixture A was a ball
-		void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-		if (bodyUserData) {
-			if (static_cast<Player*>(bodyUserData)->name == "player_1") {
+		void* bodyDataA = contact->GetFixtureA()->GetBody()->GetUserData();
+		void* bodyDataB = contact->GetFixtureB()->GetBody()->GetUserData();
+
+		if (bodyDataA) {
+			if (static_cast<Player*>(bodyDataA)->name == "player_1") {
+				if (static_cast<Player*>(bodyDataB)->name == "bomb") {
+					cout << "bomb collided with 1" << endl;
+				}
+			}
+			if (static_cast<Player*>(bodyDataA)->name == "player_2") {
+				if (static_cast<Player*>(bodyDataB)->name == "bomb") {
+					cout << "bomb collided with 2" << endl;
+				}
+			}
+			if (static_cast<Player*>(bodyDataA)->name == "bomb") {
+				
+			}
+		}
+		
+		if (bodyDataB) {
+			if (static_cast<Player*>(bodyDataB)->name == "player_1") {
+				//cout << "player 1 collided" << endl;
+			}
+			if (static_cast<Player*>(bodyDataB)->name == "player_2") {
+				//cout << "player 1 collided" << endl;
+			}
+			if (static_cast<Player*>(bodyDataB)->name == "bomb") {
 				//cout << "player 1 collided" << endl;
 			}
 		}
-			//static_cast<Player*>(bodyUserData)->startContact();
 
-		//check if fixture B was a ball
-		bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-		if (bodyUserData) {
-			if (static_cast<Player*>(bodyUserData)->name == "player_2") {
-				//cout << "player 1 collided with me" << endl;
-			}
-			
-		}
-			//static_cast<Player*>(bodyUserData)->startContact();
 	}
 		
 }

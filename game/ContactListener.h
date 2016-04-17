@@ -6,7 +6,7 @@ class ContactListener :
 public:
 	ContactListener(GameLogic* gl);
 	~ContactListener();
-
+	
 	virtual void BeginContact(b2Contact* contact);
 
 	// Called when two fixtures cease to touch

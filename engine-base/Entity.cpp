@@ -13,7 +13,7 @@ Entity::Entity(string name, string str_parent, string group, string sub_group, V
 	this->str_parent = str_parent;
 	this->sub_group = sub_group;
 	this->renderObject = new RenderObject(pos, mesh, shader, texture);
-	this->physicsObject = new PhysicsObject(world, pos, renderObject, pixels_per_m);
+	this->physicsObject = new PhysicsObject(world, pos, renderObject, pixels_per_m );
 	this->is_renderable = is_renderable;
 	this->is_physical = is_physical;
 }
@@ -27,17 +27,6 @@ Entity::Entity(string name, string str_parent, string group, string sub_group, V
 	this->physicsObject = new PhysicsObject(world, pos, renderObject, pixels_per_m);
 	this->is_renderable = is_renderable;
 	this->is_physical = is_physical;
-}
-
-Entity::Entity(string name, string str_parent, string group, string sub_group, Vector3 pos, float pixels_per_m, b2World* world){
-	this->name = name;
-	this->str_parent = str_parent;
-	this->group = group;
-	this->sub_group = sub_group;
-	this->renderObject = nullptr;
-	this->physicsObject = new PhysicsObject(world, pos, pixels_per_m);
-	this->is_renderable == false;
-	this->is_physical = true;
 }
 
 //destuctor

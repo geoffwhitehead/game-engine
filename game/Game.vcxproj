@@ -78,19 +78,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Arena.h" />
+    <ClInclude Include="Bomb.h" />
     <ClInclude Include="ContactListener.h" />
-    <ClInclude Include="derived.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="GameAudio.h" />
     <ClInclude Include="GameEvents.h" />
     <ClInclude Include="GameInput.h" />
     <ClInclude Include="GameIO.h" />
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="SnookerBall.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Arena.cpp" />
+    <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="ContactListener.cpp" />
-    <ClCompile Include="derived.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="GameAudio.cpp" />
     <ClCompile Include="GameEvents.cpp" />
     <ClCompile Include="GameInput.cpp" />
@@ -98,10 +101,8 @@
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SnookerBall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="levels\data.json" />
     <None Include="shaders\BasicFrag.glsl" />
     <None Include="shaders\BasicVert.glsl" />
     <None Include="shaders\TextureFrag.glsl" />
