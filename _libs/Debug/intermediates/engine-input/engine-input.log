@@ -1,4 +1,5 @@
 ﻿  InputManager.cpp
 c:\users\geoff\source\repos\game-engine\engine-input\inputmanager.cpp(14): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-input\inputmanager.cpp(24): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-input\inputmanager.cpp(20): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-input\inputmanager.cpp(26): warning C4018: '<': signed/unsigned mismatch
   engine-input.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-input.lib

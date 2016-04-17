@@ -18,7 +18,7 @@
 #include <map>
 
 
-
+// screen size
 #define W_X 1600.0f
 #define W_Y 900.0f
 
@@ -70,6 +70,7 @@ void main(void) {
 	glm->addSubSystem(gl);
 	im->addSubSystem(gi);
 	am->addSubSystem(ga); // register with audio manager so updates are called
+
 	gm->run();
 
 }

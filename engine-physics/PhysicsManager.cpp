@@ -18,7 +18,7 @@ void PhysicsManager::createWorld(float b2_gravity) {
 }
 
 PhysicsManager::~PhysicsManager() {
-
+	delete b2_world;
 }
 
 void PhysicsManager::update(float msec) {
@@ -34,11 +34,13 @@ void PhysicsManager::addListener(b2ContactListener* cl) {
 
 
 void PhysicsManager::destroy() {
-
+	// box2d will handle deleteing all objects from this point
+	delete b2_world;
 }
 void PhysicsManager::init() {
 
 }
+
 void PhysicsManager::addSubSystem(SubSystem*) {
 
 }

@@ -14,26 +14,71 @@ ContactListener::~ContactListener() {
 // b2ContactListener
 // Called when two fixtures begin to touch
 void ContactListener::BeginContact(b2Contact* contact) {
-	//check if fixture A was a ball
-	void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-	if (bodyUserData) {
-		if (static_cast<Player*>(bodyUserData)->name == "player_1") {
-			cout << "player 1 collided" << endl;
-		}
-	}
-	//static_cast<Player*>(bodyUserData)->startContact();
+	void* bodyDataA = contact->GetFixtureA()->GetBody()->GetUserData();
+	void* bodyDataB = contact->GetFixtureB()->GetBody()->GetUserData();
 
-	//check if fixture B was a ball
-	bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-	if (bodyUserData) {
-		if (static_cast<Player*>(bodyUserData)->name == "player_2") {
-			cout << "player 1 collided with me" << endl;
+	if (bodyDataA) {
+		if (static_cast<Player*>(bodyDataA)->name == "player_1") {
+			if (static_cast<Bomb*>(bodyDataB)->name == "bomb") {
+				cout << "bomb 1" << endl;
+			}
 		}
+
+		if (static_cast<Player*>(bodyDataA)->name == "player_1") {
+			if (static_cast<Bomb*>(bodyDataB)->name == "bomb") {
+				cout << "bomb 1" << endl;
+			}
+		}
+
+		if (static_cast<Player*>(bodyDataA)->name == "player_1") {
+			if (static_cast<Explosion*>(bodyDataB)->name == "bomb_explosion") {
+				cout << "explosion 1" << endl;
+
+				gl->in_game_events.push_back(GameLogic::eGameEvents::GS_QUIT);
+			}
+		}
+
+		if (static_cast<Bomb*>(bodyDataA)->name == "bomb") {
+
+		}
+
+		if (static_cast<Explosion*>(bodyDataB)->name == "bomb_explosion") {
+			cout << "explosion A" << endl;
+
+			gl->in_game_events.push_back(GameLogic::eGameEvents::GS_QUIT);
+		}
+
+	}
+
+	if (bodyDataB) {
+		if (static_cast<Player*>(bodyDataB)->name == "player_1") {
+			//cout << "player 1 collided" << endl;
+		}
+		if (static_cast<Player*>(bodyDataB)->name == "player_2") {
+			//cout << "player 1 collided" << endl;
+		}
+		if (static_cast<Player*>(bodyDataB)->name == "bomb") {
+			//cout << "player 1 collided" << endl;
+		}
+
+		if (static_cast<Explosion*>(bodyDataB)->name == "bomb_explosion") {
+			cout << "explosion B" << endl;
+
+			gl->in_game_events.push_back(GameLogic::eGameEvents::GS_QUIT);
+		}
+
 
 	}
 }
 
 // Called when two fixtures cease to touch
 void ContactListener::EndContact(b2Contact* contact) {
+	void* bodyDataA = contact->GetFixtureA()->GetBody()->GetUserData();
+	void* bodyDataB = contact->GetFixtureB()->GetBody()->GetUserData();
 
+	if (static_cast<Player*>(bodyDataA)->name == "player_1") {
+		if (static_cast<Player*>(bodyDataB)->name == "bomb_explosion") {
+			cout << "explosion 1" << endl;
+		}
+	}
 }

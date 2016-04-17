@@ -26,8 +26,10 @@ public:
 	Entity* getEntityByName(string child_name, string parent_name = "");
 	void addFileInput(IOManager* iom);
 	void loadLevel(string file_name);
-
+	void ShutDown();
+	void clear();
 	vector<Entity*> entities;
+
 private:
 	Window window;
 	Renderer renderer;
@@ -35,9 +37,5 @@ private:
 	b2World* world;
 	vector<SystemManager*> system_managers;
 
-	vector<Mesh*> meshes;
-	vector<std::pair<string, GLuint>> textures;
-	vector<Shader*> shaders;
-	vector<IOManager::AudioObject> audio;
 };
 

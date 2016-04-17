@@ -3,6 +3,9 @@
 #include "../engine-base/GameLogicManager.h"
 #include "GameEvents.h"
 #include "Player.h"
+#include "Bomb.h"
+#include "Arena.h"
+#include "Explosion.h"
 #include "../engine-audio/AudioManager.h"
 
 class GameLogic :
@@ -11,9 +14,10 @@ class GameLogic :
 public:
 
 	enum ePlayerTurn { GS_PLAYER_1, GS_PLAYER_2 };
-	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING};
+	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING };
 	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE };
-	enum eAudioEvents { AE_TURN_SWAP };
+	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB };
+	enum eGameEvents { GS_QUIT };
 	
 	eGameState game_state;
 	ePlayerTurn player_turn;
@@ -38,13 +42,12 @@ public:
 
 	void handleEvents();
 	void handleStates();
-	void checkContacts();
 	void endTurn();
 
 	void fireWeapon();
 	bool isAwake(string name, string parent);
-	b2Filter getFixture(enum eFilter, enum eMask);
 
+	b2Filter getFixture(enum eFilter, enum eMask);
 
 	void editEntity(string name, string parent, bool is_collidable, bool is_renderable);
 	Vector3 getMousePos3D();
@@ -54,7 +57,7 @@ public:
 	vector<eInputEvents> in_input_events;
 	vector<eAudioEvents> out_audio_events;
 	vector<pair<Entity*, Entity*>> in_contact_events;
-
+	vector<eGameEvents> in_game_events;
 private:
 	GameLogicManager* glm;
 	GameManager* gm;

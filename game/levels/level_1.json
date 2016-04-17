@@ -166,7 +166,7 @@
       "is_sensor": false,
       "density": 1.0,
       "friction": 0.5,
-      "collision_radius": 0.5
+      "collision_radius": 0.0
     }
   ],
   "audio": [
@@ -178,6 +178,11 @@
     {
       "name": "swap",
       "path": "./audio/beep1.wav",
+      "default_volume": 0.3
+    },
+     {
+      "name": "rocket1",
+      "path": "./audio/rocket1.wav",
       "default_volume": 0.3
     }
   ]

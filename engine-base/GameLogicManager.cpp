@@ -18,7 +18,9 @@ void GameLogicManager::update(float msec) {
 }
 
 void GameLogicManager::destroy() {
-
+	for (int i = 0; i < sub_systems.size(); i++) {
+		delete sub_systems[i];
+	}
 }
 
 void GameLogicManager::init() {

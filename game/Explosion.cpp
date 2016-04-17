@@ -37,11 +37,12 @@ Explosion::~Explosion() {
 }
 
 void Explosion::addBodyToWorld(b2World* world, bool is_dynamic) {
-	// let superclass to the work, we just need to set the player to be
-	// a bullet so it doesn't fall through the world on huge updates
 	this->physicsObject->addBodyToWorld(world, is_dynamic);
-	this->getPhysicsObject()->body->SetBullet(true);
 
+	// explosions are transformed to their point of explosion, must disable sleeping to allow collisions to occur
+	this->getPhysicsObject()->body->SetSleepingAllowed(false); 
+
+	this->getPhysicsObject()->body->SetBullet(true);
 }
 
 void Explosion::addFixturesToBody(float radius, bool is_sensor) {

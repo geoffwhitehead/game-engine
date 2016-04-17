@@ -17,7 +17,9 @@ void InputManager::update(float msec) {
 }
 
 void InputManager::destroy() {
-
+	for (int i = 0; i < sub_systems.size(); i++) {
+		delete sub_systems[i];
+	}
 }
 
 void InputManager::init() {

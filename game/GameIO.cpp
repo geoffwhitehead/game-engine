@@ -36,7 +36,6 @@ void GameIO::loadEntities() {
 
 		Json::Value entity = level["entities"][i];
 
-
 		string name = entity["name"].asString();
 		string parent = entity["parent"].asString();
 		string group = entity["group"].asString();
@@ -59,12 +58,10 @@ void GameIO::loadEntities() {
 		float friction = entity["friction"].asFloat();
 		float density = entity["density"].asFloat();
 
-
-		// ther vars that must e declared outside of switch
+		// the vars that must e declared outside of switch
 		int health;
 		int damage;
 		int lifetime;
-
 
 		switch (class_type) {
 		case CL_PLAYER:

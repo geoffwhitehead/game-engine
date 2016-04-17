@@ -24,6 +24,8 @@ void AudioManager::createSoundDevice() {
 
 AudioManager::~AudioManager()
 {
+	// dropping will handle deletion of all sounds
+	se->drop();
 }
 
 void AudioManager::update(float msec){
@@ -33,7 +35,16 @@ void AudioManager::update(float msec){
 }
 
 void AudioManager::destroy(){
-	// sounds are automatically destroyed when add from source
+	// dropping will handle deletion of all sounds
+	for (int i = 0; i < sub_systems.size(); i++) {
+		delete sub_systems[i];
+	}
+	se->drop();
+}
+
+// clear sounds from memory, used for loading new level and new sounds
+void AudioManager::clear() {
+	se->removeAllSoundSources();
 }
 
 ISoundSource* AudioManager::loadSound(string name, const ik_c8* path, float default_volume) {

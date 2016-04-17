@@ -4,7 +4,6 @@
 #define VEC_STILL Vector3(0.0,0.0,5.0)
 #define CAM_OFFSET 20.0f
 #define DAMPING 0.0005f
-#define FRAMES_EXPLODING 120
 GameLogic::GameLogic(GameManager* gm, GameLogicManager* glm, b2World* world, AudioManager* am, Camera* cam){
 	this->glm = glm;
 	this->gm = gm;
@@ -35,7 +34,6 @@ void GameLogic::update(float msec) {
 	
 	handleEvents();
 	handleStates();
-	checkContacts();
 
 }
 
@@ -62,6 +60,9 @@ void GameLogic::editEntity(string name, string parent, bool is_collidable, bool 
 
 // determine actions based on logic events that have been stacked between frame 
 void GameLogic::handleEvents() {
+
+
+	// handle input events
 	for (int i = 0; i < in_input_events.size(); i++) {
 		switch (in_input_events[i]) {
 			Entity* e;
@@ -92,6 +93,14 @@ void GameLogic::handleEvents() {
 			}
 		}
 	}
+
+	// handle in game events
+	for (int i = 0; i < in_game_events.size(); i++) {
+		switch (in_game_events[i]) {
+		case eGameEvents::GS_QUIT:
+			gm->getWindow()->forceQuit = true;
+		}
+	}
 }
 
 void GameLogic::fireWeapon() {
@@ -101,8 +110,22 @@ void GameLogic::fireWeapon() {
 	bomb->getPhysicsObject()->body->GetFixtureList()->SetFilterData(getFixture(eFilterSolid, eCollide));
 	bomb->getPhysicsObject()->body->ApplyForce(b2Vec2(-0.1, 0.001), bomb->getPhysicsObject()->body->GetWorldCenter(), true);
 	
+	
+
+	
+}
+/*
+void PlayerEntity::boost() {
+	float magnitude = 0.1f;
+	b2Vec2 force = b2Vec2(cos(m_PhysicsObject->GetAngle()) * magnitude, sin(m_PhysicsObject->GetAngle()) * magnitude);
+	m_PhysicsObject->ApplyForce(force, m_PhysicsObject->GetWorldCenter(), true);
 }
 
+void GameLogic::rotate(float angle) {
+	m_PhysicsObject->SetAngularVelocity(angle);
+}
+
+*/
 void GameLogic::endTurn() {
 	
 	if (player_turn == ePlayerTurn::GS_PLAYER_1) {
@@ -122,7 +145,7 @@ void GameLogic::handleStates() {
 	switch (game_state) {
 	case eGameState::GS_FIRING:
 		if (!isAwake("bomb", "")) {
-			cout << "EXPLODE" << endl;
+			out_audio_events.push_back(eAudioEvents::AE_EXPLOSION_BOMB);
 			game_state = eGameState::GS_EXPLODING;
 		}
 		break;
@@ -161,43 +184,4 @@ Vector3 GameLogic::getMousePos3D() {
 	Vector2 pos = gm->getWindow()->GetOSMousePosition();
 	Vector2 mPos = gm->getWindow()->convertToScreenCoords(pos);
 	return Vector3(mPos.x, mPos.y, 5.0f);
-}
-
-void GameLogic::checkContacts() {
-	for (b2Contact* contact = world->GetContactList(); contact; contact = contact->GetNext()) {
-		
-		//check if fixture A was a ball
-		void* bodyDataA = contact->GetFixtureA()->GetBody()->GetUserData();
-		void* bodyDataB = contact->GetFixtureB()->GetBody()->GetUserData();
-
-		if (bodyDataA) {
-			if (static_cast<Player*>(bodyDataA)->name == "player_1") {
-				if (static_cast<Player*>(bodyDataB)->name == "bomb") {
-					cout << "bomb collided with 1" << endl;
-				}
-			}
-			if (static_cast<Player*>(bodyDataA)->name == "player_2") {
-				if (static_cast<Player*>(bodyDataB)->name == "bomb") {
-					cout << "bomb collided with 2" << endl;
-				}
-			}
-			if (static_cast<Player*>(bodyDataA)->name == "bomb") {
-				
-			}
-		}
-		
-		if (bodyDataB) {
-			if (static_cast<Player*>(bodyDataB)->name == "player_1") {
-				//cout << "player 1 collided" << endl;
-			}
-			if (static_cast<Player*>(bodyDataB)->name == "player_2") {
-				//cout << "player 1 collided" << endl;
-			}
-			if (static_cast<Player*>(bodyDataB)->name == "bomb") {
-				//cout << "player 1 collided" << endl;
-			}
-		}
-
-	}
-		
 }

@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include <windows.h>
 
 GameManager::GameManager(float w_x, float w_y)
 : window(Window(w_x, w_y)), renderer(Renderer(window)){
@@ -6,11 +7,27 @@ GameManager::GameManager(float w_x, float w_y)
 }
 
 GameManager::~GameManager(){
+	ShutDown();
+}
+	
+
+// calls destroy on all systems, which in turns call destroy on all their subsystems
+void GameManager::ShutDown() {
+	cout << "shutdown" << endl;
+	// if game has file input, init destroy and delete
+	if (iom) {
+		iom->destroy();
+		delete iom;
+		entities.clear();// dont need to destroy objects here - IO manager will delete
+	}
+	
+
+	for	(vector<SystemManager*>::iterator system = system_managers.begin(); system != system_managers.end(); ++system)
+		(*system)->destroy();
+	
+	Sleep(1000);
 
 }
-	//for (vector<GLuint>::iterator tex = textures.begin(); tex != textures.end(); ++tex)
-		//delete (*tex);
-
 
 void GameManager::addEntity(Entity* e){
 	entities.push_back(e);
@@ -28,15 +45,27 @@ vector<Entity*>* GameManager::getEntities() {
 	return &entities;
 }
 
+// registers an IO class with the game manager to load entities from
 void GameManager::addFileInput(IOManager* iom) {
 	this->iom = iom;
 }
 
+// removes previous level (if exists) ready for loading new level
+void GameManager::clear() {
+	entities.clear();
+	iom->clearLevel();
+}
+
 void GameManager::loadLevel(string file_name) {
+	
+	// must have enabled file input by loading IOManager prior to calling this function
+	assert(iom);
+
+	clear();
+
 	iom->load(file_name);
 
-	// register entities
-
+	// register new entities with game manager
 	for (int i = 0; i < iom->in_entity.size(); i++) {
 		if (iom->in_entity[i]->str_parent == "") { // no parent
 			addEntity(iom->in_entity[i]);
@@ -52,6 +81,7 @@ void GameManager::loadLevel(string file_name) {
 	}
 }
 
+// returns a pointer to an entity that matches params
 Entity* GameManager::getEntityByName(string name_to_find, string parent_name) {
 	if (parent_name == "") {
 		for (int i = 0; i < entities.size(); i++) {
@@ -74,10 +104,10 @@ Entity* GameManager::getEntityByName(string name_to_find, string parent_name) {
 	return nullptr;
 }
 
+// main game loop
 void GameManager::run(){
 	
-	
-
+	// initialise systems
 	for (vector<SystemManager*>::iterator system = system_managers.begin(); system != system_managers.end(); ++system)
 		(*system)->init();
 
@@ -86,22 +116,27 @@ void GameManager::run(){
 
 		msec *= 2.0f;
 
+		// update systems
 		for (vector<SystemManager*>::iterator system = system_managers.begin(); system != system_managers.end(); ++system)
 			(*system)->update(msec);
 
+		// update entities
 		for (vector<Entity*>::iterator entity = entities.begin(); entity != entities.end(); ++entity) {
 			(*entity)->update(msec);
 		}
 
 		renderer.ClearBuffers();
 
+		// render entities
 		for (vector<Entity*>::iterator entity = entities.begin(); entity != entities.end(); ++entity) {
 			(*entity)->render(&renderer);
 		}
-
+		
 		renderer.SwapBuffers();
 	}
-	for (vector<SystemManager*>::iterator system = system_managers.begin(); system != system_managers.end(); ++system)
-		(*system)->destroy();
+	
+	// init shutdown performing safe deletion of everything
+	ShutDown();
+
 }
 

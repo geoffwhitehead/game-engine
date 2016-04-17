@@ -19,6 +19,22 @@ void IOManager::init() {
 }
 
 void IOManager::destroy() {
+	// delete textures
+	for (int i = 0; i < in_tex.size(); i++) {
+		glDeleteTextures(1, &in_tex[i].second);
+	}
+	// delete meshes
+	for (int i = 0; i < in_mesh.size(); i++) {
+		delete in_mesh[i].second;
+	}
+	// delete shaders
+	for (int i = 0; i < in_shader.size(); i++) {
+		delete in_shader[i].second;
+	}
+	// delete entities
+	for (int i = 0; i < in_entity.size(); i++) {
+		delete in_entity[i];
+	}
 
 }
 
@@ -87,6 +103,7 @@ void IOManager::load(string file_name) {
 	loadEntities(); // load entities last as it requires the others
 }
 
+// read in all objects from file "path_to_level"
 void IOManager::setLevel(std::string path_to_level) {
 	std::string data = root_dir + path_to_level;
 	Json::Reader reader;
@@ -96,23 +113,28 @@ void IOManager::setLevel(std::string path_to_level) {
 
 }
 
+// clears all the objects ready for new objects to be loaded from file
 void IOManager::clearLevel() {
 	
-	for (int i = 0; i < in_shader.size(); i++) {
-		delete(in_shader[i].second);
+	// delete textures
+	for (int i = 0; i < in_tex.size(); i++) {
+		glDeleteTextures(1, &in_tex[i].second);
 	}
-	for (int i = 0; i < in_audio.size(); i++) {
-		delete(in_audio[i]);
-	}
+	// delete meshes
 	for (int i = 0; i < in_mesh.size(); i++) {
-		delete(in_mesh[i].second);
+		delete in_mesh[i].second;
 	}
+	// delete shaders
+	for (int i = 0; i < in_shader.size(); i++) {
+		delete in_shader[i].second;
+	}
+	// delete entities
 	for (int i = 0; i < in_entity.size(); i++) {
-		delete(in_entity[i]);
+		delete in_entity[i];
 	}
 
-	// TODO: clear texture and audio from their classes
-
+	
+	// empty the vectors
 	in_audio.clear();
 	in_entity.clear();
 	in_mesh.clear();

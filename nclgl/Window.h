@@ -34,6 +34,9 @@ public:
 	}
 	Vector2 convertToScreenCoords(Vector2 coord);
 	 Vector2 GetOSMousePosition();
+
+	 bool	forceQuit;
+
 protected:
 	void CheckMessages(MSG &msg);
 
@@ -50,7 +53,7 @@ protected:
 	uint	screenWidth;
 	uint	screenHeight;
 
-	bool	forceQuit;
+	
 	bool	hasInit;
 
 	GameTimer timer;

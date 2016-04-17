@@ -1,6 +1,7 @@
 #include "GameAudio.h"
 
 #define TURN_SWAP "swap"
+#define ROCKET_1 "rocket1"
 
 int r;
 
@@ -29,9 +30,10 @@ void GameAudio::handleEvents() {
 	for (int i = 0; i < gl->out_audio_events.size(); i++) {
 		switch (gl->out_audio_events[i]) {
 		case GameLogic::eAudioEvents::AE_TURN_SWAP:
-
-
 			am->play2D(TURN_SWAP);
+			break;
+		case GameLogic::eAudioEvents::AE_EXPLOSION_BOMB:
+			am->play2D(ROCKET_1);
 			break;
 		}
 	}
