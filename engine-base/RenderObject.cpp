@@ -16,8 +16,8 @@ RenderObject::RenderObject(Vector3 pos, Mesh*m, Shader*s, GLuint t) {
 	modelMatrix = Matrix4::Translation(pos);
 }
 
-RenderObject::~RenderObject(void)
-{
+RenderObject::~RenderObject(void){
+
 }
 
 void RenderObject::setParent(RenderObject* r){

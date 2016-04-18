@@ -103,6 +103,7 @@
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="levels\level_1.json" />
     <None Include="shaders\BasicFrag.glsl" />
     <None Include="shaders\BasicVert.glsl" />
     <None Include="shaders\TextureFrag.glsl" />

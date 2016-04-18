@@ -14,8 +14,8 @@ class GameLogic :
 public:
 
 	enum ePlayerTurn { GS_PLAYER_1, GS_PLAYER_2 };
-	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING };
-	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE };
+	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING };
+	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_LEFT, IE_RIGHT};
 	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB };
 	enum eGameEvents { GS_QUIT };
 	
@@ -30,8 +30,11 @@ public:
 
 	enum eMask {
 		eNoCollide = 0x0000,
-		eCollide = 0xffff
+		eCollide = 0xffff,
 	};
+
+	float charge;
+	bool charging;
 
 	GameLogic(GameManager* gm, GameLogicManager* glm, b2World* world, AudioManager* am, Camera* cam);
 	~GameLogic();
@@ -43,9 +46,13 @@ public:
 	void handleEvents();
 	void handleStates();
 	void endTurn();
+	b2Filter createFilter(eFilter filter, eMask mask);
+	void setPointer();
 
-	void fireWeapon();
+
+	void fireWeapon(float charge);
 	bool isAwake(string name, string parent);
+	void adjustDirection(eInputEvents);
 
 	b2Filter getFixture(enum eFilter, enum eMask);
 
@@ -63,5 +70,8 @@ private:
 	GameManager* gm;
 	AudioManager* am;
 	Camera* cam;
+	Entity* p1;
+	Entity* p2;
+	Entity* pointer;
 };
 

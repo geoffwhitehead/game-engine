@@ -52,10 +52,17 @@ void GameInput::handleKeyboard() {
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_ENTER);
 	}
 
-	if (Keyboard::KeyTriggered(KeyboardKeys(KEY_SPACE))) {
+	if (Keyboard::KeyDown(KeyboardKeys(KEY_SPACE))) {
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_SPACE);
 	}
 
+	if (Keyboard::KeyDown(KeyboardKeys(KEY_LEFT))) {
+		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_LEFT);
+	}
+
+	if (Keyboard::KeyDown(KeyboardKeys(KEY_RIGHT))) {
+		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_RIGHT);
+	}
 }
 
 Vector3 GameInput::getMousePos3D() {

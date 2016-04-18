@@ -169,7 +169,7 @@ GLuint IOManager::findTexture(string name) {
 	if (name != "") {
 		for (int i = 0; i < in_tex.size(); i++) {
 			if (in_tex[i].first == name) {
-				return in_tex[i].second;
+ 				return in_tex[i].second;
 			}
 		}
 		cout << "a texture of this name wasnt found - exiting" << endl;

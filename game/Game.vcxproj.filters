@@ -86,5 +86,6 @@
     <None Include="shaders\BasicFrag.glsl" />
     <None Include="shaders\textureVert.glsl" />
     <None Include="shaders\TextureFrag.glsl" />
+    <None Include="levels\level_1.json" />
   </ItemGroup>
 </Project>

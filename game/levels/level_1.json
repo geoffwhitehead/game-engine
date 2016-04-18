@@ -32,17 +32,30 @@
       "y": 0.0,
       "z": 0.0,
       "w": 0.5
+    },
+   {
+      "name": "mesh_pointer",
+      "function": "GenerateTriFan",
+      "radius": 3.0,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 0.5
     }
 
   ],
   "textures": [
-    {
-      "name": "rust",
-      "path": "./textures/rust.png"
-    },
+    
     {
       "name": "sky",
       "path": "./textures/sky.png"
+    },
+    {
+      "name": "arrow",
+      "path": "./textures/arrow.png"
+    },{
+      "name": "rust",
+      "path": "./textures/rust.png"
     }
     /*,
     {
@@ -166,6 +179,26 @@
       "is_sensor": false,
       "density": 1.0,
       "friction": 0.5,
+      "collision_radius": 0.0
+    },
+    {
+      "class": "arena",
+      "name": "pointer",
+      "group": "",
+      "subgroup": "",
+      "parent": "",
+      "position": [ 0.0, 0.0, -7.0 ],
+      "acceleration": [ 0.0, 0.0, 0.0 ],
+      "velocity": [ 0.0, 0.0, 0.0 ],
+      "mesh": "mesh_pointer",
+      "shader": "basic",
+      "texture": "arrow",
+      "is_renderable": true,
+      "is_physical": true,
+      "is_dynamic": true,
+      "is_sensor": false,
+      "density": 0.0,
+      "friction": 0.0,
       "collision_radius": 0.0
     }
   ],
