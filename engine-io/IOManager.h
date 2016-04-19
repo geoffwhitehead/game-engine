@@ -5,6 +5,13 @@
 #include "../_resources/jsoncpp/include/json/json.h"
 #include "../engine-base/Entity.h"
 
+/*
+*	Class: IOManager
+*	Author:	Geoff Whitehead
+*	Description: Loads all of the Json data into memory. Exposes a load entity function that a sub system must 
+		implement which will contain game specific entities.
+*/
+
 
 using namespace std;
 

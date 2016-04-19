@@ -7,10 +7,16 @@
 #include "../engine-io/IOManager.h"
 #include "Renderer.h"
 
+/*
+*	Class: GameManager
+*	Author:	Geoff Whitehead
+*	Description: Handles all game related things. Holds a list of all the sytem managers to update. 
+		Initiates shutdown. Central class for all other class to access to gain game information such 
+		as list of entities
+*/
 
 using namespace std;
 
-// init gm with reference to input handler, ui, camera, audio, memory manager 
 
 class GameManager
 {

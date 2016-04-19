@@ -38,6 +38,7 @@ void Arena::addBodyToWorld(b2World* world, bool is_dynamic) {
 	// let superclass to the work, we just need to set the player to be
 	// a bullet so it doesn't fall through the world on huge updates
 	this->physicsObject->addBodyToWorld(world, is_dynamic);
+	this->physicsObject->body->SetActive(false);
 	this->getPhysicsObject()->body->SetBullet(true);
 
 }

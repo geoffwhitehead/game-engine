@@ -10,7 +10,6 @@
 #include "ContactListener.h"
 #include "GameInput.h"
 #include "GameAudio.h"
-#include "GameEvents.h"
 #include "GameLogic.h"
 #include "GameIO.h"
 
@@ -23,7 +22,7 @@
 #define W_Y 900.0f
 
 
-const float pixels_per_m = 32.0f;
+const float pixels_per_m = 30.0f;
 //const float gravity = -pixels_per_m / 0.7f; // adjust
 const float gravity = 0.0f;
 
@@ -43,7 +42,7 @@ void main(void) {
 
 	// CAMERA
 	Camera* camera = new Camera(0.0f, 0.0f, Vector3(0, 0, 400), W_X, W_Y);
-	Camera::projMatrix = Matrix4::Orthographic(1, 1000, W_X / 4.0f, -W_X / 4.0f, W_Y / 4.0f, -W_Y / 4.0f);
+	Camera::projMatrix = Matrix4::Orthographic(1, 1000, W_X/4, -W_X/4, W_Y/4,-W_Y/4);
 	//Camera::viewMatrix = Matrix4::BuildCamera(Vector3(0.0, 50.0, 20.0), Vector3(0.0, 0.0, 0.0));
 	//camera->BuildViewMatrix();
 

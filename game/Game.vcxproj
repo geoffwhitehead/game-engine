@@ -83,7 +83,6 @@
     <ClInclude Include="ContactListener.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="GameAudio.h" />
-    <ClInclude Include="GameEvents.h" />
     <ClInclude Include="GameInput.h" />
     <ClInclude Include="GameIO.h" />
     <ClInclude Include="GameLogic.h" />
@@ -95,7 +94,6 @@
     <ClCompile Include="ContactListener.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="GameAudio.cpp" />
-    <ClCompile Include="GameEvents.cpp" />
     <ClCompile Include="GameInput.cpp" />
     <ClCompile Include="GameIO.cpp" />
     <ClCompile Include="GameLogic.cpp" />

@@ -1,6 +1,13 @@
 #pragma once
 #include "SubSystem.h"
 
+/*
+*	Class: SystemManager
+*	Author:	Geoff Whitehead
+*	Description:  System managers are registered and stored wihtin the game manager. They contain functionality specific 
+		to one area. Such as input or audio. The game manager will call the virtual functions at various points 
+		during the game
+*/
 
 class SystemManager
 {

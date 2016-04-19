@@ -2,6 +2,7 @@
 
 #define TURN_SWAP "swap"
 #define ROCKET_1 "rocket1"
+#define FART "fart-2"
 
 int r;
 
@@ -35,7 +36,11 @@ void GameAudio::handleEvents() {
 		case GameLogic::eAudioEvents::AE_EXPLOSION_BOMB:
 			am->play2D(ROCKET_1);
 			break;
+		case GameLogic::eAudioEvents::AE_MOVE:
+			am->play2D(FART);
+			break;
 		}
+	
 	}
 }
 

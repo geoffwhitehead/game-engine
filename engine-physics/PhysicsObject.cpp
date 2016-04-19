@@ -26,12 +26,9 @@ Vector3& PhysicsObject::getPos() {
 	return Vector3(body->GetPosition().x, body->GetPosition().y, start_pos.z);
 }
 
-
 void PhysicsObject::update(float dt) {
 	updateRenderObject();
 };
-
-
 
 void PhysicsObject::createFixture(b2Shape* shape, bool is_sensor) {
 	// note that friction, etc. can be modified later by looping
@@ -49,8 +46,6 @@ void PhysicsObject::createFixture(b2Shape* shape, bool is_sensor) {
 	this->body->CreateFixture(&fixtureDef);
 }
 
-
-
 void PhysicsObject::addCircularFixtureToBody(float radius, bool is_sensor) {
 	b2CircleShape shape;
 	shape.m_radius = radius * this->pixels_per_m;
@@ -60,8 +55,8 @@ void PhysicsObject::addCircularFixtureToBody(float radius, bool is_sensor) {
 void PhysicsObject::addRectangularFixtureToBody(float width, float height, bool is_sensor) {
 	b2PolygonShape shape;
 	shape.SetAsBox(
-		width * this->pixels_per_m,
-		height * this->pixels_per_m
+		width, //* this->pixels_per_m,
+		height //* this->pixels_per_m
 	);
 	this->createFixture(&shape, is_sensor);
 }
@@ -71,8 +66,8 @@ void PhysicsObject::addBodyToWorld(b2World* world, bool is_dynamic) {
 	this->b2_world = world;
 	b2BodyDef bodyDef;
 	bodyDef.position.Set(
-		(float32)start_pos.x / pixels_per_m,
-		(float32)start_pos.y / pixels_per_m
+		(float32)start_pos.x, /// pixels_per_m,
+		(float32)start_pos.y /// pixels_per_m
 	);
 	if (is_dynamic) {
 		bodyDef.type = b2_dynamicBody;

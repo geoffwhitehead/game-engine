@@ -1,5 +1,13 @@
 #pragma once
 #include "..\engine-base\Entity.h"
+
+
+/*
+*	Class: Bomb
+*	Author:	Geoff Whitehead
+*	Description: Class to hold informaiton on a bomb. Add a damage float.
+*/
+
 class Bomb :
 	public Entity {
 public:

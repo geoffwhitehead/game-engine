@@ -5,6 +5,10 @@
 #include "Shader.h"
 #include "Camera.h"
 
+/*
+	Slightly modified render object class created by Rich Davison
+*/
+
 class RenderObject	{
 public:
 	RenderObject(void);

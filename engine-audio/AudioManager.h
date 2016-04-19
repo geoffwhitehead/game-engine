@@ -11,6 +11,14 @@ using namespace irrklang;
 using namespace std;
 
 
+/*
+*	Class: AudioManager
+*	Author:	Geoff Whitehead
+*	Description: Handles all irrKlang audio related things. This includes loading the sound engine and 
+*		exposing functuion that enable the user to load sounds. Has a list of sub systems that the user
+*		can add to and will call update on these each game loop. 
+*/
+
 class AudioManager :
 	public SystemManager
 {

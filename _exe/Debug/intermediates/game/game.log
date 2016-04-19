@@ -1,5 +1,6 @@
 ﻿  GameLogic.cpp
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(153): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(161): warning C4305: 'argument': truncation from 'double' to 'float32'
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(196): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(59): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(187): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(237): warning C4018: '<': signed/unsigned mismatch
   game.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\\_exe\Debug\game.exe

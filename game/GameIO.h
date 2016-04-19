@@ -2,6 +2,11 @@
 #include "../engine-io/IOManager.h"
 #include "../engine-base/Entity.h"
 
+/*
+*	Class: GameIO
+*	Author:	Geoff Whitehead
+*	Description: Handles the load entity virtual function from the base class. Determines how to laod entities into the game.
+*/
 
 class CollisionManager;
 

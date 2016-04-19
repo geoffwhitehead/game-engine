@@ -16,6 +16,6 @@ c:\users\geoff\source\repos\game-engine\engine-io\iomanager.cpp(170): warning C4
 c:\users\geoff\source\repos\game-engine\engine-io\iomanager.cpp(182): warning C4018: '<': signed/unsigned mismatch
 c:\users\geoff\source\repos\game-engine\engine-io\iomanager.cpp(194): warning C4018: '<': signed/unsigned mismatch
 c:\users\geoff\source\repos\game-engine\engine-io\iomanager.cpp(178): warning C4715: 'IOManager::findTexture': not all control paths return a value
-c:\users\geoff\source\repos\game-engine\engine-io\iomanager.cpp(202): warning C4715: 'IOManager::findShader': not all control paths return a value
 c:\users\geoff\source\repos\game-engine\engine-io\iomanager.cpp(190): warning C4715: 'IOManager::findMesh': not all control paths return a value
+c:\users\geoff\source\repos\game-engine\engine-io\iomanager.cpp(202): warning C4715: 'IOManager::findShader': not all control paths return a value
   engine-io.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-io.lib

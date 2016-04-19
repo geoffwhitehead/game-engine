@@ -4,8 +4,17 @@
 #include "GameLogic.h"
 #include "../nclgl/Window.h"
 #include "../engine-base/Camera.h"
-#include <assert.h>     /* assert */
-#include "GameEvents.h"
+#include <assert.h>     
+
+
+
+/*
+*	Class: GameInput
+*	Author:	Geoff Whitehead
+*	Description: Checks for any user input and inserts the event into a vector contained in the game logic class
+*/
+
+
 
 #define FORCE_SCALE 120
 

@@ -1,13 +1,26 @@
 #pragma once
+#include "../engine-base/GameManager.h"
 #include "../engine-base/SubSystem.h"
 #include "../engine-base/GameLogicManager.h"
-#include "GameEvents.h"
 #include "Player.h"
 #include "Bomb.h"
 #include "Arena.h"
 #include "Explosion.h"
 #include "../engine-audio/AudioManager.h"
+#include "Explosion.h"
+#include <math.h>
+#include <chrono>
+#include <ctime>
+#include <iostream>
 
+/*
+*	Class: GameLogic
+*	Author:	Geoff Whitehead
+*	Description: Handles all game evntrs and applies game logic to them. Handles states and 
+		functions that occur because of states or events.
+*/
+
+using namespace std::chrono;
 class GameLogic :
 	public SubSystem
 {
@@ -16,7 +29,7 @@ public:
 	enum ePlayerTurn { GS_PLAYER_1, GS_PLAYER_2 };
 	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING };
 	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_LEFT, IE_RIGHT};
-	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB };
+	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE };
 	enum eGameEvents { GS_QUIT };
 	
 	eGameState game_state;
@@ -33,15 +46,23 @@ public:
 		eCollide = 0xffff,
 	};
 
+	Entity* active_player;
+
+	
+	time_point<system_clock> start;
+	time_point<std::chrono::system_clock> end;
+	duration<double> elapsed_seconds;
+
 	float charge;
 	bool charging;
-
+	int temp = 100;
 	GameLogic(GameManager* gm, GameLogicManager* glm, b2World* world, AudioManager* am, Camera* cam);
 	~GameLogic();
 
 	void init();
 	void update(float msec);
 	void destroy();
+	static b2Vec2 force;
 
 	void handleEvents();
 	void handleStates();

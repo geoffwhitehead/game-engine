@@ -21,9 +21,6 @@
     <ClInclude Include="GameAudio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameEvents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameLogic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -54,9 +51,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameAudio.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEvents.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameLogic.cpp">

@@ -8,7 +8,9 @@
 #include <ctime>
 #include <cstdlib>
 
-
+/*
+	stripped down renderer initially created by Rich Davison
+*/
 
 
 using std::vector;

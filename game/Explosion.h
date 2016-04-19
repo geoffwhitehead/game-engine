@@ -1,5 +1,13 @@
 #pragma once
 #include "..\engine-base\Entity.h"
+
+/*
+*	Class: Explosion
+*	Author:	Geoff Whitehead
+*	Description: Class for explosions. Contains vars to determine the length of the explosion
+*/
+
+
 class Explosion : public Entity {
 
 	public:

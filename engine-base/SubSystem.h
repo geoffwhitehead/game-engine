@@ -1,5 +1,12 @@
 #pragma once
 
+/*
+*	Class: SubSystem
+*	Author:	Geoff Whitehead
+*	Description: Sub systems are registered with System Managers that extend functionality of the 
+		system manager in a game specific context. Contains functions that a system manager will call
+		that a sub system must implement.
+*/
 
 class SubSystem
 {

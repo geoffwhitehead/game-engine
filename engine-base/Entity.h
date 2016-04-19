@@ -9,6 +9,13 @@
 #include <Box2D\Box2D.h>
 #include "../engine-physics/PhysicsObject.h"
 
+/*
+*	Class: Entity
+*	Author:	Geoff Whitehead
+*	Description: Base class which holds references to render and physics objects and 
+*		various other functions.
+*/
+
 using namespace std;
 
 class Entity

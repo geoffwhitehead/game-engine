@@ -1,5 +1,13 @@
 #pragma once
 #include "..\engine-base\Entity.h"
+
+/*
+*	Class: Player
+*	Author:	Geoff Whitehead
+*	Description: At the moment only adds one variable: health.
+*/
+
+
 class Player :
 	public Entity {
 public:

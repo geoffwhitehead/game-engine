@@ -1,8 +1,14 @@
 #pragma once
 #include "../engine-base/SubSystem.h"
 #include "../engine-audio/AudioManager.h"
-#include "GameEvents.h"
 #include "GameLogic.h"
+
+/*
+*	Class: GameAudio
+*	Author:	Geoff Whitehead
+*	Description: Contains information on all audio related events. Each update will do a switch over all the events in its vector
+		playing a different sound for each sound event.
+*/
 
 class GameAudio :
 	public SubSystem

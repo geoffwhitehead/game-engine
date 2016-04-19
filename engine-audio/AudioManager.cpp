@@ -82,6 +82,7 @@ void AudioManager::play2D(string name) {
 	se->play2D(audio[name]);
 }
 
+// Load all sounds contained in vector from class input manager that contains details on files to load.
 void AudioManager::loudAudioFromFile() {
 	for (int i = 0; i < iom->in_audio.size(); i++) {
 		loadSound(iom->in_audio[i]->name, iom->in_audio[i]->path.c_str(), iom->in_audio[i]->default_volume);

@@ -3,6 +3,15 @@
 #include "RenderObject.h"
 #include <Box2D\Box2D.h>
 
+
+/*
+*	Class: PhysicsObjects
+*	Author:	Geoff Whitehead
+*	Description: Contains physics related information on an entity. Contains a reference to a box 2d body 
+		which is the gateway to all box2d related data and information on this entity.
+*/
+
+
 class PhysicsObject
 {
 private:

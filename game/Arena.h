@@ -1,5 +1,12 @@
 #pragma once
 #include "..\engine-base\Entity.h"
+
+/*
+*	Class: Arena
+*	Author:	Geoff Whitehead
+*	Description: Using this class for all quad objects that are related to the game level design and environment.
+*/
+
 class Arena :
 	public Entity {
 public:

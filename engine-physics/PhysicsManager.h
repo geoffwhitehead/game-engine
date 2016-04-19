@@ -4,6 +4,12 @@
 //#include "PhysicsObject.h"
 #include "../engine-base/GameManager.h"
 
+/*
+*	Class: PhysicsManager
+*	Author:	Geoff Whitehead
+*	Description: Handles all Box2D related things such as the box 2d world. 
+*/
+
 static class PhysicsManager :
 	public SystemManager {
 public:
