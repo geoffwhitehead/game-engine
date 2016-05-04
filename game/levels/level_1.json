@@ -9,16 +9,25 @@
     {
       "name": "mesh_player",
       "function": "GenerateTriFan",
-      "radius": 10.0,
+      "radius": 1.0,
       "x": 1.0,
       "y": 0.0,
       "z": 0.0,
       "w": 0.5
     },
     {
+      "name": "mesh_hub",
+      "function": "GenerateTriFan",
+      "radius": 1.0,
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0,
+      "w": 0.5
+    },
+    {
       "name": "mesh_bomb",
       "function": "GenerateTriFan",
-      "radius": 5.0,
+      "radius": 0.5,
       "x": 1.0,
       "y": 1.0,
       "z": 0.5,
@@ -27,7 +36,7 @@
     {
       "name": "mesh_explosion",
       "function": "GenerateTriFan",
-      "radius": 20.0,
+      "radius": 3.0,
       "x": 1.0,
       "y": 0.0,
       "z": 0.0,
@@ -36,7 +45,7 @@
    {
       "name": "mesh_pointer",
       "function": "GenerateTriFan",
-      "radius": 5.0,
+      "radius": 0.5,
     "x": 0.0,
       "y": 0.0,
       "z": 0.0,
@@ -95,8 +104,7 @@
       "is_sensor": false,
       "density": 1.0,
       "friction": 0.5,
-      "collision_radius": 1.33,
-      "health": 2.0
+      "collision_radius": 0.33
     },
     {
       "class": "player",
@@ -116,8 +124,7 @@
       "is_sensor": false,
       "density": 1.0,
       "friction": 0.5,
-      "collision_radius": 1.33,
-      "health": 2.0
+      "collision_radius": 0.33
     },
     {
       "class": "bomb",
@@ -135,7 +142,7 @@
       "is_physical": true,
       "is_dynamic": true,
       "is_sensor": false,
-      "density": 0.1,
+      "density": 1.0,
       "friction": 0.5,
       "collision_radius": 0.066,
       "damage": 1.0
@@ -213,10 +220,15 @@
       "path": "./audio/beep1.wav",
       "default_volume": 0.3
     },
-     {
+    {
       "name": "rocket1",
       "path": "./audio/rocket1.wav",
       "default_volume": 0.3
+    },
+     {
+      "name": "powerup",
+      "path": "./audio/powerup.wav",
+      "default_volume": 0.5
     },
      {
       "name": "fart-2",

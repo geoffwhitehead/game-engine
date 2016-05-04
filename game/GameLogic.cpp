@@ -3,10 +3,15 @@
 
 #define VEC_STILL Vector3(0.0,0.0,5.0)
 #define CAM_OFFSET 20.0f
-#define DAMPING 0.001f
+#define DAMPING 0.0003f
 #define ROTATION 0.003f
 #define MAX_CHARGE 20.0f
 #define MAX 20
+#define pointer_offset 5.0f
+#define clamp 0.035f
+#define charge_speed 0.02f
+#define initial_charge 0.01f
+#define hub_health 3
 
 b2Vec2 GameLogic::force;
 
@@ -28,7 +33,8 @@ void GameLogic::init() {
 	game_state = eGameState::GS_PLAYING;
 	p1 = gm->getEntityByName("player_1", "");
 	p2 = gm->getEntityByName("player_2", "");
-	active_player = p1;
+	selected_node = p1;
+	action = eActionSelection::AS_HUB;
 	pointer = gm->getEntityByName("pointer", "");
 	p1->getPhysicsObject()->body->SetLinearDamping(DAMPING);
 	p2->getPhysicsObject()->body->SetLinearDamping(DAMPING);
@@ -42,50 +48,82 @@ void GameLogic::init() {
 	pointer->getPhysicsObject()->body->GetFixtureList()->SetFilterData(getFixture(eFilterSolid, eNoCollide));
 }
 
+
+b2Vec2 GameLogic::getTrajectory(Entity* origin) {
+	float cosx = cos(origin->getPhysicsObject()->body->GetAngle());
+	float siny = sin(origin->getPhysicsObject()->body->GetAngle());
+
+	float charge = (elapsed_seconds.count() * charge_speed) + initial_charge;
+
+	if (charge > clamp) {
+		charge = clamp;
+	}
+
+
+	cosx = cosx * charge;
+	siny = siny * charge;
+
+	force = b2Vec2(cosx, siny);
+
+	return force;
+}
+
+void GameLogic::launch() {
+	Entity* hub;
+	
+	switch (action) {
+	case GameLogic::AS_HUB:
+		hub = new NodeHub("node" + game_nodes.size(), "", "", "", selected_node->getPhysicsObject()->getPos(),
+			gm->iom->findMesh("mesh_hub"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true, 
+			true, true, 30, 1.0, world, 0.5, 1.0, hub_health);
+		hub->getPhysicsObject()->body->SetLinearDamping(DAMPING);
+		gm->addEntity(hub);
+		launchNode(hub);
+		fired_entity = hub;
+		break;
+
+	case GameLogic::AS_BOMB:
+
+		fireWeapon(gm->getEntityByName("bomb", ""));
+		fired_entity = gm->getEntityByName("bomb", "");
+		break;
+	}
+	game_state = GS_FIRING;
+}
+
+void GameLogic::launchNode(Entity* e) {
+	e->is_renderable = true;
+	selected_node->getPhysicsObject()->body->GetFixtureList()->SetFilterData(createFilter(eFilterNonSolid, eNoCollide));
+
+	gm->getEntityByName("bomb", "")->getPhysicsObject()->body->SetTransform(selected_node->getPhysicsObject()->body->GetPosition(), 0.0f);
+	e->getPhysicsObject()->body->SetActive(true);
+	e->getPhysicsObject()->body->GetFixtureList()->SetFilterData(getFixture(eFilterNonSolid, eCollide));
+
+	e->getPhysicsObject()->body->SetLinearVelocity(getTrajectory(selected_node));
+}
+
 // postion the bomb entity and fire it with a given charge in the directon teh active player is facing
-void GameLogic::fireWeapon(float charge) {
-	Entity* bomb = gm->getEntityByName("bomb", "");
+void GameLogic::fireWeapon(Entity* bomb) {
+	
 	bomb->is_renderable = true;
+	selected_node->getPhysicsObject()->body->GetFixtureList()->SetFilterData(createFilter(eFilterNonSolid, eNoCollide));
 
-	active_player->getPhysicsObject()->body->GetFixtureList()->SetFilterData(createFilter(eFilterNonSolid, eNoCollide));
-
-	gm->getEntityByName("bomb", "")->getPhysicsObject()->body->SetTransform(active_player->getPhysicsObject()->body->GetPosition(), 0.0f);
+	gm->getEntityByName("bomb", "")->getPhysicsObject()->body->SetTransform(selected_node->getPhysicsObject()->body->GetPosition(), 0.0f);
 	bomb->getPhysicsObject()->body->SetActive(true);
 	bomb->getPhysicsObject()->body->GetFixtureList()->SetFilterData(getFixture(eFilterNonSolid, eCollide));
+
+	bomb->getPhysicsObject()->body->SetLinearVelocity(getTrajectory(selected_node));
 	
-	float cosx = cos(active_player->getPhysicsObject()->body->GetAngle());
-	float siny = sin(active_player->getPhysicsObject()->body->GetAngle());
-	cosx = cosx * elapsed_seconds.count();
-	siny = siny * elapsed_seconds.count();
-	force = b2Vec2( cosx, siny );
-
-	//b2Vec2 force = b2Vec2(5000, 5000);
-
-	//bomb->getPhysicsObject()->body->SetLinearVelocity(force, active_player->getPhysicsObject()->body->GetWorldCenter(), true);
-	bomb->getPhysicsObject()->body->SetLinearVelocity(force);
-	
-
-	/*
-	float magnitude = 10000.0f;
-	b2Vec2 forceDirection = p1->getPhysicsObject()->body->GetWorldVector(b2Vec2(0, 1));
-bomb->getPhysicsObject()->body->SetAwake(true);
-	forceDirection = magnitude * forceDirection;
-	bomb->getPhysicsObject()->body->ApplyLinearImpulse(forceDirection, bomb->getPhysicsObject()->body->GetPosition(), true);
-	
-	//bomb->getPhysicsObject()->body->SetLinearVelocity(forceDirection);
-
-*/
-
-
 }
+
 // TODO: condense this
 // positions the pointer relative to point and angle of player
 void GameLogic::setPointer() {
-	float p_angle = active_player->getPhysicsObject()->body->GetAngle();
-	float posx = active_player->getPhysicsObject()->getPos().x;
-	float posy = active_player->getPhysicsObject()->getPos().y;
-	float x = posx + (100 * cos(p_angle));
-	float y = posy + (100 * sin(p_angle));
+	float p_angle = selected_node->getPhysicsObject()->body->GetAngle();
+	float posx = selected_node->getPhysicsObject()->getPos().x;
+	float posy = selected_node->getPhysicsObject()->getPos().y;
+	float x = posx + (pointer_offset * cos(p_angle));
+	float y = posy + (pointer_offset * sin(p_angle));
 	pointer->getPhysicsObject()->body->SetTransform(b2Vec2(x, y), pointer->getPhysicsObject()->start_pos.z);
 
 }
@@ -118,7 +156,7 @@ void GameLogic::editEntity(string name, string parent, bool is_collidable, bool 
 
 }
 
-// states occur over multiple frames, this determines action that occur beacuse of this
+// states occur over multiple frames, this determines action that occur because of this
 void GameLogic::handleStates() {
 
 	// declare vars outside switch
@@ -126,18 +164,32 @@ void GameLogic::handleStates() {
 
 	switch (game_state) {
 	case eGameState::GS_FIRING:
-		if (!isAwake("bomb", "")) {
-			out_audio_events.push_back(eAudioEvents::AE_EXPLOSION_BOMB);
-			gm->getEntityByName("bomb", "")->is_renderable = false;
-			game_state = eGameState::GS_EXPLODING;
-			temp = 0;
+		if (!isAwake(fired_entity)) {
+			
+			
+			game_state = eGameState::GS_CONTACT;
 		}
-		/*if (temp > 0) {
+		break;
 
-			temp--;
-			gm->getEntityByName("bomb", "")->getPhysicsObject()->body->ApplyLinearImpulse(force, active_player->getPhysicsObject()->body->GetWorldCenter(), true);
-		}*/
+	case eGameState::GS_CONTACT:
 
+		switch (action) {
+		case GameLogic::AS_HUB:
+			out_audio_events.push_back(eAudioEvents::AE_POWERUP);
+			game_state = eGameState::GS_BUILDING;
+			break;
+		case GameLogic::AS_BOMB:
+			out_audio_events.push_back(eAudioEvents::AE_EXPLOSION_BOMB);
+			fired_entity->is_renderable = false;
+			game_state = eGameState::GS_EXPLODING;
+			break;
+		}
+
+		break;
+
+	case eGameState::GS_BUILDING:
+
+		game_state = eGameState::GS_PLAYING;
 		break;
 
 	case eGameState::GS_EXPLODING:
@@ -150,11 +202,11 @@ void GameLogic::handleStates() {
 			gm->getEntityByName("bomb_explosion", "")->is_renderable = true;
 			e->current_life--;
 		}
-		else {
+		else if (e->current_life == 0) {
 			e->current_life = e->lifetime;
 			gm->getEntityByName("bomb_explosion", "")->getPhysicsObject()->body->SetActive(false);
 			gm->getEntityByName("bomb_explosion", "")->is_renderable = false;
-			active_player->getPhysicsObject()->body->GetFixtureList()->SetFilterData(createFilter(eFilterSolid, eCollide));
+			selected_node->getPhysicsObject()->body->GetFixtureList()->SetFilterData(createFilter(eFilterSolid, eCollide));
 
 			game_state = eGameState::GS_PLAYING;
 		}
@@ -170,8 +222,8 @@ void GameLogic::handleStates() {
 			*/
 			end = std::chrono::system_clock::now();
 			elapsed_seconds = end - start;
-			fireWeapon(charge);
-			game_state = eGameState::GS_FIRING;
+			launch();
+			//game_state = eGameState::GS_FIRING;
 		}
 		break;
 	}
@@ -191,13 +243,13 @@ void GameLogic::handleEvents() {
 			if (game_state == eGameState::GS_PLAYING) {
 				//active_player->getPhysicsObject()->body->ApplyForce(b2Vec2(100, 0.0), active_player->getPhysicsObject()->body->GetWorldCenter(), true);
 				
-				float cosx = cos(active_player->getPhysicsObject()->body->GetAngle());
-				float siny = sin(active_player->getPhysicsObject()->body->GetAngle());
+				float cosx = cos(selected_node->getPhysicsObject()->body->GetAngle());
+				float siny = sin(selected_node->getPhysicsObject()->body->GetAngle());
 				cosx = cosx * 100;
 				siny = siny * 100;
 				b2Vec2 force = b2Vec2(cosx, siny);
 
-				active_player->getPhysicsObject()->body->ApplyLinearImpulse(force, active_player->getPhysicsObject()->body->GetWorldCenter(), true);
+				selected_node->getPhysicsObject()->body->ApplyLinearImpulse(force, selected_node->getPhysicsObject()->body->GetWorldCenter(), true);
 			
 				out_audio_events.push_back(eAudioEvents::AE_MOVE);
 			}
@@ -211,7 +263,7 @@ void GameLogic::handleEvents() {
 		case eInputEvents::IE_SPACE:
 			if (game_state == eGameState::GS_PLAYING) {
 				game_state = eGameState::GS_CHARGING;
-				charge = 1;
+				//charge = 1;
 				start = std::chrono::system_clock::now();
 			}
 			if (game_state == eGameState::GS_CHARGING) {
@@ -230,6 +282,18 @@ void GameLogic::handleEvents() {
 				setPointer();
 			}
 			break;
+		
+		case eInputEvents::IE_PAD1:
+			if (game_state == eGameState::GS_PLAYING) {
+				action = eActionSelection::AS_HUB;
+			}
+			break;
+	
+		case eInputEvents::IE_PAD4:
+			if (game_state == eGameState::GS_PLAYING) {
+				action = eActionSelection::AS_BOMB;
+			}
+			break;
 		}
 	}
 
@@ -246,10 +310,10 @@ void GameLogic::handleEvents() {
 void GameLogic::adjustDirection(eInputEvents dir) {
 	switch (dir) {
 	case GameLogic::IE_LEFT:
-		active_player->getPhysicsObject()->body->SetAngularVelocity(-ROTATION);
+		selected_node->getPhysicsObject()->body->SetAngularVelocity(-ROTATION);
 		break;
 	case GameLogic::IE_RIGHT:
-		active_player->getPhysicsObject()->body->SetAngularVelocity(ROTATION);
+		selected_node->getPhysicsObject()->body->SetAngularVelocity(ROTATION);
 		break;
 	}
 }
@@ -282,21 +346,21 @@ void GameLogic::endTurn() {
 	
 	if (player_turn == ePlayerTurn::GS_PLAYER_1) {
 		player_turn = ePlayerTurn::GS_PLAYER_2;
-		active_player = p2;
-		Vector3 player_pos = active_player->getPhysicsObject()->getPos();
+		selected_node = p2;
+		Vector3 player_pos = selected_node->getPhysicsObject()->getPos();
 		cam->SetPosition(Vector3(player_pos.x, player_pos.y, CAM_OFFSET));
 	}
 	else {
 		player_turn = ePlayerTurn::GS_PLAYER_1;
-		active_player = p1;
-		Vector3 player_pos = active_player->getPhysicsObject()->getPos();
+		selected_node = p1;
+		Vector3 player_pos = selected_node->getPhysicsObject()->getPos();
 		cam->SetPosition(Vector3(player_pos.x, player_pos.y, CAM_OFFSET));
 	}
 }
 
 // check if an entity with given name is awake or not
-bool GameLogic::isAwake(string name, string parent) {
-	return gm->getEntityByName("bomb", "")->getPhysicsObject()->body->IsAwake();
+bool GameLogic::isAwake(Entity* e) {
+	return e->getPhysicsObject()->body->IsAwake();
 }
 
 // return the 3d mouse position.

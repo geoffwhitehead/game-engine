@@ -4,8 +4,9 @@
 #include "Arena.h"
 #include "Bomb.h"
 #include "Explosion.h"
+#include "NodeHub.h"
 
-enum eClassType {CL_PLAYER, CL_ARENA, CL_BOMB, CL_EXPLOSION};
+enum eClassType {CL_PLAYER, CL_ARENA, CL_BOMB, CL_EXPLOSION, CL_HUB};
 eClassType class_type;
 
 GameIO::GameIO(string root_dir, b2World* b2_world, float ppm) : IOManager(root_dir, b2_world, ppm){
@@ -32,6 +33,9 @@ void GameIO::loadEntities() {
 		}
 		else if (level["entities"][i]["class"].asString() == "explosion") {
 			class_type = eClassType::CL_EXPLOSION;
+		}
+		else if (level["entities"][i]["class"].asString() == "node") {
+			class_type = eClassType::CL_HUB;
 		}
 
 		Json::Value entity = level["entities"][i];
@@ -65,10 +69,7 @@ void GameIO::loadEntities() {
 
 		switch (class_type) {
 		case CL_PLAYER:
-
-			health = entity["health"].asFloat();
-
-			e = new Player(name, parent, group, subgroup, pos, m, s, t, renderable, physical, dynamic, sensor, ppm, c_rad, world, friction, density, health);
+			e = new Player(name, parent, group, subgroup, pos, m, s, t, renderable, physical, dynamic, sensor, ppm, c_rad, world, friction, density);
 				
 			break;
 
@@ -88,7 +89,6 @@ void GameIO::loadEntities() {
 			e = new Arena(name, parent, group, subgroup, pos, m, s, t, renderable, physical, dynamic, sensor, ppm, c_rad, world, friction, density);
 
 			break;
-
 			
 		default:
 			cout << "error loading" << endl;

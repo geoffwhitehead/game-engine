@@ -1,6 +1,8 @@
 #include "Player.h"
 
 
+Player::~Player() {
+}
 
 Player::Player (
 	string name, 
@@ -19,11 +21,9 @@ Player::Player (
 	float radius, 
 	b2World* world, 
 	float friction, 
-	float density,
-	int health
+	float density
 ) : Entity(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, ppm, world)
 {
-	this->health = health;
 	addBodyToWorld(world, dynamic);
 	addFixturesToBody(radius, sensor);
 	b2Fixture* b2_list = this->getPhysicsObject()->body->GetFixtureList();
@@ -33,8 +33,6 @@ Player::Player (
 }
 
 
-Player::~Player() {
-}
 
 void Player::addBodyToWorld(b2World* world, bool is_dynamic ) {
 	// let superclass to the work, we just need to set the player to be

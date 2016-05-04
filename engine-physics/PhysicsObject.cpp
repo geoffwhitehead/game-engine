@@ -48,7 +48,7 @@ void PhysicsObject::createFixture(b2Shape* shape, bool is_sensor) {
 
 void PhysicsObject::addCircularFixtureToBody(float radius, bool is_sensor) {
 	b2CircleShape shape;
-	shape.m_radius = radius * this->pixels_per_m;
+	shape.m_radius = radius; //* this->pixels_per_m;
 	this->createFixture(&shape, is_sensor);
 }
 

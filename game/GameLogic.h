@@ -6,13 +6,14 @@
 #include "Bomb.h"
 #include "Arena.h"
 #include "Explosion.h"
+#include "Node.h"
+#include "NodeHub.h"
 #include "../engine-audio/AudioManager.h"
 #include "Explosion.h"
 #include <math.h>
 #include <chrono>
 #include <ctime>
 #include <iostream>
-
 /*
 *	Class: GameLogic
 *	Author:	Geoff Whitehead
@@ -27,13 +28,21 @@ class GameLogic :
 public:
 
 	enum ePlayerTurn { GS_PLAYER_1, GS_PLAYER_2 };
-	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING };
-	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_LEFT, IE_RIGHT};
-	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE };
+	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING, GS_CONTACT };
+	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_LEFT, IE_RIGHT, IE_PAD1, IE_PAD4};
+	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE, AE_POWERUP };
 	enum eGameEvents { GS_QUIT };
+	enum eActionSelection {AS_HUB, AS_BOMB};
 	
 	eGameState game_state;
 	ePlayerTurn player_turn;
+
+	vector<Node*> game_nodes;
+
+	Entity* selected_node;
+	eActionSelection action;
+
+	Entity* fired_entity;
 
 	enum eFilter {
 		eFilterLevel = 0x01,
@@ -46,7 +55,7 @@ public:
 		eCollide = 0xffff,
 	};
 
-	Entity* active_player;
+	
 
 	
 	time_point<system_clock> start;
@@ -70,10 +79,14 @@ public:
 	b2Filter createFilter(eFilter filter, eMask mask);
 	void setPointer();
 
+	b2Vec2 getTrajectory(Entity* origin);
+	void fireWeapon(Entity* e);
+	void launchNode(Entity* e);
+	void launch();
 
-	void fireWeapon(float charge);
-	bool isAwake(string name, string parent);
+	bool isAwake(Entity*);
 	void adjustDirection(eInputEvents);
+	
 
 	b2Filter getFixture(enum eFilter, enum eMask);
 

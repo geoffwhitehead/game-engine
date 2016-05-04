@@ -20,9 +20,9 @@
 // screen size
 #define W_X 1600.0f
 #define W_Y 900.0f
+#define p_factor 12.0f
 
-
-const float pixels_per_m = 30.0f;
+const float pixels_per_m = 20.0f;
 //const float gravity = -pixels_per_m / 0.7f; // adjust
 const float gravity = 0.0f;
 
@@ -42,7 +42,7 @@ void main(void) {
 
 	// CAMERA
 	Camera* camera = new Camera(0.0f, 0.0f, Vector3(0, 0, 400), W_X, W_Y);
-	Camera::projMatrix = Matrix4::Orthographic(1, 1000, W_X/4, -W_X/4, W_Y/4,-W_Y/4);
+	Camera::projMatrix = Matrix4::Orthographic(1, 1000, W_X/ pixels_per_m, -W_X/ pixels_per_m, W_Y/ pixels_per_m,-W_Y/ pixels_per_m);
 	//Camera::viewMatrix = Matrix4::BuildCamera(Vector3(0.0, 50.0, 20.0), Vector3(0.0, 0.0, 0.0));
 	//camera->BuildViewMatrix();
 

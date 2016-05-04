@@ -86,6 +86,8 @@
     <ClInclude Include="GameInput.h" />
     <ClInclude Include="GameIO.h" />
     <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="NodeHub.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +100,8 @@
     <ClCompile Include="GameIO.cpp" />
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="NodeHub.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>

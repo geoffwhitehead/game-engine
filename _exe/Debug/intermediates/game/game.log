@@ -1,6 +1,12 @@
-﻿  GameLogic.cpp
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(59): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(187): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(237): warning C4018: '<': signed/unsigned mismatch
+﻿  main.cpp
+c:\users\geoff\source\repos\game-engine\engine-physics\physicsmanager.h(39): warning C4091: 'static ': ignored on left of 'PhysicsManager' when no variable is declared
+  GameLogic.cpp
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(56): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(239): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(301): warning C4018: '<': signed/unsigned mismatch
+  GameInput.cpp
+  GameAudio.cpp
+c:\users\geoff\source\repos\game-engine\game\gameaudio.cpp(32): warning C4018: '<': signed/unsigned mismatch
+  ContactListener.cpp
+  Generating Code...
   game.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\\_exe\Debug\game.exe

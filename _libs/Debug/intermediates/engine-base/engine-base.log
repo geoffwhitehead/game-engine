@@ -1,11 +1,6 @@
-﻿  Camera.cpp
+﻿  Entity.cpp
   Generating Code...
   Compiling...
-  SystemManager.cpp
-  SubSystem.cpp
-  Renderer.cpp
-c:\users\geoff\source\repos\game-engine\engine-base\renderer.cpp(10): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  RenderObject.cpp
   GameManager.cpp
 c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(5): warning C4244: 'argument': conversion from 'float' to 'uint', possible loss of data
 c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(69): warning C4018: '<': signed/unsigned mismatch
@@ -13,10 +8,6 @@ c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(74): warning
 c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(87): warning C4018: '<': signed/unsigned mismatch
 c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(94): warning C4018: '<': signed/unsigned mismatch
 c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(96): warning C4018: '<': signed/unsigned mismatch
-  GameLogicManager.cpp
-c:\users\geoff\source\repos\game-engine\engine-base\gamelogicmanager.cpp(15): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamelogicmanager.cpp(21): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamelogicmanager.cpp(27): warning C4018: '<': signed/unsigned mismatch
-  Entity.cpp
   Generating Code...
+cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
   engine-base.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-base.lib

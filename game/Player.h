@@ -28,12 +28,10 @@ public:
 		float radius, 
 		b2World* world, 
 		float friction, 
-		float density,
-		int health
+		float density
 	);
 	~Player();
 
-	int health;
 
 	void addBodyToWorld(b2World* world, bool is_dynamic);
 	void addFixturesToBody(float radius, bool is_sensor);
