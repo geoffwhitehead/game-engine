@@ -1,13 +1,15 @@
-﻿  Entity.cpp
-  Generating Code...
-  Compiling...
+﻿  RenderObject.cpp
   GameManager.cpp
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(5): warning C4244: 'argument': conversion from 'float' to 'uint', possible loss of data
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(69): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(74): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(87): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(94): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(96): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(7): warning C4244: 'argument': conversion from 'float' to 'uint', possible loss of data
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(58): warning C4244: 'argument': conversion from 'unsigned int' to 'const float', possible loss of data
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(59): warning C4244: 'argument': conversion from 'FT_Int' to 'const float', possible loss of data
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(61): warning C4838: conversion from 'FT_Pos' to 'GLuint' requires a narrowing conversion
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(190): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(195): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(208): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(215): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(217): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(241): warning C4305: 'argument': truncation from 'double' to 'const float'
+  Entity.cpp
   Generating Code...
-cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
   engine-base.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-base.lib

@@ -45,5 +45,6 @@ void RenderObject::UpdateShaderMatrices()	{
 	glUniformMatrix4fv(glGetUniformLocation(shader->GetShaderProgram(), "modelMatrix"), 1, false, (float*)&modelMatrix);
 	glUniformMatrix4fv(glGetUniformLocation(shader->GetShaderProgram(), "viewMatrix"), 1, false, (GLfloat*)&Camera::viewMatrix);
 	glUniformMatrix4fv(glGetUniformLocation(shader->GetShaderProgram(), "projMatrix"), 1, false, (GLfloat*)&Camera::projMatrix);
+
 	//glUniformMatrix4fv(glGetUniformLocation(shader->GetShaderProgram(), "textureMatrix"), 1, false, (float*)&textureMatrix);
 }

@@ -36,10 +36,25 @@ public:
 	void clear();
 	vector<Entity*> entities;
 	IOManager* iom;
+	void initTextRendering();
+	void RenderText(Shader &s, std::string text, GLfloat x, GLfloat y, GLfloat scale, Vector3 color);
+
+	
+
+
+
 private:
 	Window window;
 	Renderer renderer;
-	
+
+	struct Character {
+		GLuint TextureID;  // ID handle of the glyph texture
+		Vector2	Size;       // Size of glyph
+		Vector2	Bearing;    // Offset from baseline to left/top of glyph
+		GLuint Advance;    // Offset to advance to next glyph
+	};
+	GLuint VAO, VBO;
+	std::map<GLchar, Character> Characters;
 	b2World* world;
 	vector<SystemManager*> system_managers;
 

@@ -1,6 +1,3 @@
-﻿  AudioManager.cpp
-c:\users\geoff\source\repos\game-engine\engine-audio\audiomanager.cpp(32): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-audio\audiomanager.cpp(39): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-audio\audiomanager.cpp(68): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-audio\audiomanager.cpp(87): warning C4018: '<': signed/unsigned mismatch
+﻿  Skipping... (no relevant changes detected)
+  AudioManager.cpp
   engine-audio.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-audio.lib

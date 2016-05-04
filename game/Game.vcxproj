@@ -42,8 +42,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\_exe\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\_exe\$(Configuration)\intermediates\$(ProjectName)\</IntDir>
-    <LibraryPath>..\_resources\Box2D\Build\Box2D\$(Configuration)\;..\_resources\jsoncpp\dist\json;..\_resources\irrKlang-1.5.0\lib\Win32-visualStudio;..\_libs\$(Configuration)\;..\_resources\GLEW\lib;..\_resources\SOIL\$(Configuration);\;$(LibraryPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
-    <IncludePath>..\_resources\Box2D\;..\_resources\jsoncpp\include\json;..\_resources\jsoncpp\dist\json;..\_resources\irrKlang-1.5.0\include;..\nclgl\;..\engine-base\;..\engine-audio;..\engine-input;..\engine-interface;..\engine-physics;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>..\_resources\freetype-2.6\objs\vc2010\Win32;..\_resources\Box2D\Build\Box2D\$(Configuration)\;..\_resources\jsoncpp\dist\json;..\_resources\irrKlang-1.5.0\lib\Win32-visualStudio;..\_libs\$(Configuration)\;..\_resources\GLEW\lib;..\_resources\SOIL\$(Configuration);\;$(LibraryPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>..\_resources\freetype-2.6\include\;..\_resources\Box2D\;..\_resources\jsoncpp\include\json;..\_resources\jsoncpp\dist\json;..\_resources\irrKlang-1.5.0\include;..\nclgl\;..\engine-base\;..\engine-audio;..\engine-input;..\engine-interface;..\engine-physics;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)_exe\$(Configuration)\</OutDir>
@@ -59,7 +59,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Box2D.lib;engine-io.lib;irrKlang.lib;engine-audio.lib;engine-base.lib;engine-input.lib;engine-physics.lib;nclgl.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype26d.lib;Box2D.lib;engine-io.lib;irrKlang.lib;engine-audio.lib;engine-base.lib;engine-input.lib;engine-physics.lib;nclgl.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

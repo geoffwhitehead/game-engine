@@ -82,6 +82,11 @@
       "name": "simple",
       "vert": "./shaders/TextureVert.glsl",
       "frag": "./shaders/TextureFrag.glsl"
+    },
+    {
+      "name": "font",
+      "vert": "./shaders/FontVert.glsl",
+      "frag": "./shaders/FontFrag.glsl"
     }
   ],
   "entities": [
