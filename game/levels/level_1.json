@@ -18,7 +18,7 @@
     {
       "name": "mesh_hub",
       "function": "GenerateTriFan",
-      "radius": 1.0,
+      "radius": 2.0,
       "x": 1.0,
       "y": 1.0,
       "z": 1.0,
@@ -27,16 +27,34 @@
     {
       "name": "mesh_bomb",
       "function": "GenerateTriFan",
-      "radius": 0.5,
+      "radius": 1.0,
       "x": 1.0,
       "y": 1.0,
       "z": 0.5,
       "w": 0.5
     },
     {
-      "name": "mesh_explosion",
+      "name": "mesh_explosion_3",
       "function": "GenerateTriFan",
       "radius": 3.0,
+      "x": 1.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 0.5
+    },
+    {
+      "name": "mesh_explosion_2",
+      "function": "GenerateTriFan",
+      "radius": 2.0,
+      "x": 1.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 0.5
+    },
+    {
+      "name": "mesh_explosion_1",
+      "function": "GenerateTriFan",
+      "radius": 1.0,
       "x": 1.0,
       "y": 0.0,
       "z": 0.0,
@@ -46,7 +64,7 @@
       "name": "mesh_pointer",
       "function": "GenerateTriFan",
       "radius": 0.5,
-    "x": 0.0,
+      "x": 0.0,
       "y": 0.0,
       "z": 0.0,
       "w": 0.5
@@ -91,46 +109,7 @@
   ],
   "entities": [
  
-    {
-      "class": "player",
-      "name": "player_1",
-      "group": "players",
-      "subgroup": "",
-      "parent": "",
-      "position": [ -0.0, 0.0, -7.5 ],
-      "acceleration": [ 0.0, 0.0, 0.0 ],
-      "velocity": [ 0.0, 0.0, 0.0 ],
-      "mesh": "mesh_player",
-      "shader": "basic",
-      "texture": "rust",
-      "is_renderable": true,
-      "is_physical": true,
-      "is_dynamic": true,
-      "is_sensor": false,
-      "density": 1.0,
-      "friction": 0.5,
-      "collision_radius": 0.33
-    },
-    {
-      "class": "player",
-      "name": "player_2",
-      "group": "players",
-      "subgroup": "",
-      "parent": "",
-      "position": [ 100, 0.0, -7.5 ],
-      "acceleration": [ 0.0, 0.0, 0.0 ],
-      "velocity": [ 0.0, 0.0, 0.0 ],
-      "mesh": "mesh_player",
-      "shader": "basic",
-      "texture": "rust",
-      "is_renderable": true,
-      "is_physical": true,
-      "is_dynamic": true,
-      "is_sensor": false,
-      "density": 1.0,
-      "friction": 0.5,
-      "collision_radius": 0.33
-    },
+   
     {
       "class": "bomb",
       "name": "bomb",
@@ -149,29 +128,8 @@
       "is_sensor": false,
       "density": 1.0,
       "friction": 0.5,
-      "collision_radius": 0.066,
+      "collision_radius": 1.0,
       "damage": 1.0
-    },
-    {
-      "class": "explosion",
-      "name": "bomb_explosion",
-      "group": "weapon",
-      "subgroup": "",
-      "parent": "",
-      "position": [ 0.0, 0.0, -7.5 ],
-      "acceleration": [ 0.0, 0.0, 0.0 ],
-      "velocity": [ 0.0, 0.0, 0.0 ],
-      "mesh": "mesh_explosion",
-      "shader": "basic",
-      "texture": "rust",
-      "is_renderable": false,
-      "is_physical": true,
-      "is_dynamic": true,
-      "is_sensor": true,
-      "density": 1.0,
-      "friction": 0.5,
-      "collision_radius": 2.0,
-      "lifetime": 120
     },
     {
       "class": "arena",

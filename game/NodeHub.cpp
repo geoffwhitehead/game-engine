@@ -20,9 +20,10 @@ NodeHub::NodeHub(
 	b2World* world,
 	float friction,
 	float density,
-	int health
+	int health,
+	Player* owner
 
-) : Node(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, dynamic, sensor, ppm, radius, world, friction, density, health) {
+) : Node(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, dynamic, sensor, ppm, radius, world, friction, density, health, owner) {
 	
 }
 

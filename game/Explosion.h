@@ -29,15 +29,15 @@ class Explosion : public Entity {
 		b2World* world,
 		float friction,
 		float density,
-		int lifetime
+		int lifetime,
+		int damage
 	);
 
 ~Explosion();
 
-
 int lifetime;
 int current_life;
-
+int damage;
 
 void addBodyToWorld(b2World* world, bool is_dynamic);
 void addFixturesToBody(float radius, bool is_sensor);

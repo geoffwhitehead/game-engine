@@ -19,9 +19,10 @@ Explosion::Explosion(
 	b2World* world,
 	float friction,
 	float density,
-	int lifetime
+	int lifetime,
+	int damage
 ) : Entity(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, ppm, world) {
-
+	this->damage = damage;
 	this->lifetime = lifetime;
 	this->current_life = lifetime;
 	addBodyToWorld(world, is_dynamic);

@@ -1,5 +1,6 @@
 #include "Node.h"
 
+
 Node::~Node() {
 
 }
@@ -22,9 +23,12 @@ Node::Node(
 	b2World* world,
 	float friction,
 	float density,
-	float health
+	float health,
+	Player* owner
+
 ) : Entity(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, ppm, world) {
 	this->health = health;
+	this->owner = owner;
 	addBodyToWorld(world, dynamic);
 	addFixturesToBody(radius, sensor);
 	b2Fixture* b2_list = this->getPhysicsObject()->body->GetFixtureList();
@@ -33,7 +37,7 @@ Node::Node(
 	this->physicsObject->body->SetUserData(this);
 }
 
-
+Player* owner;
 
 void Node::addBodyToWorld(b2World* world, bool is_dynamic) {
 	this->physicsObject->addBodyToWorld(world, is_dynamic);

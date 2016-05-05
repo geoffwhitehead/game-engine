@@ -42,8 +42,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)_libs\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)_libs\$(Configuration)\intermediates\$(ProjectName)\</IntDir>
-    <IncludePath>..\_resources\freetype-2.6\include\;..\_resources\Box2D\;..\engine-base\;..\_resources\GLEW\include;..\_resources\SOIL\;$(IncludePath);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>..\_resources\freetype-2.6\objs\vc2010\Win32;..\_resources\Box2D\Build\Box2D\$(Configuration)\;..\_libs\$(Configuration)\;..\_resources\GLEW\lib;..\_resources\SOIL\$(Configuration);\;$(LibraryPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>..\_resources\Box2D\;..\engine-base\;..\_resources\GLEW\include;..\_resources\SOIL\;$(IncludePath);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>..\_resources\Box2D\Build\Box2D\$(Configuration)\;..\_libs\$(Configuration)\;..\_resources\GLEW\lib;..\_resources\SOIL\$(Configuration);\;$(LibraryPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)_libs\$(Configuration)\</OutDir>

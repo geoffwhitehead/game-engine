@@ -1,5 +1,6 @@
 #pragma once
 #include "..\engine-base\Entity.h"
+#include "Player.h"
 class Node :
 	public Entity {
 
@@ -22,7 +23,8 @@ public:
 		b2World* world,
 		float friction,
 		float density,
-		float health
+		float health,
+		Player * owner
 	);
 	virtual ~Node();
 

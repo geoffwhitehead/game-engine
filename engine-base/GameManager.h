@@ -6,7 +6,8 @@
 #include <vector>
 #include "../engine-io/IOManager.h"
 #include "Renderer.h"
-
+//#include "TextMesh.h"
+#include <algorithm>
 /*
 *	Class: GameManager
 *	Author:	Geoff Whitehead
@@ -23,7 +24,7 @@ class GameManager
 public:
 	GameManager(float, float);
 	~GameManager();
-
+	
 	void run();
 	void addEntity(Entity*);
 	void addSystemManager(SystemManager*);
@@ -36,11 +37,9 @@ public:
 	void clear();
 	vector<Entity*> entities;
 	IOManager* iom;
-	void initTextRendering();
-	void RenderText(Shader &s, std::string text, GLfloat x, GLfloat y, GLfloat scale, Vector3 color);
-
-	
-
+	//void DrawText(const std::string &text, const Vector3 &position, const float size);
+	//Font*	basicFont;	//A font! a basic one...
+	void removeEntity(Entity* e);
 
 
 private:
@@ -53,8 +52,6 @@ private:
 		Vector2	Bearing;    // Offset from baseline to left/top of glyph
 		GLuint Advance;    // Offset to advance to next glyph
 	};
-	GLuint VAO, VBO;
-	std::map<GLchar, Character> Characters;
 	b2World* world;
 	vector<SystemManager*> system_managers;
 

@@ -82,7 +82,7 @@ void GameIO::loadEntities() {
 		case CL_EXPLOSION:
 			lifetime = entity["lifetime"].asFloat();
 
-			e = new Explosion(name, parent, group, subgroup, pos, m, s, t, renderable, physical, dynamic, sensor, ppm, c_rad, world, friction, density, lifetime);
+			e = new Explosion(name, parent, group, subgroup, pos, m, s, t, renderable, physical, dynamic, sensor, ppm, c_rad, world, friction, density, lifetime, 2);
 			break;
 
 		case CL_ARENA:
@@ -91,8 +91,7 @@ void GameIO::loadEntities() {
 			break;
 			
 		default:
-			cout << "error loading" << endl;
- 			exit(1);
+			cout << "ERROR loading" << endl;
 			break;
 		}
 

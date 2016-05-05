@@ -22,9 +22,12 @@ public:
 		b2World* world,
 		float friction,
 		float density,
-		int health
+		int health,
+		Player* owner
 
 	);
+
+	int cost = 2;
 
 	~NodeHub();
 };

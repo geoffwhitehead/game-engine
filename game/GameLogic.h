@@ -14,6 +14,11 @@
 #include <chrono>
 #include <ctime>
 #include <iostream>
+#include <sstream>
+
+
+
+
 /*
 *	Class: GameLogic
 *	Author:	Geoff Whitehead
@@ -37,12 +42,14 @@ public:
 	eGameState game_state;
 	ePlayerTurn player_turn;
 
-	vector<Node*> game_nodes;
 
-	Entity* selected_node;
-	eActionSelection action;
+	Player* active_player;
+
+	eActionSelection action = AS_HUB;
 
 	Entity* fired_entity;
+
+	vector<Explosion*> explosions;
 
 	enum eFilter {
 		eFilterLevel = 0x01,
@@ -61,7 +68,7 @@ public:
 	time_point<system_clock> start;
 	time_point<std::chrono::system_clock> end;
 	duration<double> elapsed_seconds;
-
+	string getName();
 	float charge;
 	bool charging;
 	int temp = 100;
@@ -104,8 +111,8 @@ private:
 	GameManager* gm;
 	AudioManager* am;
 	Camera* cam;
-	Entity* p1;
-	Entity* p2;
+	Player* p1;
+	Player* p2;
 	Entity* pointer;
 };
 

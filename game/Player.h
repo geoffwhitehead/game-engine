@@ -32,6 +32,9 @@ public:
 	);
 	~Player();
 
+	int resources;
+	Entity* selected_node;
+	vector <Entity*> nodes;
 
 	void addBodyToWorld(b2World* world, bool is_dynamic);
 	void addFixturesToBody(float radius, bool is_sensor);

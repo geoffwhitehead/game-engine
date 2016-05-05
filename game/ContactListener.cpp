@@ -18,34 +18,16 @@ void ContactListener::BeginContact(b2Contact* contact) {
 	void* bodyDataB = contact->GetFixtureB()->GetBody()->GetUserData();
 
 	if (bodyDataA) {
-		if (static_cast<Player*>(bodyDataA)->name == "player_1") {
-			if (static_cast<Bomb*>(bodyDataB)->name == "bomb") {
-				cout << "bomb 1" << endl;
+		if (static_cast<NodeHub*>(bodyDataA)) {
+			if (static_cast<Explosion*>(bodyDataB)) {
+				cout << "hub - explosion" << endl;
 			}
-		}
-
-		if (static_cast<Player*>(bodyDataA)->name == "player_1") {
-			if (static_cast<Bomb*>(bodyDataB)->name == "bomb") {
-				cout << "bomb 1" << endl;
-			}
-		}
-
-		if (static_cast<Player*>(bodyDataA)->name == "player_1") {
-			if (static_cast<Explosion*>(bodyDataB)->name == "bomb_explosion") {
-				cout << "explosion 1" << endl;
-
-				gl->in_game_events.push_back(GameLogic::eGameEvents::GS_QUIT);
-			}
-		}
-
-		if (static_cast<Bomb*>(bodyDataA)->name == "bomb") {
-
 		}
 
 		if (static_cast<Explosion*>(bodyDataB)->name == "bomb_explosion") {
 			cout << "explosion A" << endl;
 
-			gl->in_game_events.push_back(GameLogic::eGameEvents::GS_QUIT);
+			//gl->in_game_events.push_back(GameLogic::eGameEvents::GS_QUIT);
 		}
 
 	}
@@ -64,7 +46,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
 		if (static_cast<Explosion*>(bodyDataB)->name == "bomb_explosion") {
 			cout << "explosion B" << endl;
 
-			gl->in_game_events.push_back(GameLogic::eGameEvents::GS_QUIT);
+			//gl->in_game_events.push_back(GameLogic::eGameEvents::GS_QUIT);
 		}
 
 
