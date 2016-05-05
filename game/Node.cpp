@@ -27,6 +27,8 @@ Node::Node(
 	Player* owner
 
 ) : Entity(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, ppm, world) {
+	
+	this->created_on = system_clock::now();
 	this->health = health;
 	this->owner = owner;
 	addBodyToWorld(world, dynamic);

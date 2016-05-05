@@ -46,8 +46,7 @@ public:
 	string str_parent; // need this to hold the result from the tet
 	bool is_physical;
 	bool is_renderable;
-
-
+	bool delete_me = false;
 
 protected:
 

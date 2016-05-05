@@ -76,7 +76,7 @@ void GameIO::loadEntities() {
 		case CL_BOMB:
 			damage = entity["damage"].asFloat();
 
-			e = new Bomb(name, parent, group, subgroup, pos, m, s, t, renderable, physical, dynamic, sensor, ppm, c_rad, world, friction, density, damage);
+			e = new Bomb(name, parent, group, subgroup, pos, m, s, t, renderable, physical, dynamic, sensor, ppm, c_rad, world, friction, density);
 			break;
 
 		case CL_EXPLOSION:

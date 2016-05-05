@@ -1,6 +1,12 @@
 #pragma once
 #include "..\engine-base\Entity.h"
 #include "Player.h"
+#include <chrono>
+#include <ctime>
+
+
+using namespace std::chrono;
+
 class Node :
 	public Entity {
 
@@ -32,5 +38,6 @@ public:
 	void addBodyToWorld(b2World* world, bool is_dynamic);
 	void addFixturesToBody(float radius, bool is_sensor);
 
+	time_point<system_clock> created_on;
 	Entity* owner;
 };

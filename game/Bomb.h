@@ -27,14 +27,12 @@ public:
 		float radius, 
 		b2World* world, 
 		float friction, 
-		float density,
-		float damage
+		float density
 	);
 	
 	~Bomb();
 
 
-	float damage;
 
 
 	void addBodyToWorld(b2World* world, bool is_dynamic);

@@ -1,6 +1,7 @@
 #pragma once
 #include "..\_resources\Box2D\Box2D\Dynamics\b2WorldCallbacks.h"
 #include "GameLogic.h"
+#include "Node.h"
 
 
 /*

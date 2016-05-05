@@ -111,27 +111,6 @@
  
    
     {
-      "class": "bomb",
-      "name": "bomb",
-      "group": "weapon",
-      "subgroup": "",
-      "parent": "",
-      "position": [ 0.0, 0.0, -7.5 ],
-      "acceleration": [ 0.0, 0.0, 0.0 ],
-      "velocity": [ 0.0, 0.0, 0.0 ],
-      "mesh": "mesh_bomb",
-      "shader": "basic",
-      "texture": "rust",
-      "is_renderable": false,
-      "is_physical": true,
-      "is_dynamic": true,
-      "is_sensor": false,
-      "density": 1.0,
-      "friction": 0.5,
-      "collision_radius": 1.0,
-      "damage": 1.0
-    },
-    {
       "class": "arena",
       "name": "arena",
       "group": "",
@@ -176,24 +155,49 @@
     {
       "name": "bg_music",
       "path": "./audio/MF-W-90.XM",
-      "default_volume": 0.3
+      "default_volume": 1.0
     },
     {
       "name": "swap",
       "path": "./audio/beep1.wav",
-      "default_volume": 0.3
+      "default_volume": 1.0
     },
     {
       "name": "rocket1",
       "path": "./audio/rocket1.wav",
-      "default_volume": 0.3
+      "default_volume": 1.0
     },
-     {
-      "name": "powerup",
-      "path": "./audio/powerup.wav",
-      "default_volume": 0.5
+    {
+      "name": "powerup2",
+      "path": "./audio/powerup2.wav",
+      "default_volume": 1.0
     },
-     {
+    {
+      "name": "powerup3",
+      "path": "./audio/powerup3.wav",
+      "default_volume": 1.0
+    },
+    {
+      "name": "beep1",
+      "path": "./audio/beep-1.wav",
+      "default_volume": 1.0
+    },
+    {
+      "name": "beep2",
+      "path": "./audio/beep-2.wav",
+      "default_volume": 1.0
+    },
+    {
+      "name": "boom",
+      "path": "./audio/boom.wav",
+      "default_volume": 1.0
+    },
+    {
+      "name": "destroyed",
+      "path": "./audio/destroyed.wav",
+      "default_volume": 1.0
+    },
+    {
       "name": "fart-2",
       "path": "./audio/fart-2.wav",
       "default_volume": 0.8

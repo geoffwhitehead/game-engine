@@ -31,8 +31,6 @@ void PhysicsObject::update(float dt) {
 };
 
 void PhysicsObject::createFixture(b2Shape* shape, bool is_sensor) {
-	// note that friction, etc. can be modified later by looping
-	// over the body's fixtures and calling fixture->SetFriction()
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = shape;
 	if (is_sensor) {
@@ -66,8 +64,8 @@ void PhysicsObject::addBodyToWorld(b2World* world, bool is_dynamic) {
 	this->b2_world = world;
 	b2BodyDef bodyDef;
 	bodyDef.position.Set(
-		(float32)start_pos.x, /// pixels_per_m,
-		(float32)start_pos.y /// pixels_per_m
+		(float32)start_pos.x, // pixels_per_m,
+		(float32)start_pos.y // pixels_per_m
 	);
 	if (is_dynamic) {
 		bodyDef.type = b2_dynamicBody;

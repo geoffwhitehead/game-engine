@@ -35,7 +35,7 @@ public:
 	enum ePlayerTurn { GS_PLAYER_1, GS_PLAYER_2 };
 	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING, GS_CONTACT };
 	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_LEFT, IE_RIGHT, IE_PAD1, IE_PAD4};
-	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE, AE_POWERUP };
+	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE, AE_POWERUP, AE_HUB_DAMAGED, AE_HUB_DESTROYED };
 	enum eGameEvents { GS_QUIT };
 	enum eActionSelection {AS_HUB, AS_BOMB};
 	
@@ -62,9 +62,6 @@ public:
 		eCollide = 0xffff,
 	};
 
-	
-
-	
 	time_point<system_clock> start;
 	time_point<std::chrono::system_clock> end;
 	duration<double> elapsed_seconds;
@@ -83,19 +80,18 @@ public:
 	void handleEvents();
 	void handleStates();
 	void endTurn();
-	b2Filter createFilter(eFilter filter, eMask mask);
 	void setPointer();
 
 	b2Vec2 getTrajectory(Entity* origin);
 	void fireWeapon(Entity* e);
 	void launchNode(Entity* e);
 	void launch();
-
+	void handleCollisions();
 	bool isAwake(Entity*);
 	void adjustDirection(eInputEvents);
-	
+	void applyDamage(Node*, int);
 
-	b2Filter getFixture(enum eFilter, enum eMask);
+	void setFixture(Entity*, enum eFilter, enum eMask);
 
 	void editEntity(string name, string parent, bool is_collidable, bool is_renderable);
 	Vector3 getMousePos3D();

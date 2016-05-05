@@ -29,10 +29,13 @@ Entity::Entity(string name, string str_parent, string group, string sub_group, V
 	this->is_physical = is_physical;
 }
 
+
+
 //destuctor
 Entity::~Entity()
 {
 	if (renderObject) delete renderObject;
+	this->physicsObject->body->GetWorld()->DestroyBody(this->physicsObject->body);
 }
 
 RenderObject* Entity::getRenderObject() const {

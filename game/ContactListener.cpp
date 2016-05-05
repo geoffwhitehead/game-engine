@@ -1,6 +1,9 @@
 #include "ContactListener.h"
 
 
+#define explosion_group "explosions"
+#define hub_group "hubs"
+#define bomb_group "bombs"
 
 ContactListener::ContactListener(GameLogic* gl) {
 	this->gl = gl;
@@ -18,38 +21,19 @@ void ContactListener::BeginContact(b2Contact* contact) {
 	void* bodyDataB = contact->GetFixtureB()->GetBody()->GetUserData();
 
 	if (bodyDataA) {
-		if (static_cast<NodeHub*>(bodyDataA)) {
-			if (static_cast<Explosion*>(bodyDataB)) {
-				cout << "hub - explosion" << endl;
+		if (static_cast<NodeHub*>(bodyDataA)->group == hub_group) {
+			if (static_cast<Explosion*>(bodyDataB)->group == explosion_group) {
+				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<NodeHub*>(bodyDataA), static_cast<Explosion*>(bodyDataB)));
+			} else
+			if (static_cast<NodeHub*>(bodyDataB)->group == hub_group) {
+				cout << "hub hub" << endl;
+				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<NodeHub*>(bodyDataA), static_cast<NodeHub*>(bodyDataB)));
 			}
 		}
-
-		if (static_cast<Explosion*>(bodyDataB)->name == "bomb_explosion") {
-			cout << "explosion A" << endl;
-
-			//gl->in_game_events.push_back(GameLogic::eGameEvents::GS_QUIT);
-		}
-
 	}
 
 	if (bodyDataB) {
-		if (static_cast<Player*>(bodyDataB)->name == "player_1") {
-			//cout << "player 1 collided" << endl;
-		}
-		if (static_cast<Player*>(bodyDataB)->name == "player_2") {
-			//cout << "player 1 collided" << endl;
-		}
-		if (static_cast<Player*>(bodyDataB)->name == "bomb") {
-			//cout << "player 1 collided" << endl;
-		}
-
-		if (static_cast<Explosion*>(bodyDataB)->name == "bomb_explosion") {
-			cout << "explosion B" << endl;
-
-			//gl->in_game_events.push_back(GameLogic::eGameEvents::GS_QUIT);
-		}
-
-
+		//cout << "something b" << endl;
 	}
 }
 

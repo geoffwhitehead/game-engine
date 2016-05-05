@@ -56,6 +56,7 @@ void PhysicsManager::updateWorld(float msec) {
 
 		// perform a single step of the physics simulation
 		b2_world->Step(sec_per_update, 8, 1);
+
 	}
 
 }

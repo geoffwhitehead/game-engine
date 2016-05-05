@@ -107,6 +107,17 @@ Entity* GameManager::getEntityByName(string name_to_find, string parent_name) {
 	return nullptr;
 }
 
+// check to make sure no duplicate deletions are entered into the list
+void GameManager::markToDelete(Entity* e) {
+	for (int i = 0; i < marked_for_deletion.size(); i++) {
+		if (e == marked_for_deletion[i]) {
+			return;
+		}
+	}
+	marked_for_deletion.push_back(e);
+}
+
+
 // main game loop
 void GameManager::run(){
 	
@@ -122,13 +133,33 @@ void GameManager::run(){
 		//DrawText("This is orthographic text!", Vector3(0, 0, 0), 16.0f);
 
 		// update systems
-		for (vector<SystemManager*>::iterator system = system_managers.begin(); system != system_managers.end(); ++system)
+		for (vector<SystemManager*>::iterator system = system_managers.begin(); system != system_managers.end(); ++system) {
 			(*system)->update(msec);
+		}
 
 		// update entities
 		for (vector<Entity*>::iterator entity = entities.begin(); entity != entities.end(); ++entity) {
 			(*entity)->update(msec);
 		}
+
+		// mark entities to remove
+		for (vector<Entity*>::iterator entity = marked_for_deletion.begin(); entity != marked_for_deletion.end(); ++entity) {
+			(*entity)->delete_me = true;
+		}
+
+		// remove all references from entity list
+		for (int i = 0; i < marked_for_deletion.size(); i++){
+			entities.erase(std::remove(entities.begin(), entities.end(), marked_for_deletion[i]), entities.end());
+		}
+		
+
+		// delete entities in marked for deletion list
+		for (vector<Entity*>::iterator entity = marked_for_deletion.begin(); entity != marked_for_deletion.end(); ++entity) {
+			delete((*entity));
+		}
+		
+		// clear marked list
+		marked_for_deletion.clear();
 
 		renderer.ClearBuffers();
 
@@ -144,6 +175,11 @@ void GameManager::run(){
 	ShutDown();
 
 }
+
+bool GameManager::toDelete(Entity& entity) {
+	return entity.delete_me;
+}
+
 /*
 void GameManager::DrawText(const std::string &text, const Vector3 &position, const float size) {
 	//Create a new temporary TextMesh, using our line of text and our font

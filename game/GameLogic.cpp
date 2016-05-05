@@ -15,6 +15,14 @@
 #define starting_resource 3;
 #define p1_start_loc Vector3(-25, 0, -7.5)
 #define p2_start_loc Vector3(25, 0, -7.5)
+#define explosion_group "explosions"
+#define hub_group "hubs"
+#define bomb_group "bombs"
+#define hub_radius 2.0
+#define bomb_radius 1.0
+#define node_damage 2
+#define kill 100
+#define board_depth -7.5
 
 b2Vec2 GameLogic::force;
 
@@ -38,12 +46,12 @@ void GameLogic::init() {
 	p2 = new Player("p2", "", "", "", vec0, gm->iom->findMesh("mesh_player"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), false, false,
 		false, true, 30, 2.0, world, 0.5, 1.0);
 
-	p1->nodes.push_back( new NodeHub("p1_node_0", "", "", "", p1_start_loc,
+	p1->nodes.push_back( new NodeHub("p1_node_0", "", hub_group, "", p1_start_loc,
 		gm->iom->findMesh("mesh_hub"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
-		true, true, 30, 2.0, world, 0.5, 1.0, hub_health, active_player));
-	p2->nodes.push_back( new NodeHub("p2_node_0", "", "", "", p2_start_loc,
+		true, true, 30, hub_radius, world, 0.5, 1.0, hub_health, active_player));
+	p2->nodes.push_back( new NodeHub("p2_node_0", "", hub_group, "", p2_start_loc,
 		gm->iom->findMesh("mesh_hub"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
-		true, true, 30, 2.0, world, 0.5, 1.0, hub_health, active_player));
+		true, true, 30, hub_radius, world, 0.5, 1.0, hub_health, active_player));
 	
 	gm->addEntity(p1->nodes[0]);
 	gm->addEntity(p2->nodes[0]);
@@ -53,17 +61,9 @@ void GameLogic::init() {
 	active_player = p1;
 
 	pointer = gm->getEntityByName("pointer", "");
-
-	gm->getEntityByName("bomb", "")->getPhysicsObject()->body->SetLinearDamping(DAMPING);
-	gm->getEntityByName("bomb", "")->getPhysicsObject()->body->SetActive(false);
-	//gm->getEntityByName("bomb_explosion", "")->getPhysicsObject()->body->SetActive(false);
-	
 	setPointer();
-
 	pointer->is_renderable = true;
-	
-
-	pointer->getPhysicsObject()->body->GetFixtureList()->SetFilterData(getFixture(eFilterSolid, eNoCollide));
+	setFixture(pointer, eFilterSolid, eNoCollide);
 }
 
 
@@ -93,48 +93,43 @@ string GameLogic::getName() {
 
 void GameLogic::launch() {
 	Entity* hub;
+	Entity* b1;
 	
 	switch (action) {
 	case GameLogic::AS_HUB:
-		hub = new NodeHub(getName(), "", "", "", active_player->selected_node->getPhysicsObject()->getPos(),
+		hub = new NodeHub(getName(), "", hub_group, "", active_player->selected_node->getPhysicsObject()->getPos(),
 			gm->iom->findMesh("mesh_hub"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true, 
-			true, true, 30, 2.0, world, 0.5, 1.0, hub_health, active_player);
+			true, true, 30, hub_radius, world, 0.5, 1.0, hub_health, active_player);
 		hub->getPhysicsObject()->body->SetLinearDamping(DAMPING);
 		gm->addEntity(hub);
-		launchNode(hub);
 		fired_entity = hub;
+		launchNode(fired_entity);
 		break;
 
 	case GameLogic::AS_BOMB:
+		// create a new bomb
+		b1 = new Bomb("bomb_1", "", bomb_group, "", active_player->selected_node->getPhysicsObject()->getPos(),
+			gm->iom->findMesh("mesh_bomb"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
+			true, true, 0, bomb_radius, world, 0.5, 1.0);
 
-		fireWeapon(gm->getEntityByName("bomb", ""));
-		fired_entity = gm->getEntityByName("bomb", "");
+		b1->getPhysicsObject()->body->SetLinearDamping(DAMPING);
+		gm->addEntity(b1);
+
+		fireWeapon(b1);
+		fired_entity = b1;
 		break;
 	}
 	game_state = GS_FIRING;
 }
 
 void GameLogic::launchNode(Entity* e) {
-	e->is_renderable = true;
-	active_player->selected_node->getPhysicsObject()->body->GetFixtureList()->SetFilterData(createFilter(eFilterNonSolid, eNoCollide));
-
-	gm->getEntityByName("bomb", "")->getPhysicsObject()->body->SetTransform(active_player->selected_node->getPhysicsObject()->body->GetPosition(), 0.0f);
-	e->getPhysicsObject()->body->SetActive(true);
-	e->getPhysicsObject()->body->GetFixtureList()->SetFilterData(getFixture(eFilterNonSolid, eCollide));
-
+	setFixture(e, eFilterNonSolid, eNoCollide);
 	e->getPhysicsObject()->body->SetLinearVelocity(getTrajectory(active_player->selected_node));
 }
 
 // postion the bomb entity and fire it with a given charge in the directon teh active player is facing
 void GameLogic::fireWeapon(Entity* bomb) {
 	
-	bomb->is_renderable = true;
-	active_player->selected_node->getPhysicsObject()->body->GetFixtureList()->SetFilterData(createFilter(eFilterNonSolid, eNoCollide));
-
-	gm->getEntityByName("bomb", "")->getPhysicsObject()->body->SetTransform(active_player->selected_node->getPhysicsObject()->body->GetPosition(), 0.0f);
-	bomb->getPhysicsObject()->body->SetActive(true);
-	bomb->getPhysicsObject()->body->GetFixtureList()->SetFilterData(getFixture(eFilterNonSolid, eCollide));
-
 	bomb->getPhysicsObject()->body->SetLinearVelocity(getTrajectory(active_player->selected_node));
 	
 }
@@ -151,19 +146,63 @@ void GameLogic::setPointer() {
 
 }
 
+void GameLogic::handleCollisions() {
+	for (int i = 0; i < in_contact_events.size(); i++){
+		if (in_contact_events[i].first->group == explosion_group){
+			if (in_contact_events[i].second->group == hub_group) {
+				applyDamage(static_cast<Node*>(in_contact_events[i].second), static_cast<Explosion*>(in_contact_events[i].first)->damage);
+			}
+		}
+		else if (in_contact_events[i].first->group == hub_group){
+			if (in_contact_events[i].second->group == explosion_group) {
+				applyDamage(static_cast<Node*>(in_contact_events[i].first), static_cast<Explosion*>(in_contact_events[i].second)->damage);
+			}
+			if (in_contact_events[i].first->group == hub_group) {
+				
+				if (static_cast<Node*>(in_contact_events[i].first)->created_on > static_cast<Node*>(in_contact_events[i].second)->created_on) {
+					applyDamage(static_cast<Node*>(in_contact_events[i].first), kill);
+					applyDamage(static_cast<Node*>(in_contact_events[i].second), node_damage);
+				}
+				else {
+					applyDamage(static_cast<Node*>(in_contact_events[i].first), node_damage);
+					applyDamage(static_cast<Node*>(in_contact_events[i].second), kill);
+				}
+			}
+		}
+	}
+	// clear
+	in_contact_events.clear();
+}
+
+void GameLogic::applyDamage(Node* n, int damage) {
+	out_audio_events.push_back(eAudioEvents::AE_HUB_DAMAGED);
+	cout << "damage" << endl;
+	n->health = n->health - damage;
+
+	if (n->health <= 0){
+		gm->markToDelete(n);
+		out_audio_events.push_back(eAudioEvents::AE_HUB_DESTROYED);
+	}
+}
+
 void GameLogic::update(float msec) {
-	
+
+	handleCollisions(); // collisions
 	handleEvents(); // events first
+	world->SetAllowSleeping(true); // in states the bit mask of a hub is changed after sleeping. Need to wake it up to register any collisions and then reset it here, before the next step.
 	handleStates(); // then states
 
  }
 
-// returns a fixture matching the given params. Box2d fixtures determine what collisions will register with this object
-b2Filter GameLogic::getFixture(enum eFilter f, enum eMask m) {
-	b2Filter filter;
-	filter.categoryBits = f;
+
+void GameLogic::setFixture(Entity* e, enum eFilter f, enum eMask m) {
+	
+	//get the existing filter
+	b2Filter filter = e->getPhysicsObject()->body->GetFixtureList()->GetFilterData();
 	filter.maskBits = m;
-	return filter;
+	filter.categoryBits = f;
+	e->getPhysicsObject()->body->GetFixtureList()->SetFilterData(filter);
+	
 }
 
 void GameLogic::destroy() {
@@ -183,13 +222,13 @@ void GameLogic::editEntity(string name, string parent, bool is_collidable, bool 
 void GameLogic::handleStates() {
 
 	// declare vars outside switch
-	Explosion* e;
+	bool live = false; // used for explosion -- determine whether any remaining
+	Explosion*e;
+	b2Vec2 contact_pos;
 
 	switch (game_state) {
 	case eGameState::GS_FIRING:
 		if (!isAwake(fired_entity)) {
-			
-			
 			game_state = eGameState::GS_CONTACT;
 		}
 		break;
@@ -203,13 +242,16 @@ void GameLogic::handleStates() {
 			break;
 		case GameLogic::AS_BOMB:
 			out_audio_events.push_back(eAudioEvents::AE_EXPLOSION_BOMB);
-			fired_entity->is_renderable = false;
 
-			explosions.push_back( new Explosion("bomb_ex", "", "", "", fired_entity->getPhysicsObject()->getPos(),
+			e = new Explosion("bomb_ex", "", explosion_group, "", fired_entity->getPhysicsObject()->getPos(),
 				gm->iom->findMesh("mesh_explosion_3"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
-				false, true, 0, 3.0, world, 0.5, 1.0, 80, 2));
-			gm->addEntity(explosions[explosions.size()-1]);
-			gm->removeEntity(fired_entity);
+				true, true, 0, 3.0, world, 0.5, 1.0, 80, 2);
+
+			explosions.push_back( e );
+
+			gm->addEntity(e);
+			gm->markToDelete(fired_entity);
+			fired_entity = 0;
 			game_state = eGameState::GS_EXPLODING;
 			break;
 		}
@@ -217,26 +259,34 @@ void GameLogic::handleStates() {
 		break;
 
 	case eGameState::GS_BUILDING:
+		// active the hub so collisions occur
 
+		world->SetAllowSleeping(false);
+		contact_pos = b2Vec2(fired_entity->getPhysicsObject()->getPos().x, fired_entity->getPhysicsObject()->getPos().y);
+		setFixture(fired_entity, eFilterNonSolid, eCollide);
+		
+		//fired_entity->getPhysicsObject()->body->SetTransform(b2Vec2(100000,10000), 0.0);
+		//fired_entity->getPhysicsObject()->body->SetTransform(contact_pos, 0.0);
+
+		fired_entity = 0;
 		game_state = eGameState::GS_PLAYING;
 		break;
 
 	case eGameState::GS_EXPLODING:
-		e = static_cast<Explosion*>(gm->getEntityByName("bomb_explosion", ""));
-		if (e->current_life > 0) {
-			PhysicsObject* bomb = gm->getEntityByName("bomb", "")->getPhysicsObject();
-			gm->getEntityByName("bomb_explosion", "")->getPhysicsObject()->body->SetTransform(b2Vec2(bomb->getPos().x, bomb->getPos().y), 0.0f);
-
-			gm->getEntityByName("bomb_explosion", "")->getPhysicsObject()->body->SetActive(true);
-			gm->getEntityByName("bomb_explosion", "")->is_renderable = true;
-			e->current_life--;
+		
+		for (int i = 0; i < explosions.size(); i++)
+		{
+			if (explosions[i]->current_life > 0) {
+				explosions[i]->current_life--;
+				live = true;
+			}
+			else if (explosions[i]->current_life == 0) {
+				gm->markToDelete(explosions[i]);
+				explosions.erase(std::remove(explosions.begin(), explosions.end(), explosions[i]), explosions.end()); // clear from vector -- leave here
+			}
+			break;
 		}
-		else if (e->current_life == 0) {
-			e->current_life = e->lifetime;
-			gm->getEntityByName("bomb_explosion", "")->getPhysicsObject()->body->SetActive(false);
-			gm->getEntityByName("bomb_explosion", "")->is_renderable = false;
-			active_player->selected_node->getPhysicsObject()->body->GetFixtureList()->SetFilterData(createFilter(eFilterSolid, eCollide));
-
+		if (live == false){
 			game_state = eGameState::GS_PLAYING;
 		}
 		break;
@@ -244,15 +294,9 @@ void GameLogic::handleStates() {
 	case eGameState::GS_CHARGING:
 		charge = charge++;
 		if (!charging) {
-			/*
-			if (charge >= MAX_CHARGE) {
-				charge = MAX_CHARGE;
-			}
-			*/
 			end = std::chrono::system_clock::now();
 			elapsed_seconds = end - start;
 			launch();
-			//game_state = eGameState::GS_FIRING;
 		}
 		break;
 	}
@@ -274,8 +318,8 @@ void GameLogic::handleEvents() {
 				
 				float cosx = cos(active_player->selected_node->getPhysicsObject()->body->GetAngle());
 				float siny = sin(active_player->selected_node->getPhysicsObject()->body->GetAngle());
-				cosx = cosx * 0.7;
-				siny = siny * 0.7;
+				cosx = cosx * 0.1;
+				siny = siny * 0.1;
 				b2Vec2 force = b2Vec2(cosx, siny);
 
 				active_player->selected_node->getPhysicsObject()->body->ApplyLinearImpulse(force, active_player->selected_node->getPhysicsObject()->body->GetWorldCenter(), true);
@@ -346,16 +390,6 @@ void GameLogic::adjustDirection(eInputEvents dir) {
 		break;
 	}
 }
-
-// box 2d filter determine what collision will register with this object
-b2Filter GameLogic::createFilter(eFilter filter, eMask mask) {
-	b2Filter f;
-	f.categoryBits = filter;
-	f.maskBits = mask;
-	return f;
-}
-
-
 
 /*
 void PlayerEntity::boost() {
