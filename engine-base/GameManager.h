@@ -41,7 +41,6 @@ public:
 	//Font*	basicFont;	//A font! a basic one...
 	void removeEntity(Entity* e);
 
-	bool toDelete(Entity& entity);
 	void markToDelete(Entity* e);
 
 private:

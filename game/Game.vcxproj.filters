@@ -48,6 +48,9 @@
     <ClInclude Include="NodeHub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LevelEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameInput.cpp">
@@ -84,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NodeHub.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

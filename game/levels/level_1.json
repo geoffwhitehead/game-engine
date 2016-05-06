@@ -2,9 +2,12 @@
   "meshes": [
     {
       "name": "mesh_arena",
-      "function": "GenerateQuad",
-      "x": 1000.0,
-      "y": 1000.0
+      "function": "GenerateTriFan",
+      "radius": 1000.0,
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0,
+      "w": 1.0
     },
     {
       "name": "mesh_player",
@@ -16,20 +19,29 @@
       "w": 0.5
     },
     {
-      "name": "mesh_hub",
+      "name": "p1_mesh_hub",
+      "function": "GenerateTriFan",
+      "radius": 2.0,
+      "x": 0.5,
+      "y": 1.0,
+      "z": 0.5,
+      "w": 0.5
+    },
+    {
+      "name": "p2_mesh_hub",
       "function": "GenerateTriFan",
       "radius": 2.0,
       "x": 1.0,
       "y": 1.0,
-      "z": 1.0,
+      "z": 0.0,
       "w": 0.5
     },
     {
       "name": "mesh_bomb",
       "function": "GenerateTriFan",
       "radius": 1.0,
-      "x": 1.0,
-      "y": 1.0,
+      "x": 0.0,
+      "y": 0.0,
       "z": 0.5,
       "w": 0.5
     },
@@ -37,7 +49,7 @@
       "name": "mesh_explosion_3",
       "function": "GenerateTriFan",
       "radius": 3.0,
-      "x": 1.0,
+      "x": 0.0,
       "y": 0.0,
       "z": 0.0,
       "w": 0.5
@@ -108,28 +120,9 @@
     }
   ],
   "entities": [
- 
-   
-    {
-      "class": "arena",
-      "name": "arena",
-      "group": "",
-      "subgroup": "",
-      "parent": "",
-      "position": [ 0.0, 0.0, -10.0 ],
-      "acceleration": [ 0.0, 0.0, 0.0 ],
-      "velocity": [ 0.0, 0.0, 0.0 ],
-      "mesh": "mesh_arena",
-      "shader": "simple",
-      "texture": "rust",
-      "is_renderable": true,
-      "is_physical": false,
-      "is_dynamic": false,
-      "is_sensor": false,
-      "density": 1.0,
-      "friction": 0.5,
-      "collision_radius": 0.0
-    },
+
+
+
     {
       "class": "arena",
       "name": "pointer",
@@ -149,17 +142,32 @@
       "density": 0.0,
       "friction": 0.0,
       "collision_radius": 0.0
+    },
+    {
+      "class": "arena",
+      "name": "arena",
+      "group": "",
+      "subgroup": "",
+      "parent": "",
+      "position": [ 0.0, 0.0, -10.0 ],
+      "acceleration": [ 0.0, 0.0, 0.0 ],
+      "velocity": [ 0.0, 0.0, 0.0 ],
+      "mesh": "mesh_arena",
+      "shader": "basic",
+      "texture": "rust",
+      "is_renderable": true,
+      "is_physical": false,
+      "is_dynamic": false,
+      "is_sensor": false,
+      "density": 1.0,
+      "friction": 0.5,
+      "collision_radius": 0.0
     }
   ],
   "audio": [
     {
       "name": "bg_music",
       "path": "./audio/MF-W-90.XM",
-      "default_volume": 1.0
-    },
-    {
-      "name": "swap",
-      "path": "./audio/beep1.wav",
       "default_volume": 1.0
     },
     {

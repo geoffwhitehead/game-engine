@@ -68,16 +68,6 @@ void GameIO::loadEntities() {
 		int lifetime;
 
 		switch (class_type) {
-		case CL_PLAYER:
-			e = new Player(name, parent, group, subgroup, pos, m, s, t, renderable, physical, dynamic, sensor, ppm, c_rad, world, friction, density);
-				
-			break;
-
-		case CL_BOMB:
-			damage = entity["damage"].asFloat();
-
-			e = new Bomb(name, parent, group, subgroup, pos, m, s, t, renderable, physical, dynamic, sensor, ppm, c_rad, world, friction, density);
-			break;
 
 		case CL_EXPLOSION:
 			lifetime = entity["lifetime"].asFloat();

@@ -2,7 +2,4 @@
 c:\users\geoff\source\repos\game-engine\engine-physics\physicsmanager.h(39): warning C4091: 'static ': ignored on left of 'PhysicsManager' when no variable is declared
 c:\users\geoff\source\repos\game-engine\engine-physics\physicsmanager.cpp(55): warning C4244: '-=': conversion from 'const double' to 'float', possible loss of data
 c:\users\geoff\source\repos\game-engine\engine-physics\physicsmanager.cpp(58): warning C4244: 'argument': conversion from 'const double' to 'float32', possible loss of data
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  PhysicsObject.cpp
   engine-physics.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-physics.lib

@@ -37,3 +37,6 @@ public:
 	GameLogic* gl;
 };
 
+
+
+

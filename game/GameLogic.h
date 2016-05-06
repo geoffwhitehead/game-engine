@@ -15,7 +15,7 @@
 #include <ctime>
 #include <iostream>
 #include <sstream>
-
+#include <algorithm>
 
 
 
@@ -33,9 +33,10 @@ class GameLogic :
 public:
 
 	enum ePlayerTurn { GS_PLAYER_1, GS_PLAYER_2 };
-	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING, GS_CONTACT };
-	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_LEFT, IE_RIGHT, IE_PAD1, IE_PAD4};
-	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE, AE_POWERUP, AE_HUB_DAMAGED, AE_HUB_DESTROYED };
+	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING, GS_CONTACT, GS_CAMERA_MOVING};
+	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_KEY_TAB, IE_LEFT, IE_RIGHT, IE_PAD1, IE_PAD4};
+	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE, AE_POWERUP, AE_HUB_DAMAGED, AE_HUB_DESTROYED, AE_INSUF_RESOURCE
+	};
 	enum eGameEvents { GS_QUIT };
 	enum eActionSelection {AS_HUB, AS_BOMB};
 	
@@ -68,7 +69,14 @@ public:
 	string getName();
 	float charge;
 	bool charging;
-	int temp = 100;
+
+	// camera stuff
+	int camera_steps = 15;
+	int step_counter = camera_steps;
+	Vector2 target_pos;
+	Vector2 direction_step;
+
+
 	GameLogic(GameManager* gm, GameLogicManager* glm, b2World* world, AudioManager* am, Camera* cam);
 	~GameLogic();
 
@@ -81,7 +89,9 @@ public:
 	void handleStates();
 	void endTurn();
 	void setPointer();
-
+	bool sufficientResource();
+	
+	void destroyNode(Node* n);
 	b2Vec2 getTrajectory(Entity* origin);
 	void fireWeapon(Entity* e);
 	void launchNode(Entity* e);
@@ -92,9 +102,11 @@ public:
 	void applyDamage(Node*, int);
 
 	void setFixture(Entity*, enum eFilter, enum eMask);
+	LevelEntity* findNextNode();
 
 	void editEntity(string name, string parent, bool is_collidable, bool is_renderable);
 	Vector3 getMousePos3D();
+	
 
 	b2World* world;
 

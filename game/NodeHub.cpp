@@ -21,9 +21,10 @@ NodeHub::NodeHub(
 	float friction,
 	float density,
 	int health,
-	Player* owner
+	Player* owner,
+	int cost
 
-) : Node(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, dynamic, sensor, ppm, radius, world, friction, density, health, owner) {
+) : Node(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, dynamic, sensor, ppm, radius, world, friction, density, health, owner, cost) {
 	
 }
 

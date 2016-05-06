@@ -21,9 +21,11 @@ Player::Player (
 	float radius, 
 	b2World* world, 
 	float friction, 
-	float density
+	float density,
+	string colour_mesh
 ) : Entity(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, ppm, world)
 {
+	this->player_mesh = colour_mesh;
 	addBodyToWorld(world, dynamic);
 	addFixturesToBody(radius, sensor);
 	b2Fixture* b2_list = this->getPhysicsObject()->body->GetFixtureList();

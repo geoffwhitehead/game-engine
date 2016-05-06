@@ -1,15 +1,16 @@
 #pragma once
-#include "..\engine-base\Entity.h"
+
+#include "LevelEntity.h"
 
 
 /*
 *	Class: Bomb
 *	Author:	Geoff Whitehead
-*	Description: Class to hold informaiton on a bomb. Add a damage float.
+*	Description: Class to hold informaiton on a bomb. 
 */
 
 class Bomb :
-	public Entity {
+	public LevelEntity {
 public:
 	Bomb(string name, 
 		string str_parent, 
@@ -27,16 +28,12 @@ public:
 		float radius, 
 		b2World* world, 
 		float friction, 
-		float density
+		float density,
+		int cost
 	);
 	
-	~Bomb();
+	virtual ~Bomb();
 
-
-
-
-	void addBodyToWorld(b2World* world, bool is_dynamic);
-	void addFixturesToBody(float radius, bool is_sensor);
 
 };
 

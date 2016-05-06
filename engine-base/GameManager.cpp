@@ -176,9 +176,6 @@ void GameManager::run(){
 
 }
 
-bool GameManager::toDelete(Entity& entity) {
-	return entity.delete_me;
-}
 
 /*
 void GameManager::DrawText(const std::string &text, const Vector3 &position, const float size) {

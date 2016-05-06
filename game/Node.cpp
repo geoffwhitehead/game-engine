@@ -24,29 +24,14 @@ Node::Node(
 	float friction,
 	float density,
 	float health,
-	Player* owner
+	Player* owner, 
+	int cost
 
-) : Entity(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, ppm, world) {
+) : LevelEntity(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, dynamic, sensor, ppm, radius, world, friction, density, cost) {
 	
 	this->created_on = system_clock::now();
 	this->health = health;
 	this->owner = owner;
-	addBodyToWorld(world, dynamic);
-	addFixturesToBody(radius, sensor);
-	b2Fixture* b2_list = this->getPhysicsObject()->body->GetFixtureList();
-	b2_list->SetFriction(friction);
-	b2_list->SetDensity(density);
-	this->physicsObject->body->SetUserData(this);
 }
 
 Player* owner;
-
-void Node::addBodyToWorld(b2World* world, bool is_dynamic) {
-	this->physicsObject->addBodyToWorld(world, is_dynamic);
-	this->getPhysicsObject()->body->SetBullet(true);
-
-}
-
-void Node::addFixturesToBody(float radius, bool is_sensor) {
-	this->getPhysicsObject()->addCircularFixtureToBody(radius, is_sensor);
-}

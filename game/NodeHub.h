@@ -23,13 +23,14 @@ public:
 		float friction,
 		float density,
 		int health,
-		Player* owner
+		Player* owner,
+		int cost
 
 	);
 
 	int cost = 2;
 
-	~NodeHub();
+	virtual ~NodeHub();
 };
 
 

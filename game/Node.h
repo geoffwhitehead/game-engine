@@ -1,5 +1,5 @@
 #pragma once
-#include "..\engine-base\Entity.h"
+#include "LevelEntity.h"
 #include "Player.h"
 #include <chrono>
 #include <ctime>
@@ -8,7 +8,7 @@
 using namespace std::chrono;
 
 class Node :
-	public Entity {
+	public LevelEntity {
 
 public:
 	Node(
@@ -30,14 +30,13 @@ public:
 		float friction,
 		float density,
 		float health,
-		Player * owner
+		Player * owner,
+		int cost
 	);
+
 	virtual ~Node();
-
 	float health;
-	void addBodyToWorld(b2World* world, bool is_dynamic);
-	void addFixturesToBody(float radius, bool is_sensor);
-
+	
 	time_point<system_clock> created_on;
-	Entity* owner;
+	Player* owner;
 };

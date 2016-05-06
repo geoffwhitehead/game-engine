@@ -1,7 +1,11 @@
-﻿  OGLRenderer.cpp
-  Generating Code...
-  Compiling...
-  Window.cpp
+﻿  Window.cpp
 c:\users\geoff\source\repos\game-engine\nclgl\window.cpp(59): warning C4244: 'argument': conversion from 'LONG' to 'const float', possible loss of data
+  Quaternion.cpp
+  OGLRenderer.cpp
+  Mouse.cpp
+  Matrix4.cpp
+  Matrix3.cpp
+  Keyboard.cpp
+  GameTimer.cpp
   Generating Code...
   nclgl.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\nclgl.lib

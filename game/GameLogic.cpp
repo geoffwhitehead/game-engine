@@ -13,8 +13,6 @@
 #define initial_charge 0.01f
 #define hub_health 3
 #define starting_resource 3;
-#define p1_start_loc Vector3(-25, 0, -7.5)
-#define p2_start_loc Vector3(25, 0, -7.5)
 #define explosion_group "explosions"
 #define hub_group "hubs"
 #define bomb_group "bombs"
@@ -23,6 +21,14 @@
 #define node_damage 2
 #define kill 100
 #define board_depth -7.5
+#define p1_mesh "p1_mesh_hub"
+#define p2_mesh "p2_mesh_hub"
+
+const int hub_cost = 2;
+const int bomb_cost = 1;
+
+const Vector3 p1_start_loc = Vector3(-25, 0, -7.5);
+const Vector3 p2_start_loc = Vector3(25, 0, -7.5);
 
 b2Vec2 GameLogic::force;
 
@@ -42,23 +48,31 @@ void GameLogic::init() {
 	player_turn = ePlayerTurn::GS_PLAYER_1;
 	game_state = eGameState::GS_PLAYING;
 	p1 = new Player("p1", "", "", "", vec0, gm->iom->findMesh("mesh_player"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), false, false,
-		false, true, 30, 1.0, world, 0.5, 1.0);
+		false, true, 30, 1.0, world, 0.5, 1.0, p1_mesh);
 	p2 = new Player("p2", "", "", "", vec0, gm->iom->findMesh("mesh_player"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), false, false,
-		false, true, 30, 2.0, world, 0.5, 1.0);
+		false, true, 30, 2.0, world, 0.5, 1.0, p2_mesh);
 
 	p1->nodes.push_back( new NodeHub("p1_node_0", "", hub_group, "", p1_start_loc,
-		gm->iom->findMesh("mesh_hub"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
-		true, true, 30, hub_radius, world, 0.5, 1.0, hub_health, active_player));
+		gm->iom->findMesh(p1_mesh), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
+		true, true, 30, hub_radius, world, 0.5, 1.0, hub_health, p1, hub_cost));
 	p2->nodes.push_back( new NodeHub("p2_node_0", "", hub_group, "", p2_start_loc,
-		gm->iom->findMesh("mesh_hub"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
-		true, true, 30, hub_radius, world, 0.5, 1.0, hub_health, active_player));
+		gm->iom->findMesh(p2_mesh), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
+		true, true, 30, hub_radius, world, 0.5, 1.0, hub_health, p2, hub_cost));
 	
 	gm->addEntity(p1->nodes[0]);
 	gm->addEntity(p2->nodes[0]);
 
 	p1->selected_node = p1->nodes[0];
 	p2->selected_node = p2->nodes[0];
+	
+	// set the starting resource
+	p1->total_resource = starting_resource;
+	p1->current_resource = starting_resource;
+	p2->total_resource = starting_resource;
+	p2->current_resource = starting_resource;
+
 	active_player = p1;
+	cam->SetPosition(Vector3(p1_start_loc.x, p1_start_loc.y, CAM_OFFSET));
 
 	pointer = gm->getEntityByName("pointer", "");
 	setPointer();
@@ -92,16 +106,19 @@ string GameLogic::getName() {
 }
 
 void GameLogic::launch() {
-	Entity* hub;
-	Entity* b1;
+	LevelEntity* hub;
+	LevelEntity* b1;
 	
 	switch (action) {
 	case GameLogic::AS_HUB:
+
 		hub = new NodeHub(getName(), "", hub_group, "", active_player->selected_node->getPhysicsObject()->getPos(),
-			gm->iom->findMesh("mesh_hub"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true, 
-			true, true, 30, hub_radius, world, 0.5, 1.0, hub_health, active_player);
+			gm->iom->findMesh(active_player->player_mesh), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true, 
+			true, true, 30, hub_radius, world, 0.5, 1.0, hub_health, active_player, hub_cost);
 		hub->getPhysicsObject()->body->SetLinearDamping(DAMPING);
+		// after creating add new hub to all the game vectors
 		gm->addEntity(hub);
+		active_player->nodes.push_back(hub);
 		fired_entity = hub;
 		launchNode(fired_entity);
 		break;
@@ -110,7 +127,7 @@ void GameLogic::launch() {
 		// create a new bomb
 		b1 = new Bomb("bomb_1", "", bomb_group, "", active_player->selected_node->getPhysicsObject()->getPos(),
 			gm->iom->findMesh("mesh_bomb"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
-			true, true, 0, bomb_radius, world, 0.5, 1.0);
+			true, true, 0, bomb_radius, world, 0.5, 1.0, bomb_cost);
 
 		b1->getPhysicsObject()->body->SetLinearDamping(DAMPING);
 		gm->addEntity(b1);
@@ -157,7 +174,7 @@ void GameLogic::handleCollisions() {
 			if (in_contact_events[i].second->group == explosion_group) {
 				applyDamage(static_cast<Node*>(in_contact_events[i].first), static_cast<Explosion*>(in_contact_events[i].second)->damage);
 			}
-			if (in_contact_events[i].first->group == hub_group) {
+			if (in_contact_events[i].second->group == hub_group) {
 				
 				if (static_cast<Node*>(in_contact_events[i].first)->created_on > static_cast<Node*>(in_contact_events[i].second)->created_on) {
 					applyDamage(static_cast<Node*>(in_contact_events[i].first), kill);
@@ -180,9 +197,17 @@ void GameLogic::applyDamage(Node* n, int damage) {
 	n->health = n->health - damage;
 
 	if (n->health <= 0){
-		gm->markToDelete(n);
+		destroyNode(n);
 		out_audio_events.push_back(eAudioEvents::AE_HUB_DESTROYED);
 	}
+}
+
+void GameLogic::destroyNode(Node* n) {
+	//delete reference in nodes
+	n->owner->nodes.erase(std::remove(n->owner->nodes.begin(), n->owner->nodes.end(), n), n->owner->nodes.end());
+	// then schedule the deletion with the gm
+	gm->markToDelete(n);
+	
 }
 
 void GameLogic::update(float msec) {
@@ -299,7 +324,43 @@ void GameLogic::handleStates() {
 			launch();
 		}
 		break;
+
+	case eGameState::GS_CAMERA_MOVING:
+		// set the new position
+		Vector3 c_pos = cam->GetPosition();
+		float new_x = cam->GetPosition().x + direction_step.x;
+		float new_y = cam->GetPosition().y + direction_step.y;
+		cam->SetPosition(Vector3(new_x, new_y, c_pos.z));
+
+		// reduce the steps
+		step_counter--;
+
+		// check if move finished and change gamestate if true
+		if (step_counter == 0) {
+			game_state = eGameState::GS_PLAYING;
+		}
+
+
+		break;
+
 	}
+
+}
+
+LevelEntity* GameLogic::findNextNode() {
+	// find the index of selected node
+	for (int i = 0; i < active_player->nodes.size(); i++) {
+		if (active_player->nodes[i] == active_player->selected_node) {
+			return active_player->nodes[(i+1) % (active_player->nodes.size())];
+		}
+	}
+}
+
+bool GameLogic::sufficientResource() {
+	if (active_player->selected_node->cost <= active_player->current_resource) {
+		return true;
+	}
+	return false;
 }
 
 // determine actions based on logic events that have been stacked between frame 
@@ -327,6 +388,28 @@ void GameLogic::handleEvents() {
 				out_audio_events.push_back(eAudioEvents::AE_MOVE);
 			}
 			break;
+
+		case eInputEvents::IE_KEY_TAB:
+			if (game_state == eGameState::GS_PLAYING) {
+
+				// only move the camera if player holds more than one node
+				if (active_player->nodes.size() > 1) {
+					// reset the camera step counter
+					step_counter = camera_steps;
+					// find the position of the next node and set it as the active node
+					LevelEntity* next_node = findNextNode();
+					active_player->selected_node = next_node;
+					target_pos = Vector2(next_node->getPhysicsObject()->getPos().x, next_node->getPhysicsObject()->getPos().y);
+					cout << target_pos << endl;
+					// calculate the direction and then divide it by the number of steps (frames) to issue the cam moveennt over
+					direction_step = target_pos - Vector2(cam->GetPosition().x, cam->GetPosition().y);
+					direction_step = Vector2(direction_step.x / camera_steps, direction_step.y / camera_steps);
+					// change the game state whilst hte camera is moving to lock out other actions
+					game_state = eGameState::GS_CAMERA_MOVING;
+				}
+			}
+			break;
+
 		case eInputEvents::IE_ENTER:
 			if (game_state == eGameState::GS_PLAYING) {
 				out_audio_events.push_back(eAudioEvents::AE_TURN_SWAP);
@@ -335,9 +418,15 @@ void GameLogic::handleEvents() {
 			break;
 		case eInputEvents::IE_SPACE:
 			if (game_state == eGameState::GS_PLAYING) {
-				game_state = eGameState::GS_CHARGING;
-				//charge = 1;
-				start = std::chrono::system_clock::now();
+				//if (sufficientResource()) {
+
+					game_state = eGameState::GS_CHARGING;
+					start = std::chrono::system_clock::now();
+				//}
+				//else {
+					//out_audio_events.push_back(eAudioEvents::AE_INSUF_RESOURCE);
+				//}
+				
 			}
 			if (game_state == eGameState::GS_CHARGING) {
 				charging = true;
@@ -410,15 +499,21 @@ void GameLogic::endTurn() {
 	if (player_turn == ePlayerTurn::GS_PLAYER_1) {
 		player_turn = ePlayerTurn::GS_PLAYER_2;
 		active_player = p2;
-		Vector3 player_pos = p2->selected_node->getPhysicsObject()->getPos();
-		cam->SetPosition(Vector3(player_pos.x, player_pos.y, CAM_OFFSET));
 	}
 	else {
 		player_turn = ePlayerTurn::GS_PLAYER_1;
 		active_player = p1;
-		Vector3 player_pos = p1->selected_node->getPhysicsObject()->getPos();
-		cam->SetPosition(Vector3(player_pos.x, player_pos.y, CAM_OFFSET));
 	}
+	// reset the step counter
+	step_counter = camera_steps;
+	// find the position of the next node and set it as the active node
+	Entity* next_node = active_player->selected_node;
+	target_pos = Vector2(next_node->getPhysicsObject()->getPos().x, next_node->getPhysicsObject()->getPos().y);
+	// calculate the direction and then divide it by the number of steps (frames) to issue the cam moveennt over
+	direction_step = target_pos - Vector2(cam->GetPosition().x, cam->GetPosition().y);
+	direction_step = Vector2(direction_step.x / camera_steps, direction_step.y / camera_steps);
+	// change the game state whilst hte camera is moving to lock out other actions
+	game_state = eGameState::GS_CAMERA_MOVING;
 }
 
 // check if an entity with given name is awake or not

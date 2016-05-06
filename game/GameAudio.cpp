@@ -1,6 +1,6 @@
 #include "GameAudio.h"
 
-#define turn_swap "swap"
+#define turn_swap "beep1"
 #define rocket_1 "rocket1"
 #define fart "fart-2"
 #define powerup2 "powerup2"

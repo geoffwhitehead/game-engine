@@ -1,5 +1,5 @@
 #pragma once
-#include "..\engine-base\Entity.h"
+#include "LevelEntity.h"
 
 /*
 *	Class: Player
@@ -28,13 +28,17 @@ public:
 		float radius, 
 		b2World* world, 
 		float friction, 
-		float density
+		float density,
+		string colour_mesh
 	);
 	~Player();
 
-	int resources;
-	Entity* selected_node;
-	vector <Entity*> nodes;
+	int total_resource;
+	int current_resource;
+
+	LevelEntity* selected_node;
+	vector <LevelEntity*> nodes;
+	string player_mesh;
 
 	void addBodyToWorld(b2World* world, bool is_dynamic);
 	void addFixturesToBody(float radius, bool is_sensor);
