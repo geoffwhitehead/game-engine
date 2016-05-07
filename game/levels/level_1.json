@@ -191,6 +191,11 @@
       "default_volume": 1.0
     },
     {
+      "name": "beep3",
+      "path": "./audio/beep-3.wav",
+      "default_volume": 1.0
+    },
+    {
       "name": "beep2",
       "path": "./audio/beep-2.wav",
       "default_volume": 1.0

@@ -12,7 +12,7 @@
 #define charge_speed 0.02f
 #define initial_charge 0.01f
 #define hub_health 3
-#define starting_resource 3;
+#define starting_resource 4;
 #define explosion_group "explosions"
 #define hub_group "hubs"
 #define bomb_group "bombs"
@@ -189,16 +189,19 @@ void GameLogic::handleCollisions() {
 	}
 	// clear
 	in_contact_events.clear();
+
 }
 
 void GameLogic::applyDamage(Node* n, int damage) {
-	out_audio_events.push_back(eAudioEvents::AE_HUB_DAMAGED);
-	cout << "damage" << endl;
-	n->health = n->health - damage;
+	if (n != active_player->selected_node) {
+		out_audio_events.push_back(eAudioEvents::AE_HUB_DAMAGED);
+		cout << "damage" << endl;
+		n->health = n->health - damage;
 
-	if (n->health <= 0){
-		destroyNode(n);
-		out_audio_events.push_back(eAudioEvents::AE_HUB_DESTROYED);
+		if (n->health <= 0){
+			destroyNode(n);
+			out_audio_events.push_back(eAudioEvents::AE_HUB_DESTROYED);
+		}
 	}
 }
 
@@ -207,8 +210,11 @@ void GameLogic::destroyNode(Node* n) {
 	n->owner->nodes.erase(std::remove(n->owner->nodes.begin(), n->owner->nodes.end(), n), n->owner->nodes.end());
 	// then schedule the deletion with the gm
 	gm->markToDelete(n);
+	// create a game event to say a node has been destroyed. The event will check whether there are remaining nodes
+	in_game_events.push_back(eGameEvents::GE_NODE_DESTROYED);
 	
 }
+
 
 void GameLogic::update(float msec) {
 
@@ -286,12 +292,9 @@ void GameLogic::handleStates() {
 	case eGameState::GS_BUILDING:
 		// active the hub so collisions occur
 
-		world->SetAllowSleeping(false);
+		world->SetAllowSleeping(false); // this is important so that collision of a stationary object is registered when placed inside another statuonary object
 		contact_pos = b2Vec2(fired_entity->getPhysicsObject()->getPos().x, fired_entity->getPhysicsObject()->getPos().y);
 		setFixture(fired_entity, eFilterNonSolid, eCollide);
-		
-		//fired_entity->getPhysicsObject()->body->SetTransform(b2Vec2(100000,10000), 0.0);
-		//fired_entity->getPhysicsObject()->body->SetTransform(contact_pos, 0.0);
 
 		fired_entity = 0;
 		game_state = eGameState::GS_PLAYING;
@@ -357,7 +360,19 @@ LevelEntity* GameLogic::findNextNode() {
 }
 
 bool GameLogic::sufficientResource() {
-	if (active_player->selected_node->cost <= active_player->current_resource) {
+	int cost;
+	switch (action) {
+	case eActionSelection::AS_HUB:
+		cost = hub_cost;
+		break;
+	case eActionSelection::AS_BOMB:
+		cost = bomb_cost;
+		break;
+	}
+
+	if (cost <= active_player->current_resource) {
+		active_player->current_resource = active_player->current_resource - cost;
+		cout << "2: " << active_player->current_resource << " " << cost << endl;
 		return true;
 	}
 	return false;
@@ -368,6 +383,30 @@ void GameLogic::handleEvents() {
 	
 	// reset per frame variables here
 	charging = false;
+
+
+	// handle in game events
+	for (int i = 0; i < in_game_events.size(); i++) {
+		switch (in_game_events[i]) {
+		case eGameEvents::GE_QUIT:
+			gm->getWindow()->forceQuit = true;
+			break;
+		case eGameEvents::GE_NODE_DESTROYED:
+			if (p1->nodes.size() == 0) {
+				cout << "Player 2 WINS!!!!!!" << endl;
+				game_state = eGameState::GS_GAME_END;
+			}
+			if (p2->nodes.size() == 0) {
+				cout << "Player 2 WINS!!!!!!" << endl;
+				game_state = eGameState::GS_GAME_END;
+			}
+			break;
+		}
+	}
+	// game events exist in game logic so need to be cleared here... unlike other events
+	in_game_events.clear();
+
+
 
 	// handle input events
 	for (int i = 0; i < in_input_events.size(); i++) {
@@ -406,6 +445,8 @@ void GameLogic::handleEvents() {
 					direction_step = Vector2(direction_step.x / camera_steps, direction_step.y / camera_steps);
 					// change the game state whilst hte camera is moving to lock out other actions
 					game_state = eGameState::GS_CAMERA_MOVING;
+				} else {
+					active_player->selected_node == active_player->nodes[0];
 				}
 			}
 			break;
@@ -413,19 +454,25 @@ void GameLogic::handleEvents() {
 		case eInputEvents::IE_ENTER:
 			if (game_state == eGameState::GS_PLAYING) {
 				out_audio_events.push_back(eAudioEvents::AE_TURN_SWAP);
+				std::cout << "0: " << active_player->current_resource << " " << active_player->total_resource << endl;
+
 				endTurn();
 			}
 			break;
 		case eInputEvents::IE_SPACE:
-			if (game_state == eGameState::GS_PLAYING) {
-				//if (sufficientResource()) {
+			std::cout << "0: " << active_player->current_resource << " " << active_player->total_resource << endl;
 
+			if (game_state == eGameState::GS_PLAYING) {
+				std::cout << "1: " << active_player->current_resource << " " << active_player->total_resource << endl;
+
+				if (sufficientResource()) {
+					cout << "3: " << active_player->current_resource << " " << active_player->total_resource << endl;
 					game_state = eGameState::GS_CHARGING;
 					start = std::chrono::system_clock::now();
-				//}
-				//else {
-					//out_audio_events.push_back(eAudioEvents::AE_INSUF_RESOURCE);
-				//}
+				}
+				else {
+					out_audio_events.push_back(eAudioEvents::AE_INSUF_RESOURCE);
+				}
 				
 			}
 			if (game_state == eGameState::GS_CHARGING) {
@@ -433,6 +480,8 @@ void GameLogic::handleEvents() {
 			}
 			break;
 		case eInputEvents::IE_LEFT:
+			std::cout << "0: " << active_player->current_resource << " " << active_player->total_resource << endl;
+
 			if (game_state == eGameState::GS_PLAYING) {
 				adjustDirection(eInputEvents::IE_LEFT);
 				setPointer();
@@ -459,13 +508,7 @@ void GameLogic::handleEvents() {
 		}
 	}
 
-	// handle in game events
-	for (int i = 0; i < in_game_events.size(); i++) {
-		switch (in_game_events[i]) {
-		case eGameEvents::GS_QUIT:
-			gm->getWindow()->forceQuit = true;
-		}
-	}
+	
 }
 
 // adjust the direction of the active player. Used to determien which wya to fire or move
@@ -504,6 +547,8 @@ void GameLogic::endTurn() {
 		player_turn = ePlayerTurn::GS_PLAYER_1;
 		active_player = p1;
 	}
+	// reset the resource
+	active_player->current_resource = active_player->total_resource;
 	// reset the step counter
 	step_counter = camera_steps;
 	// find the position of the next node and set it as the active node

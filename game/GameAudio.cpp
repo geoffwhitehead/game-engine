@@ -9,6 +9,7 @@
 #define beep2 "beep2"
 #define boom "boom"
 #define destroyed "destroyed"
+#define insuf_resource "beep3"
 
 
 int r;
@@ -52,7 +53,9 @@ void GameAudio::handleEvents() {
 		case GameLogic::eAudioEvents::AE_HUB_DESTROYED:
 			am->play2D(destroyed);
 			break;
-
+		case GameLogic::eAudioEvents::AE_INSUF_RESOURCE:
+			am->play2D(insuf_resource);
+			break;
 		}
 	}
 }

@@ -1,2 +1,28 @@
-﻿  Entity.cpp
+﻿  SystemManager.cpp
+  SubSystem.cpp
+  Shader.cpp
+c:\users\geoff\source\repos\game-engine\_resources\glew\include\gl\wglew.h(79): warning C4005: 'GLEWAPI': macro redefinition
+  c:\users\geoff\source\repos\game-engine\_resources\glew\include\gl\glew.h(205): note: see previous definition of 'GLEWAPI'
+  RenderObject.cpp
+  Renderer.cpp
+c:\users\geoff\source\repos\game-engine\engine-base\renderer.cpp(10): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Mesh.cpp
+c:\users\geoff\source\repos\game-engine\engine-base\mesh.cpp(130): warning C4018: '<': signed/unsigned mismatch
+  jsoncpp.cpp
+  GameManager.cpp
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(5): warning C4244: 'argument': conversion from 'float' to 'uint', possible loss of data
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(72): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(77): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(90): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(97): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(99): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(112): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(151): warning C4018: '<': signed/unsigned mismatch
+  GameLogicManager.cpp
+c:\users\geoff\source\repos\game-engine\engine-base\gamelogicmanager.cpp(15): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamelogicmanager.cpp(21): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamelogicmanager.cpp(27): warning C4018: '<': signed/unsigned mismatch
+  Entity.cpp
+  Camera.cpp
+  Generating Code...
   engine-base.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-base.lib
