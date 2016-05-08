@@ -91,8 +91,10 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="NodeHub.h" />
     <ClInclude Include="NodeHubResource.h" />
+    <ClInclude Include="NodeHubShield.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Shield.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Arena.cpp" />
@@ -109,8 +111,10 @@
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="NodeHub.cpp" />
     <ClCompile Include="NodeHubResource.cpp" />
+    <ClCompile Include="NodeHubShield.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="Shield.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="levels\level_1.json" />

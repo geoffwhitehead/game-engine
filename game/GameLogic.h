@@ -6,10 +6,12 @@
 #include "Bomb.h"
 #include "Arena.h"
 #include "Explosion.h"
+#include "Shield.h"
 #include "Node.h"
 #include "LevelEntity.h"
 #include "NodeHub.h"
 #include "NodeHubResource.h"
+#include "NodeHubShield.h"
 #include "../engine-audio/AudioManager.h"
 #include "Explosion.h"
 #include <math.h>
@@ -35,14 +37,18 @@ class GameLogic :
 public:
 
 	enum ePlayerTurn { GS_PLAYER_1, GS_PLAYER_2 };
-	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING, GS_CONTACT, GS_CAMERA_MOVING, GS_GAME_END};
-	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_KEY_TAB, IE_LEFT, IE_RIGHT, IE_PAD1, IE_PAD2, IE_PAD4};
+	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING, 
+		GS_CONTACT, GS_CAMERA_MOVING, GS_GAME_END, GS_POWERUP_SHIELD
+	};
+	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_KEY_TAB, IE_LEFT, 
+		IE_RIGHT, IE_PAD1, IE_PAD2, IE_PAD3, IE_PAD4
+	};
 	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE, AE_POWERUP, 
 		AE_HUB_DAMAGED, AE_HUB_DESTROYED, AE_INSUF_RESOURCE, AE_POWERUP_RESOURCE,
 		AE_POWERDOWN_RESOURCE, AE_CHARGE_1, AE_CHARGE_2, AE_CHARGE_FULL, AE_LAUNCH
 	};
 	enum eGameEvents { GE_QUIT, GE_NODE_DESTROYED };
-	enum eActionSelection {AS_HUB, AS_RESOURCE_HUB, AS_BOMB};
+	enum eActionSelection {AS_HUB, AS_RESOURCE_HUB, AS_BOMB, AS_SHIELD_HUB};
 	
 	eGameState game_state;
 	ePlayerTurn player_turn;
@@ -59,7 +65,8 @@ public:
 	enum eFilter {
 		eFilterLevel = 0x01,
 		eFilterSolid = 0x02,
-		eFilterNonSolid = 0x04
+		eFilterNonSolid = 0x04,
+		eFilterProjectile = 0x06
 	};
 
 	enum eMask {
@@ -94,6 +101,8 @@ public:
 	void setPointer();
 	bool sufficientResource();
 	void checkResourceHubs();
+	void checkShieldHubs();
+
 	void destroyNode(Node* n);
 	b2Vec2 getTrajectory(Entity* origin);
 	void fireWeapon(Entity* e);
@@ -106,7 +115,7 @@ public:
 	void applyResource(NodeHubResource* n);
 	void detachResource(NodeHubResource* n);
 	bool exists(vector<LevelEntity*>* vector, LevelEntity* to_find);
-
+	bool shield_hub_placed = false;
 	void setFixture(Entity*, enum eFilter, enum eMask);
 	LevelEntity* findNextNode();
 

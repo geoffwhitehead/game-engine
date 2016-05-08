@@ -15,8 +15,11 @@
 #define starting_resource 40000;
 #define ppm 30
 
+#define mesh_shield "mesh_shield"
 #define group_explosion "explosions"
+#define group_shield "shields"
 #define group_hub "hubs"
+#define subgroup_hub_shield "shield_hub"
 #define subgroup_hub_resource "resource_hub"
 #define subgroup_hub ""
 #define group_bomb "bombs"
@@ -25,6 +28,8 @@
 
 #define hub_radius 2.0
 #define resource_hub_radius 3.0
+#define shield_hub_radius 1.0
+#define shield_radius 15.0
 #define bomb_radius 1.0
 
 #define node_damage 2
@@ -33,6 +38,7 @@
 #define explosion_lifetime 40
 #define resource_hub_strength 2
 #define resource_hub_health 4
+#define shield_hub_health 2
 #define die_speed 0.2
 
 #define charge_arr_size 5 
@@ -43,16 +49,18 @@ int current_charge_index = 0;
 
 const string node_hub = "hub";
 const string node_resource_hub = "resource_hub";
+const string node_shield_hub = "shield_hub";
 const string p1_mesh = "p1_mesh_";
 const string p2_mesh = "p2_mesh_";
 
-
+const int shield_power = 1;
 const int hub_cost = 2;
 const int bomb_cost = 1;
 const int resource_hub_cost = 4;
+const int shield_hub_cost = 4;
 
-const Vector3 p1_start_loc = Vector3(-25, 0, -6);
-const Vector3 p2_start_loc = Vector3(25, 0, -6);
+const Vector3 p1_start_loc = Vector3(-25, 0, 0);
+const Vector3 p2_start_loc = Vector3(25, 0, 0);
 
 b2Vec2 GameLogic::force;
 
@@ -110,12 +118,22 @@ GAME UPDATE
 
 void GameLogic::update(float msec) {
 
+	//checkShieldHubs();
 	checkResourceHubs();
 	handleCollisions(); // collisions
 	handleEvents(); // events first
 	world->SetAllowSleeping(true); // in states the bit mask of a hub is changed after sleeping. Need to wake it up to register any collisions and then reset it here, before the next step.
 	handleStates(); // then states
 
+}
+void GameLogic::checkShieldHubs() {
+	if (shield_hub_placed) {
+		for (int i = 0; i < active_player->shield_nodes.size(); i++) {
+			//if (!active_player->shield_nodes[i]) {
+			//	game_state = GS_POWERUP_SHIELD;
+			//}
+		}
+	}
 }
 
 void GameLogic::checkResourceHubs() {
@@ -155,6 +173,9 @@ string GameLogic::getName() {
 	case GameLogic::AS_RESOURCE_HUB:
 		ss << active_player->name << "_node_res_" << active_player->resource_nodes.size();
 		break;
+	case GameLogic::AS_SHIELD_HUB:
+		ss << active_player->name << "_node_shield_" << active_player->resource_nodes.size();
+		break;
 	case GameLogic::AS_BOMB:
 		ss << "bomb_1";
 		break;
@@ -170,6 +191,7 @@ LAUNCH
 void GameLogic::launch() {
 	Node* hub;
 	NodeHubResource* res_hub;
+	NodeHubShield* shield_hub;
 	LevelEntity* b1;
 	out_audio_events.push_back(eAudioEvents::AE_LAUNCH);
 	switch (action) {
@@ -196,6 +218,19 @@ void GameLogic::launch() {
 		gm->addEntity(res_hub);
 		active_player->resource_nodes.push_back(res_hub);
 		fired_entity = res_hub;
+		launchNode(fired_entity);
+		break;
+
+	case GameLogic::AS_SHIELD_HUB:
+
+		shield_hub = new NodeHubShield(getName(), "", group_hub, subgroup_hub_shield, active_player->selected_node->getPhysicsObject()->getPos(),
+			gm->iom->findMesh(active_player->player_mesh + node_shield_hub), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
+			true, true, ppm, shield_hub_radius, world, 0.5, 1.0, shield_hub_health, active_player, shield_power);
+		shield_hub->getPhysicsObject()->body->SetLinearDamping(DAMPING);
+		// after creating add new resource hub to all the game vectors
+		gm->addEntity(shield_hub);
+		active_player->shield_nodes.push_back(shield_hub);
+		fired_entity = shield_hub;
 		launchNode(fired_entity);
 		break;
 
@@ -253,7 +288,7 @@ void GameLogic::handleCollisions() {
 		}
 		// HUB
 		else if (in_contact_events[i].first->group == group_hub){
-			// hub - hub
+			// -- hub - hub
 			if (in_contact_events[i].second->group == group_hub) {
 
 				if (static_cast<Node*>(in_contact_events[i].first)->created_on > static_cast<Node*>(in_contact_events[i].second)->created_on) {
@@ -263,6 +298,21 @@ void GameLogic::handleCollisions() {
 				else {
 					applyDamage(static_cast<Node*>(in_contact_events[i].first), node_damage);
 					applyDamage(static_cast<Node*>(in_contact_events[i].second), kill);
+				}
+			}
+			// shield hub specific
+			else if (in_contact_events[i].first->sub_group == subgroup_hub_shield) {
+				// hub - explosion
+				if (in_contact_events[i].second->group == group_explosion) {
+					applyDamage(static_cast<Node*>(in_contact_events[i].first), static_cast<Explosion*>(in_contact_events[i].second)->damage);
+				}
+				// hub - block
+				else if (in_contact_events[i].second->group == group_env_block) {
+					applyDamage(static_cast<Node*>(in_contact_events[i].first), kill);
+				}
+				// hub - resource
+				else if (in_contact_events[i].second->group == group_env_resource) {
+					applyDamage(static_cast<Node*>(in_contact_events[i].first), kill);
 				}
 			}
 			// -- hub specific
@@ -290,7 +340,6 @@ void GameLogic::handleCollisions() {
 				else if (in_contact_events[i].second->group == group_explosion) {
 					applyDamage(static_cast<NodeHubResource*>(in_contact_events[i].first), static_cast<Explosion*>(in_contact_events[i].second)->damage);
 				}
-
 			}
 		}
 	}
@@ -348,6 +397,12 @@ void GameLogic::destroyNode(Node* n) {
 		n->owner->resource_nodes.erase(std::remove(n->owner->resource_nodes.begin(), n->owner->resource_nodes.end(), n), n->owner->resource_nodes.end());
 		detachResource(static_cast<NodeHubResource*>(n));
 	}
+	else if (n->sub_group == subgroup_hub_shield) {
+		out_audio_events.push_back(eAudioEvents::AE_HUB_DESTROYED);
+		// remove the attached shield
+		n->owner->shield_nodes.erase(std::remove(n->owner->shield_nodes.begin(), n->owner->shield_nodes.end(), n), n->owner->shield_nodes.end());
+		gm->markToDelete(static_cast<NodeHubShield*>(n)->shield);
+	}
 	//delete reference in nodes
 	n->owner->nodes.erase(std::remove(n->owner->nodes.begin(), n->owner->nodes.end(), n), n->owner->nodes.end());
 	// then schedule the deletion with the gm
@@ -392,6 +447,7 @@ void GameLogic::handleStates() {
 	bool live = false; // used for explosion -- determine whether any remaining
 	float current_charge;
 	Explosion*e;
+	Shield* shield;
 	b2Vec2 contact_pos;
 	float vel;
 	switch (game_state) {
@@ -409,6 +465,9 @@ void GameLogic::handleStates() {
 			game_state = eGameState::GS_BUILDING;
 			break;
 		case GameLogic::AS_RESOURCE_HUB:
+			game_state = eGameState::GS_BUILDING;
+			break;
+		case GameLogic::AS_SHIELD_HUB:
 			game_state = eGameState::GS_BUILDING;
 			break;
 		case GameLogic::AS_BOMB:
@@ -434,10 +493,22 @@ void GameLogic::handleStates() {
 		// active the hub so collisions occur
 
 		world->SetAllowSleeping(false); // this is important so that collision of a stationary object is registered when placed inside another statuonary object
-		contact_pos = b2Vec2(fired_entity->getPhysicsObject()->getPos().x, fired_entity->getPhysicsObject()->getPos().y);
+		//contact_pos = b2Vec2(fired_entity->getPhysicsObject()->getPos().x, fired_entity->getPhysicsObject()->getPos().y);
 		setFixture(fired_entity, eFilterNonSolid, eCollide);
 
-		fired_entity = 0;
+		switch (action) {
+		case GameLogic::AS_SHIELD_HUB:
+			
+			shield = new Shield(getName() + "s", "", group_shield, "", Vector3(fired_entity->getPhysicsObject()->getPos().x, 
+				fired_entity->getPhysicsObject()->getPos().y, -4.0),
+				gm->iom->findMesh(mesh_shield), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
+				true, true, ppm, shield_radius, world, 0.5, 1.0, shield_power);
+				
+			((NodeHubShield*)fired_entity)->shield = shield;
+			setFixture(shield, eFilterNonSolid, eNoCollide);
+			gm->addEntity(shield);
+			break;
+		}
 		game_state = eGameState::GS_PLAYING;
 		break;
 
@@ -540,6 +611,9 @@ bool GameLogic::sufficientResource() {
 		break;
 	case eActionSelection::AS_BOMB:
 		cost = bomb_cost;
+		break;
+	case eActionSelection::AS_SHIELD_HUB:
+		cost = shield_hub_cost;
 		break;
 	case eActionSelection::AS_RESOURCE_HUB:
 		cost = resource_hub_cost;
@@ -680,7 +754,11 @@ void GameLogic::handleEvents() {
 				action = eActionSelection::AS_RESOURCE_HUB;
 			}
 			break;
-
+		case eInputEvents::IE_PAD3:
+			if (game_state == eGameState::GS_PLAYING) {
+				action = eActionSelection::AS_SHIELD_HUB;
+			}
+			break;
 		case eInputEvents::IE_PAD4:
 			if (game_state == eGameState::GS_PLAYING) {
 				action = eActionSelection::AS_BOMB;
