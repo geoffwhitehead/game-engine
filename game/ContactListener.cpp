@@ -1,9 +1,14 @@
 #include "ContactListener.h"
 
 
-#define explosion_group "explosions"
-#define hub_group "hubs"
-#define bomb_group "bombs"
+#define group_explosion "explosions"
+#define group_hub "hubs"
+#define subgroup_hub_resource "resource_hub"
+#define subgroup_hub ""
+#define group_bomb "bombs"
+#define group_env_resource "resource"
+#define group_env_block "impas"
+
 
 ContactListener::ContactListener(GameLogic* gl) {
 	this->gl = gl;
@@ -21,13 +26,39 @@ void ContactListener::BeginContact(b2Contact* contact) {
 	void* bodyDataB = contact->GetFixtureB()->GetBody()->GetUserData();
 
 	if (bodyDataA) {
-		if (static_cast<NodeHub*>(bodyDataA)->group == hub_group) {
-			if (static_cast<Explosion*>(bodyDataB)->group == explosion_group) {
-				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<NodeHub*>(bodyDataA), static_cast<Explosion*>(bodyDataB)));
-			} else
-			if (static_cast<NodeHub*>(bodyDataB)->group == hub_group) {
+		cout << "contact" << endl;
+		// --HUB
+		if (static_cast<Entity*>(bodyDataA)->group == group_hub) {
+			cout << "hub contact" << endl;
+			if (static_cast<Entity*>(bodyDataB)->group == group_explosion) {
+				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataA), static_cast<Entity*>(bodyDataB)));
+			} 
+			else if (static_cast<Entity*>(bodyDataB)->group == group_hub) {
 				cout << "hub hub" << endl;
-				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<NodeHub*>(bodyDataA), static_cast<NodeHub*>(bodyDataB)));
+				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataA), static_cast<Entity*>(bodyDataB)));
+			}
+			else if (static_cast<Entity*>(bodyDataB)->group == group_env_block) {
+				cout << "hub block!!!!!!!" << endl;
+				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataA), static_cast<Entity*>(bodyDataB)));
+			}
+			else if (static_cast<Entity*>(bodyDataB)->group == group_env_resource) {
+				cout << "hub resource!!!!!" << endl;
+				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataA), static_cast<Entity*>(bodyDataB)));
+			}
+		}
+		// --ENV ENTITY
+		if (static_cast<Entity*>(bodyDataA)->group == group_env_block) {
+			if (static_cast<Entity*>(bodyDataB)->group == group_hub) {
+				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataB), static_cast<Entity*>(bodyDataA)));
+			}
+		}
+		// --RESOURCE
+		if (static_cast<Entity*>(bodyDataA)->group == group_env_resource) {
+			if (static_cast<Entity*>(bodyDataB)->sub_group == subgroup_hub) {
+				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataB), static_cast<Entity*>(bodyDataA)));
+			}
+			if (static_cast<Entity*>(bodyDataB)->sub_group == subgroup_hub_resource) {
+				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataB), static_cast<Entity*>(bodyDataA)));
 			}
 		}
 	}
@@ -42,9 +73,4 @@ void ContactListener::EndContact(b2Contact* contact) {
 	void* bodyDataA = contact->GetFixtureA()->GetBody()->GetUserData();
 	void* bodyDataB = contact->GetFixtureB()->GetBody()->GetUserData();
 
-	if (static_cast<Player*>(bodyDataA)->name == "player_1") {
-		if (static_cast<Player*>(bodyDataB)->name == "bomb_explosion") {
-			cout << "explosion 1" << endl;
-		}
-	}
 }

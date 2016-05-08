@@ -28,7 +28,6 @@ public:
 
 	);
 
-	int cost = 2;
 
 	virtual ~NodeHub();
 };

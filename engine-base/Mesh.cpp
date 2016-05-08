@@ -167,7 +167,6 @@ Mesh* Mesh::GenerateQuad(float width, float height) {
 	m->type = GL_TRIANGLE_STRIP;
 	m->numVertices = 4;
 
-
 	float half_width = width / 2;
 	float half_height = height / 2;
 

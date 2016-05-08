@@ -5,11 +5,14 @@
 #define fart "fart-2"
 #define powerup2 "powerup2"
 #define powerup3 "powerup3"
+#define powerup4 "powerup4"
 #define beep1 "beep1"
 #define beep2 "beep2"
 #define boom "boom"
 #define destroyed "destroyed"
 #define insuf_resource "beep3"
+#define powerdown_resource "powerdown1"
+
 
 
 int r;
@@ -55,6 +58,12 @@ void GameAudio::handleEvents() {
 			break;
 		case GameLogic::eAudioEvents::AE_INSUF_RESOURCE:
 			am->play2D(insuf_resource);
+			break;
+		case GameLogic::eAudioEvents::AE_POWERUP_RESOURCE:
+			am->play2D(powerup4);
+			break;
+		case GameLogic::eAudioEvents::AE_POWERDOWN_RESOURCE:
+			am->play2D(powerdown_resource);
 			break;
 		}
 	}

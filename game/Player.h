@@ -7,6 +7,8 @@
 *	Description: At the moment only adds one variable: health.
 */
 
+class Node;
+class NodeHubResource;
 
 class Player :
 	public Entity {
@@ -37,7 +39,8 @@ public:
 	int current_resource;
 
 	LevelEntity* selected_node;
-	vector <LevelEntity*> nodes;
+	vector <Node*> nodes;
+	vector <NodeHubResource*> resource_nodes;
 	string player_mesh;
 
 	void addBodyToWorld(b2World* world, bool is_dynamic);

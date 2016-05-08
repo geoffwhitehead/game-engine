@@ -21,7 +21,7 @@ public:
 		float radius,
 		b2World* world,
 		float friction,
-		float density,
+		float density, 
 		int cost
 	);
 

@@ -8,6 +8,7 @@
 #include "Explosion.h"
 #include "Node.h"
 #include "NodeHub.h"
+#include "NodeHubResource.h"
 #include "../engine-audio/AudioManager.h"
 #include "Explosion.h"
 #include <math.h>
@@ -23,7 +24,7 @@
 *	Class: GameLogic
 *	Author:	Geoff Whitehead
 *	Description: Handles all game evntrs and applies game logic to them. Handles states and 
-		functions that occur because of states or events.
+*		functions that occur because of states or events.
 */
 
 using namespace std::chrono;
@@ -34,11 +35,13 @@ public:
 
 	enum ePlayerTurn { GS_PLAYER_1, GS_PLAYER_2 };
 	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING, GS_CONTACT, GS_CAMERA_MOVING, GS_GAME_END};
-	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_KEY_TAB, IE_LEFT, IE_RIGHT, IE_PAD1, IE_PAD4};
-	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE, AE_POWERUP, AE_HUB_DAMAGED, AE_HUB_DESTROYED, AE_INSUF_RESOURCE
+	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_KEY_TAB, IE_LEFT, IE_RIGHT, IE_PAD1, IE_PAD2, IE_PAD4};
+	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE, AE_POWERUP, 
+		AE_HUB_DAMAGED, AE_HUB_DESTROYED, AE_INSUF_RESOURCE, AE_POWERUP_RESOURCE,
+		AE_POWERDOWN_RESOURCE
 	};
 	enum eGameEvents { GE_QUIT, GE_NODE_DESTROYED };
-	enum eActionSelection {AS_HUB, AS_BOMB};
+	enum eActionSelection {AS_HUB, AS_RESOURCE_HUB, AS_BOMB};
 	
 	eGameState game_state;
 	ePlayerTurn player_turn;
@@ -90,7 +93,7 @@ public:
 	void endTurn();
 	void setPointer();
 	bool sufficientResource();
-	
+	void checkResourceHubs();
 	void destroyNode(Node* n);
 	b2Vec2 getTrajectory(Entity* origin);
 	void fireWeapon(Entity* e);
@@ -99,7 +102,10 @@ public:
 	void handleCollisions();
 	bool isAwake(Entity*);
 	void adjustDirection(eInputEvents);
-	void applyDamage(Node*, int);
+	void applyDamage(Node*, float);
+	void applyResource(NodeHubResource* n);
+	void detachResource(NodeHubResource* n);
+
 
 	void setFixture(Entity*, enum eFilter, enum eMask);
 	LevelEntity* findNextNode();

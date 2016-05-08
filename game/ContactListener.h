@@ -2,6 +2,10 @@
 #include "..\_resources\Box2D\Box2D\Dynamics\b2WorldCallbacks.h"
 #include "GameLogic.h"
 #include "Node.h"
+#include "EnvEntity.h"
+#include "LevelEntity.h"
+#include "Bomb.h"
+#include "Resource.h"
 
 
 /*

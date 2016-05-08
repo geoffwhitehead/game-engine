@@ -66,6 +66,9 @@ void GameInput::handleKeyboard() {
 	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD1))) {
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_PAD1);
 	}
+	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD2))) {
+		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_PAD2);
+	}
 	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD4))) {
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_PAD4);
 	}

@@ -81,6 +81,7 @@
     <ClInclude Include="Arena.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="ContactListener.h" />
+    <ClInclude Include="EnvEntity.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="GameAudio.h" />
     <ClInclude Include="GameInput.h" />
@@ -89,12 +90,15 @@
     <ClInclude Include="LevelEntity.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="NodeHub.h" />
+    <ClInclude Include="NodeHubResource.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Arena.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="ContactListener.cpp" />
+    <ClCompile Include="EnvEntity.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="GameAudio.cpp" />
     <ClCompile Include="GameInput.cpp" />
@@ -104,7 +108,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="NodeHub.cpp" />
+    <ClCompile Include="NodeHubResource.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Resource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="levels\level_1.json" />

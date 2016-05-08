@@ -1,15 +1,17 @@
 ﻿  GameLogic.cpp
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(88): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(167): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(305): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(355): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(389): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(412): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(421): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(422): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(449): warning C4553: '==': operator has no effect; did you intend '='?
-  GameAudio.cpp
-c:\users\geoff\source\repos\game-engine\game\gameaudio.cpp(39): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(360): warning C4715: 'GameLogic::findNextNode': not all control paths return a value
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(117): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(119): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(128): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(240): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(244): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(252): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(284): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(435): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(485): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(526): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(549): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(558): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(559): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(588): warning C4553: '==': operator has no effect; did you intend '='?
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(490): warning C4715: 'GameLogic::findNextNode': not all control paths return a value
   game.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\\_exe\Debug\game.exe

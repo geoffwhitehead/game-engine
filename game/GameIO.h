@@ -14,6 +14,12 @@ class GameIO :
 	public IOManager {
 
 public:
+
+
+	enum eClassType { CL_PLAYER, CL_ARENA, CL_BOMB, CL_EXPLOSION, CL_HUB, CL_RESOURCE, CL_ENV};
+	eClassType class_type;
+
+
 	GameIO(string root_dir, b2World* b2_world, float ppm);
 	~GameIO();
 	void loadEntities();
