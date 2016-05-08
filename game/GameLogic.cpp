@@ -246,23 +246,23 @@ void GameLogic::handleCollisions() {
 		}
 		// HUB
 		else if (in_contact_events[i].first->group == group_hub){
-			if (in_contact_events[i].first->sub_group == subgroup_hub) {
+			// hub - hub
+			if (in_contact_events[i].second->group == group_hub) {
+
+				if (static_cast<Node*>(in_contact_events[i].first)->created_on > static_cast<Node*>(in_contact_events[i].second)->created_on) {
+					applyDamage(static_cast<Node*>(in_contact_events[i].first), kill);
+					applyDamage(static_cast<Node*>(in_contact_events[i].second), node_damage);
+				}
+				else {
+					applyDamage(static_cast<Node*>(in_contact_events[i].first), node_damage);
+					applyDamage(static_cast<Node*>(in_contact_events[i].second), kill);
+				}
+			}
+			// -- hub specific
+			else if (in_contact_events[i].first->sub_group == subgroup_hub) {
 				// hub - explosion
 				if (in_contact_events[i].second->group == group_explosion) {
 					applyDamage(static_cast<Node*>(in_contact_events[i].first), static_cast<Explosion*>(in_contact_events[i].second)->damage);
-				}
-			
-				// hub - hub
-				else if (in_contact_events[i].second->group == group_hub) {
-				
-					if (static_cast<Node*>(in_contact_events[i].first)->created_on > static_cast<Node*>(in_contact_events[i].second)->created_on) {
-						applyDamage(static_cast<Node*>(in_contact_events[i].first), kill);
-						applyDamage(static_cast<Node*>(in_contact_events[i].second), node_damage);
-					}
-					else {
-						applyDamage(static_cast<Node*>(in_contact_events[i].first), node_damage);
-						applyDamage(static_cast<Node*>(in_contact_events[i].second), kill);
-					}
 				}
 				// hub - block
 				else if (in_contact_events[i].second->group == group_env_block) {
@@ -273,7 +273,7 @@ void GameLogic::handleCollisions() {
 					applyDamage(static_cast<Node*>(in_contact_events[i].first), kill);
 				}
 			}
-			//RESOURCE HUB
+			// -- resource hub specific
 			else if (in_contact_events[i].first->sub_group == subgroup_hub_resource) {
 				// resource hub - env resource
 				if (in_contact_events[i].second->group == group_env_resource) {
@@ -283,6 +283,7 @@ void GameLogic::handleCollisions() {
 				else if (in_contact_events[i].second->group == group_explosion) {
 					applyDamage(static_cast<NodeHubResource*>(in_contact_events[i].first), static_cast<Explosion*>(in_contact_events[i].second)->damage);
 				}
+
 			}
 		}
 	}
@@ -292,8 +293,10 @@ void GameLogic::handleCollisions() {
 }
 
 void GameLogic::applyResource(NodeHubResource* n){
-	// just incase the event occurs twice.. check the hub isnt already powered on
-	if (!n->is_powered_on) {
+	// because box2d requires object deletions to be sceduled at the end of the world step. The collision with the resource
+	// block could come after the collision with entity which destroyed it. Need to check that it hasnt already been removed from the 
+	// players resource vector ... ie. destroyed
+	if (!n->is_powered_on && exists((vector<LevelEntity*>*)&(active_player->resource_nodes), (LevelEntity*)n)) {
 		out_audio_events.push_back(eAudioEvents::AE_POWERUP_RESOURCE);	
 		n->owner->total_resource = active_player->total_resource + n->resource_per_turn;
 		n->is_powered_on = true;
@@ -305,7 +308,6 @@ void GameLogic::applyResource(NodeHubResource* n){
 void GameLogic::detachResource(NodeHubResource* n) {
 	// just incase the event occurs on a node already powered down
 	if (n->is_powered_on) {
-		out_audio_events.push_back(eAudioEvents::AE_POWERDOWN_RESOURCE); 
 		n->owner->total_resource = active_player->total_resource - n->resource_per_turn;
 		n->is_powered_on = false;
 	}
@@ -318,16 +320,24 @@ void GameLogic::applyDamage(Node* n, float damage) {
 		cout << n->health << endl;
 		if (n->health <= 0){
 			destroyNode(n);
-			out_audio_events.push_back(eAudioEvents::AE_HUB_DESTROYED);
 		}
 	}
 }
 
+bool GameLogic::exists(vector<LevelEntity*>* vector, LevelEntity* to_find) {
+	if (std::find(vector->begin(), vector->end(), to_find) != vector->end()) {
+		return true;
+	}
+	return false;
+}
+
 void GameLogic::destroyNode(Node* n) {
 	if (n->sub_group == subgroup_hub) {
+		out_audio_events.push_back(eAudioEvents::AE_HUB_DESTROYED);
 		n->owner->nodes.erase(std::remove(n->owner->nodes.begin(), n->owner->nodes.end(), n), n->owner->nodes.end());
 	}
 	else if (n->sub_group == subgroup_hub_resource) {
+		out_audio_events.push_back(eAudioEvents::AE_POWERDOWN_RESOURCE); 
 		n->owner->resource_nodes.erase(std::remove(n->owner->resource_nodes.begin(), n->owner->resource_nodes.end(), n), n->owner->resource_nodes.end());
 		detachResource(static_cast<NodeHubResource*>(n));
 	}

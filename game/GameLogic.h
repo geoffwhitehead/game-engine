@@ -7,6 +7,7 @@
 #include "Arena.h"
 #include "Explosion.h"
 #include "Node.h"
+#include "LevelEntity.h"
 #include "NodeHub.h"
 #include "NodeHubResource.h"
 #include "../engine-audio/AudioManager.h"
@@ -105,7 +106,7 @@ public:
 	void applyDamage(Node*, float);
 	void applyResource(NodeHubResource* n);
 	void detachResource(NodeHubResource* n);
-
+	bool exists(vector<LevelEntity*>* vector, LevelEntity* to_find);
 
 	void setFixture(Entity*, enum eFilter, enum eMask);
 	LevelEntity* findNextNode();
