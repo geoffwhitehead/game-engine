@@ -35,11 +35,16 @@
 #define resource_hub_health 4
 #define die_speed 0.2
 
+#define charge_arr_size 5 
+bool fully_charged;
+const float charge_step = clamp / charge_arr_size;
+const float charge_arr[] = { charge_step, charge_step *2, charge_step*3, charge_step*4, charge_step*5 };
+int current_charge_index = 0;
+
 const string node_hub = "hub";
 const string node_resource_hub = "resource_hub";
 const string p1_mesh = "p1_mesh_";
 const string p2_mesh = "p2_mesh_";
-
 
 
 const int hub_cost = 2;
@@ -131,6 +136,8 @@ b2Vec2 GameLogic::getTrajectory(Entity* origin) {
 		charge = clamp;
 	}
 
+	cout << "TRAJ : " << charge << endl;
+
 	cosx = cosx * charge;
 	siny = siny * charge;
 
@@ -164,7 +171,7 @@ void GameLogic::launch() {
 	Node* hub;
 	NodeHubResource* res_hub;
 	LevelEntity* b1;
-	
+	out_audio_events.push_back(eAudioEvents::AE_LAUNCH);
 	switch (action) {
 	case GameLogic::AS_HUB:
 
@@ -383,6 +390,7 @@ void GameLogic::handleStates() {
 
 	// declare vars outside switch
 	bool live = false; // used for explosion -- determine whether any remaining
+	float current_charge;
 	Explosion*e;
 	b2Vec2 contact_pos;
 	float vel;
@@ -453,11 +461,43 @@ void GameLogic::handleStates() {
 		break;
 
 	case eGameState::GS_CHARGING:
-		charge = charge++;
+		
+		duration<double> current = system_clock::now() - start;
+		current_charge = (current.count() * charge_speed);
+		
+		if (!fully_charged) {
+			if (current_charge >= charge_arr[current_charge_index]) {
+				current_charge_index++;
+				switch (current_charge_index) {
+				case 1:
+					out_audio_events.push_back(eAudioEvents::AE_CHARGE_2);
+					break;
+				case 2:
+					out_audio_events.push_back(eAudioEvents::AE_CHARGE_2);
+					break;
+				case 3:
+					out_audio_events.push_back(eAudioEvents::AE_CHARGE_2);
+					break;
+				case 4:
+					out_audio_events.push_back(eAudioEvents::AE_CHARGE_2);
+					break;
+				case 5:
+					out_audio_events.push_back(eAudioEvents::AE_CHARGE_FULL);
+					fully_charged = true;
+					break;
+				}
+				
+			}
+		}
+
 		if (!charging) {
 			end = std::chrono::system_clock::now();
 			elapsed_seconds = end - start;
+			cout << "elapsed seconds: " << elapsed_seconds.count() << endl;
 			launch();
+			fully_charged = false;
+			current_charge_index = 0;
+
 		}
 		break;
 
@@ -602,10 +642,8 @@ void GameLogic::handleEvents() {
 		case eInputEvents::IE_SPACE:
 			
 			if (game_state == eGameState::GS_PLAYING) {
-				std::cout << "1: " << active_player->current_resource << " " << active_player->total_resource << endl;
-
 				if (sufficientResource()) {
-					cout << "3: " << active_player->current_resource << " " << active_player->total_resource << endl;
+					out_audio_events.push_back(eAudioEvents::AE_CHARGE_1);
 					game_state = eGameState::GS_CHARGING;
 					start = std::chrono::system_clock::now();
 				}

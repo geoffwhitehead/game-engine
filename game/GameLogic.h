@@ -39,7 +39,7 @@ public:
 	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_KEY_TAB, IE_LEFT, IE_RIGHT, IE_PAD1, IE_PAD2, IE_PAD4};
 	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE, AE_POWERUP, 
 		AE_HUB_DAMAGED, AE_HUB_DESTROYED, AE_INSUF_RESOURCE, AE_POWERUP_RESOURCE,
-		AE_POWERDOWN_RESOURCE
+		AE_POWERDOWN_RESOURCE, AE_CHARGE_1, AE_CHARGE_2, AE_CHARGE_FULL, AE_LAUNCH
 	};
 	enum eGameEvents { GE_QUIT, GE_NODE_DESTROYED };
 	enum eActionSelection {AS_HUB, AS_RESOURCE_HUB, AS_BOMB};
@@ -71,7 +71,6 @@ public:
 	time_point<std::chrono::system_clock> end;
 	duration<double> elapsed_seconds;
 	string getName();
-	float charge;
 	bool charging;
 
 	// camera stuff

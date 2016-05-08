@@ -1067,7 +1067,27 @@
     {
       "name": "destroyed",
       "path": "./audio/destroyed.wav",
-      "default_volume": 1.0
+      "default_volume": 0.8
+    },
+    {
+      "name": "charge2",
+      "path": "./audio/charge.wav",
+      "default_volume": 0.3
+    },
+    {
+      "name": "charge-full",
+      "path": "./audio/charge-full.wav",
+      "default_volume": 0.5
+    },
+    {
+      "name": "launch",
+      "path": "./audio/launch.wav",
+      "default_volume": 0.5
+    },
+     {
+      "name": "blip",
+      "path": "./audio/blip.wav",
+      "default_volume": 0.5
     },
     {
       "name": "fart-2",

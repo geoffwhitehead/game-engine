@@ -12,8 +12,10 @@
 #define destroyed "destroyed"
 #define insuf_resource "beep3"
 #define powerdown_resource "powerdown1"
-
-
+#define charge "blip"
+#define charge2 "charge2"
+#define chargefull "charge-full"
+#define launch "launch"
 
 int r;
 
@@ -64,6 +66,18 @@ void GameAudio::handleEvents() {
 			break;
 		case GameLogic::eAudioEvents::AE_POWERDOWN_RESOURCE:
 			am->play2D(powerdown_resource);
+			break;
+		case GameLogic::eAudioEvents::AE_CHARGE_1:
+			am->play2D(charge);
+			break;
+		case GameLogic::eAudioEvents::AE_CHARGE_2:
+			am->play2D(charge2);
+			break;
+		case GameLogic::eAudioEvents::AE_CHARGE_FULL:
+			am->play2D(chargefull);
+			break;
+		case GameLogic::eAudioEvents::AE_LAUNCH:
+			am->play2D(launch);
 			break;
 		}
 	}
