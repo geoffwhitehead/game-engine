@@ -1,5 +1,8 @@
 #pragma once
 #include "Node.h"
+
+class Connector;
+
 class NodeHub :
 	public Node {
 public:

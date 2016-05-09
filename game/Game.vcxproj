@@ -80,6 +80,8 @@
   <ItemGroup>
     <ClInclude Include="Arena.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="ConnectionManager.h" />
+    <ClInclude Include="Connector.h" />
     <ClInclude Include="ContactListener.h" />
     <ClInclude Include="EnvEntity.h" />
     <ClInclude Include="Explosion.h" />
@@ -99,6 +101,8 @@
   <ItemGroup>
     <ClCompile Include="Arena.cpp" />
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="ConnectionManager.cpp" />
+    <ClCompile Include="Connector.cpp" />
     <ClCompile Include="ContactListener.cpp" />
     <ClCompile Include="EnvEntity.cpp" />
     <ClCompile Include="Explosion.cpp" />

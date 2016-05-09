@@ -109,6 +109,7 @@ Entity* GameManager::getEntityByName(string name_to_find, string parent_name) {
 
 // check to make sure no duplicate deletions are entered into the list
 void GameManager::markToDelete(Entity* e) {
+	cout << "deleting comsthing " << endl;
 	for (int i = 0; i < marked_for_deletion.size(); i++) {
 		if (e == marked_for_deletion[i]) {
 			return;

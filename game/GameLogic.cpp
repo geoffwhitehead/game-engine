@@ -15,6 +15,10 @@ GameLogic::GameLogic(GameManager* gm, GameLogicManager* glm, b2World* world, Aud
 GameLogic::~GameLogic(){
 	
 }
+
+void GameLogic::destroy() {
+
+}
 // logic events that occur at the start of the game
 void GameLogic::init() {
 	// default starting player and set the correct state
@@ -28,13 +32,21 @@ void GameLogic::init() {
 		false, true, ppm, 0.0, world, 0.5, 1.0, p2_mesh);
 
 	// create the inital starting nodes for each player
-	p1->nodes.push_back( new NodeHub("p1_node_0", "", group_hub, "", p1_start_loc,
+	NodeHub* n1 = new NodeHub("p1_node_0", "", group_hub, "", p1_start_loc,
 		gm->iom->findMesh(p1_mesh + node_hub), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
-		true, true, ppm, hub_radius, world, 0.5, 1.0, hub_health, p1, hub_cost));
-	p2->nodes.push_back( new NodeHub("p2_node_0", "", group_hub, "", p2_start_loc,
+		true, true, ppm, hub_radius, world, 0.5, 1.0, hub_health, p1, hub_cost);
+	NodeHub* n2 =  new NodeHub("p2_node_0", "", group_hub, "", p2_start_loc,
 		gm->iom->findMesh(p2_mesh + node_hub), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
-		true, true, ppm, hub_radius, world, 0.5, 1.0, hub_health, p2, hub_cost));
+		true, true, ppm, hub_radius, world, 0.5, 1.0, hub_health, p2, hub_cost);
 	
+	// assign them to aplayer
+	p1->nodes.push_back(n1);
+	p2->nodes.push_back(n2);
+	
+	// notify the connection manager
+	ConnectionManager::addNode(n1);
+	ConnectionManager::addNode(n2);
+
 	// set the starting node fixtures
 	setFixture(p1->nodes[0], eNode, eExplosion | eBlock);
 	setFixture(p2->nodes[0], eNode, eExplosion | eBlock);
@@ -70,6 +82,9 @@ void GameLogic::init() {
 	pointer = gm->getEntityByName("pointer", "");
 	setPointer();
 	setFixture(pointer, ePointer, eNoCollide);
+
+	// cretae the connection manager
+	//static ConnectionManager conman;
 }
 
 /*****************************************************
@@ -99,7 +114,8 @@ b2Vec2 GameLogic::getTrajectory(Entity* origin) {
 	float cosx;
 	float siny;
 
-	if (AS_CLUSTER) {
+	// special case for cluster wheere multiple projectiles are fired
+	if (action == eActionSelection::AS_CLUSTER) {
 		switch (cluster_index) {
 		case 0:
 			cosx = cos(origin->getPhysicsObject()->body->GetAngle()- cluster_spread);
@@ -115,19 +131,18 @@ b2Vec2 GameLogic::getTrajectory(Entity* origin) {
 			break;
 		}
 	}
-	else {
+	else { // for everything else ... use this
 		cosx = cos(origin->getPhysicsObject()->body->GetAngle());
 		siny = sin(origin->getPhysicsObject()->body->GetAngle());
 	}
-
-	
-
+	// calculate the power based on the elapsed seconds from holding and releasing space
 	float charge = (elapsed_seconds.count() * charge_speed) + initial_charge;
 
 	if (charge > clamp) {
 		charge = clamp;
 	}
 
+	// calculate the trajectory and return
 	cosx = cosx * charge;
 	siny = siny * charge;
 	force = b2Vec2(cosx, siny);
@@ -175,6 +190,7 @@ void GameLogic::launch() {
 		hub->getPhysicsObject()->body->SetLinearDamping(damping);
 		// after creating add new hub to all the game vectors
 		gm->addEntity(hub);
+		ConnectionManager::addNode(hub);
 		active_player->nodes.push_back(hub);
 		fired_entity = hub;
 		launchNode(fired_entity);
@@ -189,6 +205,7 @@ void GameLogic::launch() {
 		res_hub->getPhysicsObject()->body->SetLinearDamping(damping);
 		// after creating add new resource hub to all the game vectors
 		gm->addEntity(res_hub);
+		ConnectionManager::addNode(res_hub);
 		active_player->resource_nodes.push_back(res_hub);
 		fired_entity = res_hub;
 		launchNode(fired_entity);
@@ -203,6 +220,7 @@ void GameLogic::launch() {
 		shield_hub->getPhysicsObject()->body->SetLinearDamping(damping);
 		// after creating add new resource hub to all the game vectors
 		gm->addEntity(shield_hub);
+		ConnectionManager::addNode(shield_hub);
 		active_player->shield_nodes.push_back(shield_hub);
 		fired_entity = shield_hub;
 		launchNode(fired_entity);
@@ -234,6 +252,7 @@ void GameLogic::launch() {
 		clusters_fired = 0;
 		// initialise to nullptr. camera checks for null when following
 		cluster_ptr_to_follow = nullptr;
+		break;
 
 	}
 	
@@ -269,7 +288,6 @@ HANDLE COLLISIONS
 
 void GameLogic::handleCollisions() {
 	for (int i = 0; i < in_contact_events.size(); i++){
-	cout << "collision" << endl;
 		//EXPLOSION
 		if (in_contact_events[i].first->group == group_explosion){
 			if (in_contact_events[i].second->group == group_hub) {
@@ -389,7 +407,6 @@ void GameLogic::applyDamage(Node* n, float damage) {
 	if (n != active_player->selected_node) { // cannot damage node that you are currently firing from. Happens when you fire too close to yourself
 		out_audio_events.push_back(eAudioEvents::AE_HUB_DAMAGED);
 		n->health = n->health - damage;
-		cout << n->health << endl;
 		if (n->health <= 0){
 			destroyNode(n);
 		}
@@ -404,7 +421,78 @@ bool GameLogic::exists(vector<LevelEntity*>* vector, LevelEntity* to_find) {
 	return false;
 }
 
+void GameLogic::removeConnection(Connector*c, enum eConDirection dir) {
+	
+	if (dir == CD_LEFT) {
+		if (c->left) {
+			removeConnection(c->left, dir);
+			destroyConnector(c);
+		}
+		else {
+			// remove the reference to edge from node
+			ConnectionManager::removeConnector(c->left_node, c);
+			// check whether the left node is still connected
+			if (!isNodeConnected(c->left_node)) {
+				// check to make sure this isnt the last node
+				if (c->left_node->owner->nodes.size() > 1) {
+					destroyNode(c->left_node);
+				}
+			}
+			// delete this connector
+			destroyConnector(c);
+		}
+	}
+	else if (dir == CD_RIGHT) {
+		if (c->right) {
+			removeConnection(c->right, dir);
+		}
+		else {
+			// remove the reference to edge from node
+			ConnectionManager::removeConnector(c->right_node, c);
+			// check whether the left node is still connected
+			if (!isNodeConnected(c->right_node)) {
+				// check to make sure this isnt the last node
+				if (c->right_node->owner->nodes.size() > 1) {
+					destroyNode(c->right_node);
+				}
+			}
+		}
+		destroyConnector(c);
+	}
+}
+bool GameLogic::isNodeConnected(Node* n) {
+	vector<Connector*>* cons = ConnectionManager::getEdges(n);
+	if (ConnectionManager::getEdges(n)->size() < 1) {
+		return false;
+	}
+	return true;
+}
+
+
+void GameLogic::destroyConnector(Connector*c) {
+	// stop any further collisions... who knows
+	setFixture(c, eConnector, eNoCollide);
+	// mark the entityt itself for deletion
+	gm->markToDelete(c);
+	// play sound
+	out_audio_events.push_back(eAudioEvents::AE_CONNECTOR_DOWN);
+}
+
+void GameLogic::removeEdges(Node*n) {
+	vector<Connector*>* cons = ConnectionManager::getEdges(n);
+	for (int i = 0; i < cons->size(); i++) {
+		if ((*cons)[i]->left_node == n) {
+			removeConnection((*cons)[i], CD_RIGHT);
+		} else {
+			removeConnection((*cons)[i], CD_LEFT);
+		}
+		
+	}
+}
+
+
 void GameLogic::destroyNode(Node* n) {
+	
 	if (n->sub_group == subgroup_hub) {
 		out_audio_events.push_back(eAudioEvents::AE_HUB_DESTROYED);
 		n->owner->nodes.erase(std::remove(n->owner->nodes.begin(), n->owner->nodes.end(), n), n->owner->nodes.end());
@@ -413,6 +501,7 @@ void GameLogic::destroyNode(Node* n) {
 		out_audio_events.push_back(eAudioEvents::AE_POWERDOWN_RESOURCE); 
 		n->owner->resource_nodes.erase(std::remove(n->owner->resource_nodes.begin(), n->owner->resource_nodes.end(), n), n->owner->resource_nodes.end());
 		detachResource(static_cast<NodeHubResource*>(n));
+		createExplosion(n->getPhysicsObject()->getPos(), mesh_ex_energy, ex_energy_radius, ex_energy_lifetime, ex_energy_damage);
 	}
 	else if (n->sub_group == subgroup_hub_shield) {
 		out_audio_events.push_back(eAudioEvents::AE_HUB_DESTROYED);
@@ -420,6 +509,11 @@ void GameLogic::destroyNode(Node* n) {
 		n->owner->shield_nodes.erase(std::remove(n->owner->shield_nodes.begin(), n->owner->shield_nodes.end(), n), n->owner->shield_nodes.end());
 		gm->markToDelete(static_cast<NodeHubShield*>(n)->shield);
 	}
+
+	// remove the ndoes edges
+	removeEdges(n);
+	// remove collisions for this object so further collisions dont occur before entity removed
+	setFixture(n, eNode, eNoCollide);
 	//delete reference in nodes
 	n->owner->nodes.erase(std::remove(n->owner->nodes.begin(), n->owner->nodes.end(), n), n->owner->nodes.end());
 	// then schedule the deletion with the gm
@@ -429,7 +523,22 @@ void GameLogic::destroyNode(Node* n) {
 	
 }
 
-
+void GameLogic::createExplosion(Vector3 pos, string mesh, float ex_radius, int lifetime, int damage) {
+	
+	out_audio_events.push_back(eAudioEvents::AE_EXPLOSION_BOMB);
+	// create an explosion 
+	Explosion* e = new Explosion("bomb_ex", "", group_explosion, "", pos,
+		gm->iom->findMesh(mesh), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
+		true, true, 0, ex_radius, world, 0.5, 1.0, lifetime, damage);
+	// set its fixture so it collides
+	setFixture(e, eExplosion, eNode | eShield);
+	// add to record of current explosion
+	explosions.push_back(e);
+	// tell the gm about it
+	gm->addEntity(e);
+	// change thte gamesate to wait whilst exploding
+	game_state = eGameState::GS_EXPLODING;
+}
 void GameLogic::setFixture(Entity* e, uint16 category_bits, uint16 mask_bits) {
 	
 	//get the existing filter
@@ -440,10 +549,6 @@ void GameLogic::setFixture(Entity* e, uint16 category_bits, uint16 mask_bits) {
 	
 }
 
-void GameLogic::destroy() {
-
-}
-
 // adjust whether an entity is rendered or colldable
 void GameLogic::editEntity(string name, string parent, bool is_collidable, bool is_renderable) {
 	
@@ -452,6 +557,22 @@ void GameLogic::editEntity(string name, string parent, bool is_collidable, bool 
 	e->is_physical = is_collidable;
 
 }
+
+Connector* GameLogic::placeConnector(Vector3 pos, string mesh, float radius, float health, float cost) {
+	out_audio_events.push_back(eAudioEvents::AE_CONNECTOR_PLACED);
+	Connector* connector = new Connector("", "", group_connector, "", pos,
+		gm->iom->findMesh(active_player->player_mesh + mesh), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
+		true, true, ppm, radius, world, 0.5, 1.0, health, active_player, cost);
+
+	// place it
+	gm->addEntity(connector);
+	
+	// set its fixture so it collides
+	setFixture(connector, eConnector, eConnector | eDisablers);
+
+	return connector;
+}
+
 
 /*****************************************************
 HANDLE STATES
@@ -478,6 +599,51 @@ void GameLogic::handleStates() {
 		);
 		if (!isAwake(fired_entity)) {
 			game_state = eGameState::GS_CONTACT;
+		}
+		else if (fired_entity->group == group_hub) {
+
+			Vector3 start = active_player->selected_node->getPhysicsObject()->getPos();
+			Vector3 current_pos = fired_entity->getPhysicsObject()->getPos();
+			float length = (current_pos - start).Length();
+			//cout << "length " << length << " vel length " << fired_entity->getPhysicsObject()->body->GetLinearVelocity().Length() << endl;
+			// if not too close to start
+			if (length > con_placement_min) {
+				// if not too close to the end
+				if (fired_entity->getPhysicsObject()->body->GetLinearVelocity().Length() > min_con_velocity) {
+
+
+					//cout << "travelled " << start << " ---" << current_pos << " --- " << " ---- " << length << endl;
+
+					// if the distance is greater than connector spread -- handles spread and stopping placement too close to start
+					if ((length - con_last_placement) > con_spread) {
+						// create a connector
+						Connector* c = placeConnector(current_pos, mesh_connector, con_radius, con_health, con_cost);
+
+						// first placement
+						if (con_last_placement == 0) {
+							c->left_node = ((NodeHub*)active_player->selected_node);
+							// add this nodes to the hub edges
+							ConnectionManager::addConnector((NodeHub*)active_player->selected_node, c);
+						}
+						else {
+							// set the connectors left pointer to the last connection
+							c->left = last_con_ptr;
+							// set the left connectors right pointer to this connector
+							c->left->right = c;
+						}
+						// set the last placement after everything else
+						con_last_placement = length;
+						last_con_ptr = c;
+					}
+				}
+				else if (last_con_ptr) {
+					// finished placing nodes -- add the last node to the destination and set its connecting pointer
+					last_con_ptr->right_node = (NodeHub*)fired_entity;
+					ConnectionManager::addConnector((NodeHub*)fired_entity, last_con_ptr);
+					last_con_ptr = NULL;
+					con_last_placement = 0.0;
+				}
+			}
 		}
 		break;
 
@@ -589,17 +755,11 @@ void GameLogic::handleStates() {
 		case GameLogic::AS_BOMB:
 			out_audio_events.push_back(eAudioEvents::AE_EXPLOSION_BOMB);
 
-			e = new Explosion("bomb_ex", "", group_explosion, "", fired_entity->getPhysicsObject()->getPos(),
-				gm->iom->findMesh("mesh_explosion_3"), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
-				true, true, 0, bomb_explosion_radius, world, 0.5, 1.0, explosion_lifetime, 2);
-			
-			setFixture(e, eExplosion, eNode | eShield);
-			explosions.push_back( e );
+			// create explosion and mvoe to GS_EXPLODING
+			createExplosion(fired_entity->getPhysicsObject()->getPos(), mesh_ex_bomb, ex_bomb_radius, ex_bomb_lifetime, ex_bomb_damage);
 
-			gm->addEntity(e);
 			gm->markToDelete(fired_entity);
 			fired_entity = 0;
-			game_state = eGameState::GS_EXPLODING;
 			break;
 
 		}
@@ -641,12 +801,17 @@ void GameLogic::handleStates() {
 				live = true;
 			}
 			else if (explosions[i]->current_life == 0) {
-				gm->markToDelete(explosions[i]);
-				explosions.erase(std::remove(explosions.begin(), explosions.end(), explosions[i]), explosions.end()); // clear from vector -- leave here
+				
+				//explosions.erase(std::remove(explosions.begin(), explosions.end(), explosions[i]), explosions.end()); // clear from vector -- leave here
 			}
 			break;
 		}
 		if (live == false){
+
+			for (int i = 0; i < explosions.size(); i++) {
+				gm->markToDelete(explosions[i]);
+			}
+			explosions.clear();
 			moveCamera(active_player->selected_node->getPhysicsObject()->getPos());
 		}
 		break;
@@ -684,7 +849,7 @@ void GameLogic::handleStates() {
 		if (!charging) {
 			end = std::chrono::system_clock::now();
 			elapsed_seconds = end - start;
-			cout << "elapsed seconds: " << elapsed_seconds.count() << endl;
+			//cout << "elapsed seconds: " << elapsed_seconds.count() << endl;
 			launch();
 			fully_charged = false;
 			current_charge_index = 0;
@@ -716,6 +881,8 @@ void GameLogic::handleStates() {
 
 
 void GameLogic::moveCamera(Vector3 target) {
+	// reset the step counter
+	step_counter = camera_steps;
 	target_pos = Vector2(target.x, target.y);
 	// calculate the direction and then divide it by the number of steps (frames) to issue the cam moveennt over
 	direction_step = target_pos - Vector2(cam->GetPosition().x, cam->GetPosition().y);
@@ -755,7 +922,7 @@ bool GameLogic::sufficientResource() {
 
 	if (cost <= active_player->current_resource) {
 		active_player->current_resource = active_player->current_resource - cost;
-		cout << "2: " << active_player->current_resource << " " << cost << endl;
+		//cout << "2: " << active_player->current_resource << " " << cost << endl;
 		return true;
 	}
 	return false;
@@ -784,7 +951,7 @@ void GameLogic::handleEvents() {
 				game_state = eGameState::GS_GAME_END;
 			}
 			if (p2->nodes.size() == 0) {
-				cout << "Player 2 WINS!!!!!!" << endl;
+				cout << "Player 1 WINS!!!!!!" << endl;
 				game_state = eGameState::GS_GAME_END;
 			}
 			break;
@@ -826,7 +993,6 @@ void GameLogic::handleEvents() {
 					LevelEntity* next_node = findNextNode();
 					active_player->selected_node = next_node;
 					target_pos = Vector2(next_node->getPhysicsObject()->getPos().x, next_node->getPhysicsObject()->getPos().y);
-					cout << target_pos << endl;
 					// calculate the direction and then divide it by the number of steps (frames) to issue the cam moveennt over
 					direction_step = target_pos - Vector2(cam->GetPosition().x, cam->GetPosition().y);
 					direction_step = Vector2(direction_step.x / camera_steps, direction_step.y / camera_steps);
@@ -915,10 +1081,10 @@ void GameLogic::handleEvents() {
 void GameLogic::adjustDirection(eInputEvents dir) {
 	switch (dir) {
 	case GameLogic::IE_LEFT:
-		active_player->selected_node->getPhysicsObject()->body->SetAngularVelocity(-ROTATION);
+		active_player->selected_node->getPhysicsObject()->body->SetAngularVelocity(ROTATION);
 		break;
 	case GameLogic::IE_RIGHT:
-		active_player->selected_node->getPhysicsObject()->body->SetAngularVelocity(ROTATION);
+		active_player->selected_node->getPhysicsObject()->body->SetAngularVelocity(-ROTATION);
 		break;
 	}
 }

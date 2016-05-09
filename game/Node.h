@@ -36,7 +36,9 @@ public:
 
 	virtual ~Node();
 	float health;
-	
+
+
 	time_point<system_clock> created_on;
 	Player* owner;
+
 };

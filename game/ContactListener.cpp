@@ -10,6 +10,7 @@
 #define group_env_resource "resource"
 #define group_env_block "impas"
 
+#define group_connector "connectors"
 
 ContactListener::ContactListener(GameLogic* gl) {
 	this->gl = gl;
@@ -86,6 +87,16 @@ void ContactListener::BeginContact(b2Contact* contact) {
 			}
 			if (data_b->group == group_shield) {
 				valid_collision = true;
+			}
+		}
+		else if (data_a->group == group_connector) {
+			if (data_b->group == group_connector) {
+				cout << "con con" << endl;
+				valid_collision = true;
+			}
+			if (data_b->group == group_hub) {
+				cout << "con - hub" << endl;
+				valid_collision_reverse = true;
 			}
 		}
 	}

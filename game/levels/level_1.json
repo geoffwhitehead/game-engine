@@ -25,16 +25,16 @@
       "x": 0.5,
       "y": 1.0,
       "z": 0.5,
-      "w": 0.5
+      "w": 1.0
     },
     {
       "name": "p2_mesh_hub",
       "function": "GenerateTriFan",
       "radius": 2.0,
-      "x": 1.0,
-      "y": 1.0,
-      "z": 0.0,
-      "w": 0.5
+      "x": 0.0,
+      "y": 0.0,
+      "z": 1.0,
+      "w": 1.0
     },
     {
       "name": "p1_mesh_resource_hub",
@@ -61,7 +61,7 @@
       "x": 0.0,
       "y": 0.0,
       "z": 1.0,
-      "w": 0.5
+      "w": 1.0
     },
     {
       "name": "p2_mesh_shield_hub",
@@ -70,7 +70,7 @@
       "x": 1.0,
       "y": 1.0,
       "z": 0.0,
-      "w": 0.5
+      "w": 1.0
     },
     {
       "name": "mesh_shield",
@@ -91,9 +91,45 @@
       "w": 0.5
     },
     {
+      "name": "p1_mesh_connector",
+      "function": "GenerateTriFan",
+      "radius": 1.0,
+      "x": 0.0,
+      "y": 1.0,
+      "z": 0.0,
+      "w": 0.4
+    },
+     {
+      "name": "p2_mesh_connector",
+      "function": "GenerateTriFan",
+      "radius": 1.0,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 1.0,
+      "w": 0.4
+    },
+    {
       "name": "mesh_bomb_cluster",
       "function": "GenerateTriFan",
-      "radius": 0.5,
+      "radius": 1.5,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 0.5
+    },
+     {
+      "name": "mesh_explosion_10",
+      "function": "GenerateTriFan",
+      "radius": 10.0,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 0.5
+    },
+     {
+      "name": "mesh_explosion_5",
+      "function": "GenerateTriFan",
+      "radius": 5.0,
       "x": 0.0,
       "y": 0.0,
       "z": 0.0,
@@ -260,7 +296,7 @@
     },
     {
       "name": "noise",
-      "path": "./textures/noise.png"
+      "path": "./textures/black.jpg"
     }
   ],
   "shaders": [

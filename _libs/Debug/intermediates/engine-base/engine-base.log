@@ -16,8 +16,8 @@ c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(77): warning
 c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(90): warning C4018: '<': signed/unsigned mismatch
 c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(97): warning C4018: '<': signed/unsigned mismatch
 c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(99): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(112): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(151): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(113): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(152): warning C4018: '<': signed/unsigned mismatch
   GameLogicManager.cpp
 c:\users\geoff\source\repos\game-engine\engine-base\gamelogicmanager.cpp(15): warning C4018: '<': signed/unsigned mismatch
 c:\users\geoff\source\repos\game-engine\engine-base\gamelogicmanager.cpp(21): warning C4018: '<': signed/unsigned mismatch

@@ -23,6 +23,8 @@
 #define explosion2 "ex2"
 #define explosion3 "ex3"
 #define explosion4 "ex4"
+#define con_placed "beep1"
+#define con_down "beep2"
 
 int r;
 int min = 1;
@@ -117,6 +119,13 @@ void GameAudio::handleEvents() {
 		case GameLogic::eAudioEvents::AE_SHIELD_OFF:
 			am->play2D(shield_off);
 			break;
+		case GameLogic::eAudioEvents::AE_CONNECTOR_PLACED:
+			am->play2D(con_placed);
+			break;
+		case GameLogic::eAudioEvents::AE_CONNECTOR_DOWN:
+			am->play2D(con_down);
+			break;
+			
 		}
 	}
 }
