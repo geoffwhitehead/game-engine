@@ -20,9 +20,11 @@ Shield::Shield(
 	b2World* world,
 	float friction,
 	float density,
-	int shield_power
+	int shield_power,
+	Player* owner
 
 	) : Entity(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, ppm, world) {
+	this->owner = owner;
 	this->shield_power = shield_power;
 	this->current_power = shield_power;
 	addBodyToWorld(world, is_dynamic);

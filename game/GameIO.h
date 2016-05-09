@@ -20,7 +20,7 @@ public:
 	eClassType class_type;
 
 
-	GameIO(string root_dir, b2World* b2_world, float ppm);
+	GameIO(string root_dir, b2World* b2_world, float pixels_per_m);
 	~GameIO();
 	void loadEntities();
 };

@@ -63,19 +63,22 @@ void GameInput::handleKeyboard() {
 	if (Keyboard::KeyDown(KeyboardKeys(KEY_RIGHT))) {
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_RIGHT);
 	}
-	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD1))) {
+	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD1)) && !(Keyboard::KeyHeld(KeyboardKeys(KEY_NUMPAD1)))){
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_PAD1);
 	}
-	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD2))) {
+	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD2)) && !(Keyboard::KeyHeld(KeyboardKeys(KEY_NUMPAD2)))){
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_PAD2);
 	}
-	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD3))) {
+	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD3)) && !(Keyboard::KeyHeld(KeyboardKeys(KEY_NUMPAD3)))){
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_PAD3);
 	}
-	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD4))) {
+	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD4)) && !(Keyboard::KeyHeld(KeyboardKeys(KEY_NUMPAD4)))){
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_PAD4);
 	}
-	if (Keyboard::KeyDown(KeyboardKeys(KEY_TAB))) {
+	if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD5)) && !(Keyboard::KeyHeld(KeyboardKeys(KEY_NUMPAD5)))) {
+		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_PAD5);
+	}
+	if (Keyboard::KeyDown(KeyboardKeys(KEY_TAB)) && !(Keyboard::KeyHeld(KeyboardKeys(KEY_TAB)))) {
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_KEY_TAB);
 	}
 }

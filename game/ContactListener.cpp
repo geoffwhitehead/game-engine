@@ -2,6 +2,7 @@
 
 
 #define group_explosion "explosions"
+#define group_shield "shields"
 #define group_hub "hubs"
 #define subgroup_hub_resource "resource_hub"
 #define subgroup_hub ""
@@ -25,46 +26,78 @@ void ContactListener::BeginContact(b2Contact* contact) {
 	void* bodyDataA = contact->GetFixtureA()->GetBody()->GetUserData();
 	void* bodyDataB = contact->GetFixtureB()->GetBody()->GetUserData();
 
+	bool valid_collision = false;
+	bool valid_collision_reverse = false;
+
+	Entity* data_a = static_cast<Entity*>(bodyDataA);
+	Entity* data_b = static_cast<Entity*>(bodyDataB);
+
 	if (bodyDataA) {
 		cout << "contact" << endl;
 		// --HUB
-		if (static_cast<Entity*>(bodyDataA)->group == group_hub) {
-			cout << "hub contact" << endl;
-			if (static_cast<Entity*>(bodyDataB)->group == group_explosion) {
-				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataA), static_cast<Entity*>(bodyDataB)));
-			} 
-			else if (static_cast<Entity*>(bodyDataB)->group == group_hub) {
-				cout << "hub hub" << endl;
-				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataA), static_cast<Entity*>(bodyDataB)));
+		if (data_a->group == group_hub) {
+
+		    if (data_b->group == group_hub) {
+				valid_collision = true;
 			}
-			else if (static_cast<Entity*>(bodyDataB)->group == group_env_block) {
-				cout << "hub block!!!!!!!" << endl;
-				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataA), static_cast<Entity*>(bodyDataB)));
+			else if (data_b->group == group_env_block) {
+				valid_collision = true;
 			}
-			else if (static_cast<Entity*>(bodyDataB)->group == group_env_resource) {
-				cout << "hub resource!!!!!" << endl;
-				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataA), static_cast<Entity*>(bodyDataB)));
+			else if (data_b->group == group_env_resource) {
+				valid_collision = true;
+			}
+			else if (data_b->group == group_shield) {
+				valid_collision = true;
+			}
+			else if (data_b->group == group_explosion) {
+				valid_collision_reverse = true;
 			}
 		}
 		// --ENV ENTITY
-		if (static_cast<Entity*>(bodyDataA)->group == group_env_block) {
-			if (static_cast<Entity*>(bodyDataB)->group == group_hub) {
-				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataB), static_cast<Entity*>(bodyDataA)));
+		
+		else if (data_a->group == group_env_block) {
+			if (data_b->group == group_hub) {
+				valid_collision_reverse = true;
 			}
 		}
 		// --RESOURCE
-		if (static_cast<Entity*>(bodyDataA)->group == group_env_resource) {
-			if (static_cast<Entity*>(bodyDataB)->sub_group == subgroup_hub) {
-				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataB), static_cast<Entity*>(bodyDataA)));
+		else if (data_a->group == group_env_resource) {
+			if (data_b->sub_group == subgroup_hub) {
+				valid_collision_reverse = true;
 			}
-			if (static_cast<Entity*>(bodyDataB)->sub_group == subgroup_hub_resource) {
-				gl->in_contact_events.push_back(pair<Entity*, Entity*>(static_cast<Entity*>(bodyDataB), static_cast<Entity*>(bodyDataA)));
+			if (data_b->sub_group == subgroup_hub_resource) {
+				valid_collision_reverse = true;
+			}
+		}
+		// --SHIELD
+		else if (data_a->group == group_shield) {
+			if (data_b->group == group_bomb) {
+				valid_collision_reverse = true;
+			}
+			if (data_b->group == group_explosion) {
+				valid_collision_reverse = true;
+			}
+		}
+
+		// -- EXPLOSION
+		else if (data_a->group == group_explosion) {
+			if (data_b->group == group_hub) {
+				valid_collision_reverse = true;
+			}
+			if (data_b->group == group_shield) {
+				valid_collision = true;
 			}
 		}
 	}
 
-	if (bodyDataB) {
-		//cout << "something b" << endl;
+	assert(!(valid_collision && valid_collision_reverse));
+
+	// send the collision
+	if (valid_collision) {
+		gl->in_contact_events.push_back(pair<Entity*, Entity*>(data_a, data_b));
+	}
+	else if (valid_collision_reverse) {
+		gl->in_contact_events.push_back(pair<Entity*, Entity*>(data_b, data_a));
 	}
 }
 

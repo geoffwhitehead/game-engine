@@ -15,14 +15,14 @@ Resource::Resource(
 	bool phys,
 	bool dynamic,
 	bool sensor,
-	float ppm,
+	float pixels_per_m,
 	float c_x,
 	float c_y,
 	b2World* world,
 	float friction,
 	float density
 
-) : EnvEntity(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, dynamic, sensor, ppm, c_x, c_y, world, friction, density) {
+) : EnvEntity(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, dynamic, sensor, pixels_per_m, c_x, c_y, world, friction, density) {
 }
 
 

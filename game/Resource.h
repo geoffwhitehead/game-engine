@@ -16,7 +16,7 @@ public:
 		bool phys,
 		bool dynamic,
 		bool sensor,
-		float ppm,
+		float pixels_per_m,
 		float c_x,
 		float c_y,
 		b2World* world,

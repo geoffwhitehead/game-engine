@@ -85,9 +85,18 @@
       "name": "mesh_bomb",
       "function": "GenerateTriFan",
       "radius": 1.0,
-      "x": 1.0,
-      "y": 1.0,
-      "z": 1.0,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 0.5
+    },
+    {
+      "name": "mesh_bomb_cluster",
+      "function": "GenerateTriFan",
+      "radius": 0.5,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
       "w": 0.5
     },
     {
@@ -103,7 +112,7 @@
       "name": "mesh_explosion_2",
       "function": "GenerateTriFan",
       "radius": 2.0,
-      "x": 1.0,
+      "x": 0.0,
       "y": 0.0,
       "z": 0.0,
       "w": 0.5
@@ -112,7 +121,7 @@
       "name": "mesh_explosion_1",
       "function": "GenerateTriFan",
       "radius": 1.0,
-      "x": 1.0,
+      "x": 0.0,
       "y": 0.0,
       "z": 0.0,
       "w": 0.5
@@ -1111,14 +1120,54 @@
       "path": "./audio/launch.wav",
       "default_volume": 0.5
     },
-     {
+    {
       "name": "blip",
       "path": "./audio/blip.wav",
+      "default_volume": 0.5
+    },
+     {
+      "name": "switch",
+      "path": "./audio/switch.wav",
       "default_volume": 0.5
     },
     {
       "name": "fart-2",
       "path": "./audio/fart-2.wav",
+      "default_volume": 0.8
+    },
+    {
+      "name": "shield_on",
+      "path": "./audio/shield_on.wav",
+      "default_volume": 0.8
+    },
+    {
+      "name": "shield_off",
+      "path": "./audio/shield_off.wav",
+      "default_volume": 1.0
+    },
+    {
+      "name": "ex1",
+      "path": "./audio/ex1.wav",
+      "default_volume": 0.2
+    },
+    {
+      "name": "ex2",
+      "path": "./audio/ex2.wav",
+      "default_volume": 0.1
+    },
+    {
+      "name": "ex3",
+      "path": "./audio/ex3.wav",
+      "default_volume": 0.1
+    },
+    {
+      "name": "ex4",
+      "path": "./audio/ex4.wav",
+      "default_volume": 0.1
+    },
+    {
+      "name": "ex5-debris",
+      "path": "./audio/ex5-debris.wav",
       "default_volume": 0.8
     }
   ]

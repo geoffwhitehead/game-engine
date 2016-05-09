@@ -1,5 +1,8 @@
 #pragma once
-#include "C:\Users\Geoff\Source\Repos\game-engine\engine-base\Entity.h"
+#include "..\engine-base\Entity.h"
+
+class Player;
+
 class Shield :
 	public Entity
 {
@@ -22,11 +25,12 @@ public:
 		b2World* world,
 		float friction,
 		float density,
-		int shield_power
+		int shield_power,
+		Player* owner
 	);
 
 	~Shield();
-
+	Player* owner;
 	int shield_power;
 	int current_power;
 

@@ -16,8 +16,21 @@
 #define charge2 "charge2"
 #define chargefull "charge-full"
 #define launch "launch"
+#define select "switch"
+#define shield_on "shield_on"
+#define shield_off "shield_off"
+#define explosion1 "ex1"
+#define explosion2 "ex2"
+#define explosion3 "ex3"
+#define explosion4 "ex4"
 
 int r;
+int min = 1;
+int max = 4;
+
+std::random_device rd;     // only used once to initialise (seed) engine
+std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+std::uniform_int_distribution<int> uni(1, 4); 
 
 GameAudio::GameAudio(GameLogic* gl, AudioManager* am)
 {
@@ -40,14 +53,30 @@ void GameAudio::handleStates() {
 }
 
 void GameAudio::handleEvents() {
-
+	int random_integer;
 	for (int i = 0; i < gl->out_audio_events.size(); i++) {
+
 		switch (gl->out_audio_events[i]) {
 		case GameLogic::eAudioEvents::AE_TURN_SWAP:
 			am->play2D(turn_swap);
 			break;
 		case GameLogic::eAudioEvents::AE_EXPLOSION_BOMB:
-			am->play2D(boom);
+			
+			random_integer = uni(rng);
+			switch (random_integer) {
+			case 1:
+				am->play2D(explosion1);
+				break;
+			case 2:
+				am->play2D(explosion2);
+				break;
+			case 3:
+				am->play2D(explosion3);
+				break;
+			case 4:
+				am->play2D(explosion4);
+				break;
+			}
 			break;
 		case GameLogic::eAudioEvents::AE_POWERUP:
 			am->play2D(powerup3);
@@ -78,6 +107,15 @@ void GameAudio::handleEvents() {
 			break;
 		case GameLogic::eAudioEvents::AE_LAUNCH:
 			am->play2D(launch);
+			break;
+		case GameLogic::eAudioEvents::AE_SELECT:
+			am->play2D(select);
+			break;
+		case GameLogic::eAudioEvents::AE_SHIELD_ON:
+			am->play2D(shield_on);
+			break;
+		case GameLogic::eAudioEvents::AE_SHIELD_OFF:
+			am->play2D(shield_off);
 			break;
 		}
 	}
