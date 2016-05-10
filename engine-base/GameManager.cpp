@@ -148,15 +148,14 @@ void GameManager::run(){
 			(*entity)->delete_me = true;
 		}
 
-		// remove all references from entity list
-		for (int i = 0; i < marked_for_deletion.size(); i++){
-			entities.erase(std::remove(entities.begin(), entities.end(), marked_for_deletion[i]), entities.end());
-		}
-		
-
 		// delete entities in marked for deletion list
 		for (vector<Entity*>::iterator entity = marked_for_deletion.begin(); entity != marked_for_deletion.end(); ++entity) {
 			delete((*entity));
+		}
+
+		// remove all references from entity list
+		for (int i = 0; i < marked_for_deletion.size(); i++){
+			entities.erase(std::remove(entities.begin(), entities.end(), marked_for_deletion[i]), entities.end());
 		}
 		
 		// clear marked list

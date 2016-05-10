@@ -40,6 +40,6 @@ public:
 	time_point<system_clock> created_on;
 	Player* owner;
 
-	~Connector();
+	virtual ~Connector();
 };
 

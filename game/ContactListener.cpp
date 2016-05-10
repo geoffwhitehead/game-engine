@@ -92,11 +92,11 @@ void ContactListener::BeginContact(b2Contact* contact) {
 		else if (data_a->group == group_connector) {
 			if (data_b->group == group_connector) {
 				cout << "con con" << endl;
-				valid_collision = true;
+				//valid_collision = true;
 			}
 			if (data_b->group == group_hub) {
 				cout << "con - hub" << endl;
-				valid_collision_reverse = true;
+				//valid_collision_reverse = true;
 			}
 		}
 	}

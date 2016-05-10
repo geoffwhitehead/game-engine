@@ -426,7 +426,6 @@ void GameLogic::removeConnection(Connector*c, enum eConDirection dir) {
 	if (dir == CD_LEFT) {
 		if (c->left) {
 			removeConnection(c->left, dir);
-			destroyConnector(c);
 		}
 		else {
 			// remove the reference to edge from node
@@ -438,8 +437,6 @@ void GameLogic::removeConnection(Connector*c, enum eConDirection dir) {
 					destroyNode(c->left_node);
 				}
 			}
-			// delete this connector
-			destroyConnector(c);
 		}
 	}
 	else if (dir == CD_RIGHT) {
@@ -457,9 +454,10 @@ void GameLogic::removeConnection(Connector*c, enum eConDirection dir) {
 				}
 			}
 		}
-		destroyConnector(c);
 	}
+	destroyConnector(c);
 }
+
 bool GameLogic::isNodeConnected(Node* n) {
 	vector<Connector*>* cons = ConnectionManager::getEdges(n);
 	if (ConnectionManager::getEdges(n)->size() < 1) {
@@ -483,10 +481,11 @@ void GameLogic::removeEdges(Node*n) {
 	for (int i = 0; i < cons->size(); i++) {
 		if ((*cons)[i]->left_node == n) {
 			removeConnection((*cons)[i], CD_RIGHT);
-		} else {
+		} else if ((*cons)[i]->right_node == n) {
 			removeConnection((*cons)[i], CD_LEFT);
-		}
-		
+		} //else {
+		//	assert(false);
+		//}
 	}
 }
 
@@ -826,7 +825,7 @@ void GameLogic::handleStates() {
 				current_charge_index++;
 				switch (current_charge_index) {
 				case 1:
-					//out_audio_events.push_back(eAudioEvents::AE_CHARGE_2);
+					out_audio_events.push_back(eAudioEvents::AE_CHARGE_2);
 					break;
 				case 2:
 					out_audio_events.push_back(eAudioEvents::AE_CHARGE_2);

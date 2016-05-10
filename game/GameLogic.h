@@ -115,7 +115,7 @@ public:
 	#define clamp 0.033f
 	#define charge_arr_size 5 
 	bool fully_charged;
-	const float charge_step = ((clamp) / 5) - initial_charge;
+	const float charge_step = ((clamp) / 5);
 	const float charge_arr[5] = { initial_charge +(charge_step), initial_charge + (charge_step*2), initial_charge + (charge_step*3), initial_charge + (charge_step*4), initial_charge + (charge_step*5) };
 	int current_charge_index = 0;
 	bool charging;

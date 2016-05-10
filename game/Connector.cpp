@@ -25,14 +25,7 @@ Connector::Connector(
 
 ) : Node(name, str_parent, group, sub_group, pos, mesh, shader, texture, rend, phys, dynamic, sensor, ppm, radius, world, friction, density, health, owner, cost) {
 
-	addBodyToWorld(world, dynamic);
-	addFixturesToBody(radius, sensor);
-	b2Fixture* b2_list = this->getPhysicsObject()->body->GetFixtureList();
-	b2_list->SetFriction(friction);
-	b2_list->SetDensity(density);
-	this->physicsObject->body->SetUserData(this);
-	this->created_on = system_clock::now();
-	this->owner = owner;
+	
 }
 
 Connector::~Connector() {
