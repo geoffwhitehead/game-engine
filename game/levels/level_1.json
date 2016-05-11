@@ -39,8 +39,8 @@
     {
       "name": "p1_mesh_resource_hub",
       "function": "GenerateTriFan",
-      "radius": 3.0,
-      "x": 0.5,
+      "radius": 2.0,
+      "x": 1.0,
       "y": 1.0,
       "z": 0.0,
       "w": 1.0
@@ -48,7 +48,7 @@
     {
       "name": "p2_mesh_resource_hub",
       "function": "GenerateTriFan",
-      "radius": 3.0,
+      "radius": 2.0,
       "x": 1.0,
       "y": 1.0,
       "z": 0.0,
@@ -57,7 +57,7 @@
     {
       "name": "p1_mesh_shield_hub",
       "function": "GenerateTriFan",
-      "radius": 1.0,
+      "radius": 2.0,
       "x": 0.0,
       "y": 0.0,
       "z": 1.0,
@@ -67,9 +67,9 @@
       "name": "p2_mesh_shield_hub",
       "function": "GenerateTriFan",
       "radius": 1.0,
-      "x": 1.0,
-      "y": 1.0,
-      "z": 0.0,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 1.0,
       "w": 1.0
     },
     {
@@ -99,7 +99,7 @@
       "z": 0.0,
       "w": 0.4
     },
-     {
+    {
       "name": "p2_mesh_connector",
       "function": "GenerateTriFan",
       "radius": 1.0,
@@ -108,6 +108,7 @@
       "z": 1.0,
       "w": 0.4
     },
+   
     {
       "name": "mesh_bomb_cluster",
       "function": "GenerateTriFan",
@@ -166,10 +167,19 @@
       "name": "mesh_pointer",
       "function": "GenerateTriFan",
       "radius": 0.5,
-      "x": 0.0,
+      "x": 1.0,
       "y": 0.0,
-      "z": 1.0,
-      "w": 0.5
+      "z": 0.0,
+      "w": 1.0
+    },
+      {
+      "name": "mesh_pointer_centre",
+      "function": "GenerateTriFan",
+      "radius": 1.0,
+      "x": 1.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 1.0
     },
     {
       "name": "mesh_impas1",
@@ -328,6 +338,26 @@
       "acceleration": [ 0.0, 0.0, 0.0 ],
       "velocity": [ 0.0, 0.0, 0.0 ],
       "mesh": "mesh_pointer",
+      "shader": "basic",
+      "texture": "arrow",
+      "is_renderable": true,
+      "is_physical": true,
+      "is_dynamic": true,
+      "is_sensor": false,
+      "density": 0.0,
+      "friction": 0.0,
+      "collision_radius": 0.0
+    },
+     {
+      "class": "arena",
+      "name": "pointer_centre",
+      "group": "",
+      "subgroup": "",
+      "parent": "",
+      "position": [ 0.0, 0.0, 0.0 ],
+      "acceleration": [ 0.0, 0.0, 0.0 ],
+      "velocity": [ 0.0, 0.0, 0.0 ],
+      "mesh": "mesh_pointer_centre",
       "shader": "basic",
       "texture": "arrow",
       "is_renderable": true,

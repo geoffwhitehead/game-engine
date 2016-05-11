@@ -39,6 +39,7 @@ void GameLogic::init() {
 		gm->iom->findMesh(p2_mesh + node_hub), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
 		true, true, ppm, hub_radius, world, 0.5, 1.0, hub_health, p2, hub_cost);
 	
+
 	// assign them to aplayer
 	p1->nodes.push_back(n1);
 	p2->nodes.push_back(n2);
@@ -48,8 +49,8 @@ void GameLogic::init() {
 	ConnectionManager::addNode(n2);
 
 	// set the starting node fixtures
-	setFixture(p1->nodes[0], eNode, eExplosion | eBlock);
-	setFixture(p2->nodes[0], eNode, eExplosion | eBlock);
+	setFixture(p1->nodes[0], eNode, eExplosion | eBlock | eConnector);
+	setFixture(p2->nodes[0], eNode, eExplosion | eBlock | eConnector);
 
 	// add the player entities
 	gm->addEntity(p1->nodes[0]);
@@ -80,9 +81,10 @@ void GameLogic::init() {
 
 	// set the pointer entity properties
 	pointer = gm->getEntityByName("pointer", "");
+	pointer_mark = gm->getEntityByName("pointer_centre", "");
 	setPointer();
 	setFixture(pointer, ePointer, eNoCollide);
-
+	setFixture(pointer_mark, ePointer, eNoCollide);
 	// cretae the connection manager
 	//static ConnectionManager conman;
 }
@@ -92,19 +94,24 @@ GAME UPDATE
 ******************************************************/
 
 void GameLogic::update(float msec) {
-
 	checkResourceHubs();
 	handleCollisions(); // collisions
 	handleEvents(); // events first
-	world->SetAllowSleeping(true); // in states the bit mask of a hub is changed after sleeping. Need to wake it up to register any collisions and then reset it here, before the next step.
 	handleStates(); // then states
 
 }
 
 void GameLogic::checkResourceHubs() {
 	for (int i = 0; i < active_player->resource_nodes.size(); i++) {
-		if (!active_player->resource_nodes[i]->is_powered_on && !active_player->resource_nodes[i]->getPhysicsObject()->body->IsAwake()) {
-			applyDamage(active_player->resource_nodes[i], die_speed);
+		if (!active_player->resource_nodes[i]->is_powered_on) {
+			!active_player->resource_nodes[i]->lifespan--;
+
+			if (active_player->resource_nodes[i]->lifespan == 0) {
+				applyDamage(active_player->resource_nodes[i], kill);
+			}
+			else if (active_player->resource_nodes[i]->lifespan == active_player->resource_nodes[i]->lifespan / 2) {
+
+			}
 		}
 	}
 }
@@ -278,9 +285,39 @@ void GameLogic::setPointer() {
 	float posy = active_player->selected_node->getPhysicsObject()->getPos().y;
 	float x = posx + (pointer_offset * cos(p_angle));
 	float y = posy + (pointer_offset * sin(p_angle));
-	pointer->getPhysicsObject()->body->SetTransform(b2Vec2(x, y), pointer->getPhysicsObject()->start_pos.z);
-
+	pointer->getPhysicsObject()->body->SetTransform(b2Vec2(x, y), pointer_z);
+	pointer_mark->getPhysicsObject()->body->SetTransform(
+		b2Vec2(active_player->selected_node->getPhysicsObject()->getPos().x, 
+			active_player->selected_node->getPhysicsObject()->getPos().y), 
+		pointer_z
+	);
 }
+
+void GameLogic::connectorIntersection(Connector* c1, Connector* c2) {
+	// if both are 0 in GS_DESTROYING_CONNECTORS then finished
+	destroy_left = 0;
+	destroy_right = 0;
+	Connector* new_con;
+	// if connector 1 is newer
+	if (c1->created_on > c2->created_on) {
+		new_con = c1;
+	}
+	else { // else connector 2 is newer
+		new_con = c2;
+	}
+	// destroy this initial connector
+	destroyConnector(new_con);
+	// check left and right and mark those to be destroyed if they exist
+	if (new_con->left) {
+		destroy_left = new_con->left;
+	}
+	if (new_con->right) {
+		destroy_right = new_con->right;
+	}
+	// this game state will iterate through all the connectors destroying them
+	game_state = eGameState::GS_DESTROYING_CONNECTORS;
+}
+
 
 /*****************************************************
 HANDLE COLLISIONS
@@ -288,6 +325,15 @@ HANDLE COLLISIONS
 
 void GameLogic::handleCollisions() {
 	for (int i = 0; i < in_contact_events.size(); i++){
+		cout << "contact in handle collisions" << endl;
+		// CONNECTOR
+
+		if (in_contact_events[i].first->group == group_connector) {
+			if (in_contact_events[i].second->group == group_connector && !collision_flag) {
+				collision_flag = true;
+				connectorIntersection(static_cast<Connector*>(in_contact_events[i].first), static_cast<Connector*>(in_contact_events[i].second));
+			}
+		}
 		//EXPLOSION
 		if (in_contact_events[i].first->group == group_explosion){
 			if (in_contact_events[i].second->group == group_hub) {
@@ -311,6 +357,18 @@ void GameLogic::handleCollisions() {
 		}
 		// HUB
 		else if (in_contact_events[i].first->group == group_hub){
+			// hub connector
+			if (in_contact_events[i].second->group == group_connector && !collision_flag) {
+				collision_flag = true;
+				if (static_cast<Node*>(in_contact_events[i].first)->created_on > static_cast<Node*>(in_contact_events[i].second)->created_on) {
+					applyDamage(static_cast<Node*>(in_contact_events[i].first), kill);
+				} else {
+					// just pass this function both connectors as we know the connection needs to be removed based
+					// on the above statement declaring the hub older.
+					connectorIntersection(static_cast<Connector*>(in_contact_events[i].second), static_cast<Connector*>(in_contact_events[i].second));
+				}
+			}
+
 			// -- hub - hub
 			if (in_contact_events[i].second->group == group_hub) {
 
@@ -407,7 +465,9 @@ void GameLogic::applyDamage(Node* n, float damage) {
 	if (n != active_player->selected_node) { // cannot damage node that you are currently firing from. Happens when you fire too close to yourself
 		out_audio_events.push_back(eAudioEvents::AE_HUB_DAMAGED);
 		n->health = n->health - damage;
+		
 		if (n->health <= 0){
+			fired_entity = 0; // release the pointer;
 			destroyNode(n);
 		}
 	}
@@ -421,50 +481,47 @@ bool GameLogic::exists(vector<LevelEntity*>* vector, LevelEntity* to_find) {
 	return false;
 }
 
-void GameLogic::removeConnection(Connector*c, enum eConDirection dir) {
+void GameLogic::getConnectorsToRemove(vector<Entity*>* results, Connector*c, enum eConDirection dir) {
+	
 	
 	if (dir == CD_LEFT) {
 		if (c->left) {
-			removeConnection(c->left, dir);
+			getConnectorsToRemove(results, c->left, dir);
 		}
 		else {
 			// remove the reference to edge from node
 			ConnectionManager::removeConnector(c->left_node, c);
 			// check whether the left node is still connected
-			if (!isNodeConnected(c->left_node)) {
+			if (!ConnectionManager::isNodeConnected(c->left_node)) {
 				// check to make sure this isnt the last node
 				if (c->left_node->owner->nodes.size() > 1) {
-					destroyNode(c->left_node);
+					(*results).push_back(c->left_node);
+					//destroyNode(c->left_node);
 				}
 			}
 		}
 	}
 	else if (dir == CD_RIGHT) {
 		if (c->right) {
-			removeConnection(c->right, dir);
+			getConnectorsToRemove(results, c->right, dir);
 		}
 		else {
 			// remove the reference to edge from node
 			ConnectionManager::removeConnector(c->right_node, c);
 			// check whether the left node is still connected
-			if (!isNodeConnected(c->right_node)) {
+			if (!ConnectionManager::isNodeConnected(c->right_node)) {
 				// check to make sure this isnt the last node
 				if (c->right_node->owner->nodes.size() > 1) {
-					destroyNode(c->right_node);
+					(*results).push_back(c->right_node);
+					//destroyNode(c->right_node);
 				}
 			}
 		}
 	}
-	destroyConnector(c);
+	(*results).push_back(c);
 }
 
-bool GameLogic::isNodeConnected(Node* n) {
-	vector<Connector*>* cons = ConnectionManager::getEdges(n);
-	if (ConnectionManager::getEdges(n)->size() < 1) {
-		return false;
-	}
-	return true;
-}
+
 
 
 void GameLogic::destroyConnector(Connector*c) {
@@ -478,20 +535,36 @@ void GameLogic::destroyConnector(Connector*c) {
 
 void GameLogic::removeEdges(Node*n) {
 	vector<Connector*>* cons = ConnectionManager::getEdges(n);
+	vector<Entity*> edge_to_remove;
 	for (int i = 0; i < cons->size(); i++) {
 		if ((*cons)[i]->left_node == n) {
-			removeConnection((*cons)[i], CD_RIGHT);
+			getConnectorsToRemove(&edge_to_remove, (*cons)[i], CD_RIGHT);
 		} else if ((*cons)[i]->right_node == n) {
-			removeConnection((*cons)[i], CD_LEFT);
-		} //else {
-		//	assert(false);
-		//}
+			getConnectorsToRemove(&edge_to_remove, (*cons)[i], CD_LEFT);
+		} 
+		removeEdge(&edge_to_remove);
 	}
 }
 
+void GameLogic::removeEdge(vector<Entity*>* edge_to_remove) {
+	
+	for (int i = 0; i < (*edge_to_remove).size(); i++) {
+
+		if ((*edge_to_remove)[i]->group == group_hub) {
+			destroyNode(static_cast<Node*>((*edge_to_remove)[i]));
+		} 
+		else if ((*edge_to_remove)[i]->group == group_connector) {
+			destroyConnector(static_cast<Connector*>((*edge_to_remove)[i]));
+		}
+	}
+	(*edge_to_remove).clear();
+}
 
 void GameLogic::destroyNode(Node* n) {
-	
+
+	// remove collisions for this object so further collisions dont occur before entity removed
+	setFixture(n, eNode, eNoCollide);
+
 	if (n->sub_group == subgroup_hub) {
 		out_audio_events.push_back(eAudioEvents::AE_HUB_DESTROYED);
 		n->owner->nodes.erase(std::remove(n->owner->nodes.begin(), n->owner->nodes.end(), n), n->owner->nodes.end());
@@ -499,8 +572,11 @@ void GameLogic::destroyNode(Node* n) {
 	else if (n->sub_group == subgroup_hub_resource) {
 		out_audio_events.push_back(eAudioEvents::AE_POWERDOWN_RESOURCE); 
 		n->owner->resource_nodes.erase(std::remove(n->owner->resource_nodes.begin(), n->owner->resource_nodes.end(), n), n->owner->resource_nodes.end());
+		// if powered on ... nuke
+		if (static_cast<NodeHubResource*>(n)->is_powered_on) {
+			createExplosion(n->getPhysicsObject()->getPos(), mesh_ex_energy, ex_energy_radius, ex_energy_lifetime, ex_energy_damage);
+		}
 		detachResource(static_cast<NodeHubResource*>(n));
-		createExplosion(n->getPhysicsObject()->getPos(), mesh_ex_energy, ex_energy_radius, ex_energy_lifetime, ex_energy_damage);
 	}
 	else if (n->sub_group == subgroup_hub_shield) {
 		out_audio_events.push_back(eAudioEvents::AE_HUB_DESTROYED);
@@ -511,8 +587,6 @@ void GameLogic::destroyNode(Node* n) {
 
 	// remove the ndoes edges
 	removeEdges(n);
-	// remove collisions for this object so further collisions dont occur before entity removed
-	setFixture(n, eNode, eNoCollide);
 	//delete reference in nodes
 	n->owner->nodes.erase(std::remove(n->owner->nodes.begin(), n->owner->nodes.end(), n), n->owner->nodes.end());
 	// then schedule the deletion with the gm
@@ -567,11 +641,29 @@ Connector* GameLogic::placeConnector(Vector3 pos, string mesh, float radius, flo
 	gm->addEntity(connector);
 	
 	// set its fixture so it collides
-	setFixture(connector, eConnector, eConnector | eDisablers);
+	setFixture(connector, eConnector, eConnector | eDisablers | eNode);
+
+	// change state to inactive ... activated at a later stage (need to perform the collision operations in a certain order)
+	connector->getPhysicsObject()->body->SetActive(false);
 
 	return connector;
 }
 
+void GameLogic::destroyUnconnectedNodes() {
+	// loop throgh and check each players nodes
+	for (int i = 0; i < p1->nodes.size(); i++) {
+		if (!ConnectionManager::isNodeConnected(p1->nodes[i]) && p1->nodes.size() > 1) {
+			destroyNode(p1->nodes[i]);
+			return;
+		}
+	}
+	for (int i = 0; i < p2->nodes.size(); i++) {
+		if (!ConnectionManager::isNodeConnected(p2->nodes[i]) && p2->nodes.size() > 1) {
+			destroyNode(p2->nodes[i]);
+			return;
+		}
+	}
+}
 
 /*****************************************************
 HANDLE STATES
@@ -590,6 +682,9 @@ void GameLogic::handleStates() {
 
 
 	switch (game_state) {
+	case eGameState::GS_PLAYING:
+		world->SetAllowSleeping(true);
+		break;
 	case eGameState::GS_FIRING:
 		cam->SetPosition(Vector3(
 			fired_entity->getPhysicsObject()->getPos().x
@@ -598,6 +693,7 @@ void GameLogic::handleStates() {
 		);
 		if (!isAwake(fired_entity)) {
 			game_state = eGameState::GS_CONTACT;
+			world->SetAllowSleeping(false);
 		}
 		else if (fired_entity->group == group_hub) {
 
@@ -646,6 +742,62 @@ void GameLogic::handleStates() {
 		}
 		break;
 
+	case eGameState::GS_DESTROYING_CONNECTORS:
+		// wait between destroying connections
+		Sleep(wait);	
+		// check left and
+		if (destroy_left) {
+			destroyConnector(destroy_left); // scheduled
+			if (destroy_left->left) {
+				destroy_left = destroy_left->left;
+			}
+			else {
+				// remove the edge from the connecting node
+				ConnectionManager::removeConnector(destroy_left->left_node, destroy_left);
+				// if this is not a hub it can only have 1 connection therefore must be destroyed
+				if (destroy_left->left_node->sub_group != subgroup_hub) {
+					destroyNode(destroy_left->left_node);
+				}
+				// indicates no more to destroy in this direction 
+				destroy_left = 0;
+
+			}
+		
+		}
+		
+		// check right
+		if (destroy_right) {
+			destroyConnector(destroy_right); // scheduled
+			if (destroy_right->right) {
+				destroy_right = destroy_right->right;
+			}
+			else {
+				// remove the edge from the connecting node
+
+				ConnectionManager::removeConnector(destroy_right->right_node, destroy_right);
+				// if this is not a hub it can only have 1 connection therefore must be destroyed
+				if (destroy_right->right_node->sub_group != subgroup_hub) {
+					destroyNode(destroy_right->right_node);
+				}
+				// indicates no more to destroy in this direction 
+				destroy_right = 0;
+			}
+		}
+
+
+
+		if (destroy_left == 0 && destroy_right == 0) {
+			
+			// reset the collision flag
+			collision_flag = false;
+			//finished -- check nodes
+			destroyUnconnectedNodes();
+			// move the camera
+			moveCamera(active_player->selected_node->getPhysicsObject()->getPos());;
+		}
+
+
+		break;
 	case eGameState::GS_FIRING_CLUSTERS:
 		
 		// reposition the camera to follow the specified cluster...
@@ -663,7 +815,7 @@ void GameLogic::handleStates() {
 				gm->iom->findMesh(mesh_bomb_cluster), gm->iom->findShader("basic"), gm->iom->findTexture("rust"), true, true,
 				true, true, 0, bomb_cluster_radius, world, 0.5, 1.0, bomb_cluster_cost);
 		
-			fired_entity->getPhysicsObject()->body->SetLinearDamping(damping_cluster);
+			fired_entity->getPhysicsObject()->body->SetLinearDamping(damping);
 			setFixture(fired_entity, eProjectile, eShield);
 			gm->addEntity(fired_entity);
 			vec_clusters.push_back(static_cast<Bomb*>(fired_entity));
@@ -735,20 +887,22 @@ void GameLogic::handleStates() {
 
 		break;
 
+
+
 	case eGameState::GS_CONTACT:
 
 		switch (action) {
 		case GameLogic::AS_HUB:
-			setFixture(fired_entity, eNode, eNode | eExplosion | eBlock);
+			setFixture(fired_entity, eNode, eNode | eExplosion | eBlock | eConnector | eDisablers);
 			out_audio_events.push_back(eAudioEvents::AE_POWERUP);
 			game_state = eGameState::GS_BUILDING;
 			break;
 		case GameLogic::AS_RESOURCE_HUB:
-			setFixture(fired_entity, eNode, eNode | eExplosion | eBlock);
+			setFixture(fired_entity, eNode, eNode | eExplosion | eBlock | eConnector | eDisablers);
 			game_state = eGameState::GS_BUILDING;
 			break;
 		case GameLogic::AS_SHIELD_HUB:
-			setFixture(fired_entity, eNode, eNode | eExplosion | eBlock);
+			setFixture(fired_entity, eNode, eNode | eExplosion | eBlock | eConnector | eDisablers);
 			game_state = eGameState::GS_BUILDING;
 			break;
 		case GameLogic::AS_BOMB:
@@ -758,6 +912,7 @@ void GameLogic::handleStates() {
 			createExplosion(fired_entity->getPhysicsObject()->getPos(), mesh_ex_bomb, ex_bomb_radius, ex_bomb_lifetime, ex_bomb_damage);
 
 			gm->markToDelete(fired_entity);
+			// null the pointer
 			fired_entity = 0;
 			break;
 
@@ -765,12 +920,48 @@ void GameLogic::handleStates() {
 
 		break;
 
+	case eGameState::GS_COLLIDING:
+		if (c_step == c_steps) { // give chance to register collisions before moving on
+			// if there werent any collisions during the collisions step period
+			if (!collision_flag) { // 0 would mean there was a collison and this entity has been removed
+				
+				// get the last connection -- could have maintained a refernce after just placing it which is more effecient... i just prefer to excapsulate the game state incase the value was changed
+				activating_connector = ConnectionManager::getLastConnection(static_cast<Node*>(fired_entity));
+				// start activating the connectors
+				game_state = GS_ACTIVATING_CONNECTORS;
+			} else {
+				// move the cam back
+				c_step = 0;
+				moveCamera(active_player->selected_node->getPhysicsObject()->getPos());
+			}
+		}
+		// increment the frame counter
+		c_step++;
+		break;
+
+	case eGameState::GS_ACTIVATING_CONNECTORS:
+		if (collision_flag) {
+			// end activating the nodes - a collision occured
+			moveCamera(active_player->selected_node->getPhysicsObject()->getPos());
+			break;
+		}
+		// activate the current connector
+		activating_connector->getPhysicsObject()->body->SetActive(true);
+		// if there are any connecotrs left in the chain
+		if (activating_connector->left) {
+			// set the connector to activate during the next frame
+			activating_connector = activating_connector->left;
+		}
+		else {
+			c_step = 0; // reset the step
+			// finished -- move the camera back and return to playing gamestate
+			moveCamera(active_player->selected_node->getPhysicsObject()->getPos());
+		}
+		
+		break;
+
 	case eGameState::GS_BUILDING:
 		// active the hub so collisions occur
-
-		world->SetAllowSleeping(false); // this is important so that collision of a stationary object is registered when placed inside another statuonary object
-		//contact_pos = b2Vec2(fired_entity->getPhysicsObject()->getPos().x, fired_entity->getPhysicsObject()->getPos().y);
-		//setFixture(fired_entity, eNode, eProjectile | eExplosion | eBlock );
 
 		switch (action) {
 		case GameLogic::AS_SHIELD_HUB:
@@ -786,9 +977,12 @@ void GameLogic::handleStates() {
 			gm->addEntity(shield);
 			break;
 		}
-
-		moveCamera(active_player->selected_node->getPhysicsObject()->getPos());
 		
+		// give collisions a chace to occur before moving on
+		c_step = 0;
+		assert(c_steps > 2); // needs to be atleast a cpl of frames for this to work 
+		game_state = GS_COLLIDING;
+
 		break;
 
 	case eGameState::GS_EXPLODING:
@@ -841,7 +1035,6 @@ void GameLogic::handleStates() {
 					fully_charged = true;
 					break;
 				}
-				
 			}
 		}
 
@@ -865,9 +1058,10 @@ void GameLogic::handleStates() {
 
 		// reduce the steps
 		step_counter--;
-
 		// check if move finished and change gamestate if true
 		if (step_counter == 0) {
+			// remove the refernence to fired entity
+			fired_entity = 0;
 			game_state = eGameState::GS_PLAYING;
 		}
 
@@ -878,8 +1072,9 @@ void GameLogic::handleStates() {
 
 }
 
-
 void GameLogic::moveCamera(Vector3 target) {
+	// set the pointer to new pos
+	setPointer();
 	// reset the step counter
 	step_counter = camera_steps;
 	target_pos = Vector2(target.x, target.y);
@@ -890,11 +1085,23 @@ void GameLogic::moveCamera(Vector3 target) {
 	game_state = eGameState::GS_CAMERA_MOVING;
 }
 
-LevelEntity* GameLogic::findNextNode() {
+Node* GameLogic::findPreviousNode() {
 	// find the index of selected node
 	for (int i = 0; i < active_player->nodes.size(); i++) {
 		if (active_player->nodes[i] == active_player->selected_node) {
-			return active_player->nodes[(i+1) % (active_player->nodes.size())];
+			if (i == 0) {
+				return active_player->nodes[active_player->nodes.size()-1];
+			}
+			return active_player->nodes[i-1];
+		}
+	}
+}
+
+Node* GameLogic::findNextNode() {
+	// find the index of selected node
+	for (int i = 0; i < active_player->nodes.size(); i++) {
+		if (active_player->nodes[i] == active_player->selected_node) {
+			return active_player->nodes[(i + 1) % (active_player->nodes.size())];
 		}
 	}
 }
@@ -965,43 +1172,18 @@ void GameLogic::handleEvents() {
 	for (int i = 0; i < in_input_events.size(); i++) {
 		
  		switch (in_input_events[i]) {
-		case eInputEvents::IE_LEFT_CLICK:
+	
+		case eInputEvents::IE_KEY_D:
 			if (game_state == eGameState::GS_PLAYING) {
-				//active_player->getPhysicsObject()->body->ApplyForce(b2Vec2(100, 0.0), active_player->getPhysicsObject()->body->GetWorldCenter(), true);
-				
-				float cosx = cos(active_player->selected_node->getPhysicsObject()->body->GetAngle());
-				float siny = sin(active_player->selected_node->getPhysicsObject()->body->GetAngle());
-				cosx = cosx * 0.1;
-				siny = siny * 0.1;
-				b2Vec2 force = b2Vec2(cosx, siny);
-
-				active_player->selected_node->getPhysicsObject()->body->ApplyLinearImpulse(force, active_player->selected_node->getPhysicsObject()->body->GetWorldCenter(), true);
-			
-				out_audio_events.push_back(eAudioEvents::AE_MOVE);
+				active_player->selected_node = findNextNode();
+				moveCamera(active_player->selected_node->getPhysicsObject()->getPos());
 			}
 			break;
-
-		case eInputEvents::IE_KEY_TAB:
+		case eInputEvents::IE_KEY_A:
 			if (game_state == eGameState::GS_PLAYING) {
 
-				// only move the camera if player holds more than one node
-				if (active_player->nodes.size() > 1) {
-					// reset the camera step counter
-					step_counter = camera_steps;
-					// find the position of the next node and set it as the active node
-					LevelEntity* next_node = findNextNode();
-					active_player->selected_node = next_node;
-					target_pos = Vector2(next_node->getPhysicsObject()->getPos().x, next_node->getPhysicsObject()->getPos().y);
-					// calculate the direction and then divide it by the number of steps (frames) to issue the cam moveennt over
-					direction_step = target_pos - Vector2(cam->GetPosition().x, cam->GetPosition().y);
-					direction_step = Vector2(direction_step.x / camera_steps, direction_step.y / camera_steps);
-					// change the game state whilst hte camera is moving to lock out other actions
-					game_state = eGameState::GS_CAMERA_MOVING;
-					// move the pointer
-					setPointer();
-				} else {
-					active_player->selected_node == active_player->nodes[0];
-				}
+				active_player->selected_node = findPreviousNode();
+				moveCamera(active_player->selected_node->getPhysicsObject()->getPos());
 			}
 			break;
 

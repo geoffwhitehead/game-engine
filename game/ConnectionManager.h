@@ -2,8 +2,8 @@
 #include "../engine-base/Entity.h"
 #include <vector>
 #include <algorithm>
+#include "Connector.h"
 
-class Connector;
 class Node;
 
 using namespace std;
@@ -17,6 +17,8 @@ public:
 	static void removeConnector(Node* node, Connector* con);
 	static void addConnector(Node*, Connector*);
 	static void addNode(Node*);
-	static vector<Connector*>*  ConnectionManager::getEdges(Node* n);
+	static vector<Connector*>*  getEdges(Node* n);
+	static Connector* getLastConnection(Node*n);
+	static bool isNodeConnected(Node* n);
 };
 

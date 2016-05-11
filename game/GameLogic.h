@@ -22,7 +22,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-
+#include <stdlib.h>   
 
 
 /*
@@ -39,11 +39,13 @@ class GameLogic :
 public:
 
 	enum ePlayerTurn { GS_PLAYER_1, GS_PLAYER_2 };
+
 	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING, 
-		GS_CONTACT, GS_CAMERA_MOVING, GS_GAME_END, GS_FIRING_CLUSTERS
+		GS_CONTACT, GS_CAMERA_MOVING, GS_GAME_END, GS_FIRING_CLUSTERS, GS_COLLIDING, 
+		GS_ACTIVATING_CONNECTORS, GS_DESTROYING_CONNECTORS
 	};
 	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_KEY_TAB, IE_LEFT, 
-		IE_RIGHT, IE_PAD1, IE_PAD2, IE_PAD3, IE_PAD4, IE_PAD5
+		IE_RIGHT, IE_PAD1, IE_PAD2, IE_PAD3, IE_PAD4, IE_PAD5, IE_KEY_A, IE_KEY_D
 	};
 	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE, AE_POWERUP, 
 		AE_HUB_DAMAGED, AE_HUB_DESTROYED, AE_INSUF_RESOURCE, AE_POWERUP_RESOURCE,
@@ -51,8 +53,11 @@ public:
 		AE_SELECT, AE_SHIELD_ON, AE_SHIELD_OFF, AE_CONNECTOR_PLACED, AE_CONNECTOR_DOWN
 	};
 	enum eGameEvents { GE_QUIT, GE_NODE_DESTROYED };
+
 	enum eActionSelection {AS_HUB, AS_RESOURCE_HUB, AS_BOMB, AS_CLUSTER, AS_SHIELD_HUB};
+
 	enum eConDirection {CD_LEFT, CD_RIGHT};
+
 	//game vars
 	#define ROTATION 0.002f
 	#define MAX_CHARGE 20.0f
@@ -66,20 +71,26 @@ public:
 	#define kill 50
 	#define board_depth -7.5
 	vector<Bomb*> vec_clusters;
-	#define die_speed 0.2
 	#define damping 0.00033f
 	#define damping_cluster 0.00044 
 	#define vec0 Vector3(0.0,0.0,0.0)
 	#define VEC_STILL Vector3(0.0,0.0,5.0)
 	#define CAM_OFFSET 20.0f
+	#define pointer_z 10.0f
+
 	const Vector3 p1_start_loc = Vector3(-25, 0, 0);
 	const Vector3 p2_start_loc = Vector3(25, 0, 0);
+	Player* p1;
+	Player* p2;
 	eGameState game_state;
 	ePlayerTurn player_turn;
 	Player* active_player;
 	eActionSelection action = AS_HUB;
 	Entity* fired_entity;
 	vector<Explosion*> explosions;
+	const int c_steps = 5; // used to cause a lag for when to check connector collisions. Avoids different collision events occuring at the same time.
+	int c_step;
+	const int wait = 80; // frames to wait between connections destroyed
 
 	enum eFilter {
 		eNoCollide = 0x000,
@@ -149,7 +160,7 @@ public:
 	const string mesh_ex_energy = "mesh_explosion_10";
 	const float ex_energy_radius = 10.0;
 	const float ex_energy_damage = 5.0;
-	const float ex_energy_lifetime = 70;
+	const float ex_energy_lifetime = 100;
 
 	//bomb
 	#define bomb_radius 1.0
@@ -165,18 +176,24 @@ public:
 	#define resource_hub_strength 3
 	#define resource_hub_health 5
 	const int resource_hub_cost = 7;
-	#define resource_hub_radius 3.0
+	#define resource_hub_radius 2.0
 
 	// connectors
 	const float con_spread = 2.5;
 	const float con_placement_min = 4.0;
 	float con_last_placement = 0.0;
-	const float con_radius = 0.5;
+	const float con_radius = 1.0;
 	const float con_health = 1.0;
 	const float con_cost = 0.0;
 	Connector* last_con_ptr = NULL;
 	const float min_con_velocity = 0.0110;
-	
+	Connector* activating_connector;
+	Connector* destroy_left;
+	Connector* destroy_right;
+	bool collision_flag;
+	bool hub_connector_collision_flag;
+	bool con_con_collision_flag = false;
+
 	// node hub
 	#define hub_radius 2.0
 	const int hub_cost = 7;
@@ -184,7 +201,7 @@ public:
 
 	// shield hub
 	#define shield_hub_health 5
-	#define shield_hub_radius 1.0
+	#define shield_hub_radius 2.0
 	#define shield_radius 15.0
 
 	// shield
@@ -215,9 +232,11 @@ public:
 	void update(float msec);
 	static b2Vec2 force;
 	void removeEdges(Node*n);
-	void removeConnection(Connector*c, enum eConDirection dir);
+	void GameLogic::getConnectorsToRemove(vector<Entity*>* results, Connector*c, enum eConDirection dir);
 	void destroyConnector(Connector*c);
-	bool isNodeConnected(Node* n);
+	void connectorIntersection(Connector* c1, Connector* c2);
+	void destroyUnconnectedNodes();
+	void removeEdge(vector<Entity*>* path);
 
 	void handleEvents();
 	void handleStates();
@@ -241,13 +260,15 @@ public:
 	void powerupShields(Player* p);
 	Connector* placeConnector(Vector3 pos, string mesh, float con_radius, float health, float cost);
 
+
 	void moveCamera(Vector3 target);
 	void applyResource(NodeHubResource* n);
 	void detachResource(NodeHubResource* n);
 	bool exists(vector<LevelEntity*>* vector, LevelEntity* to_find);
 	bool shield_hub_placed = false;
 	void setFixture(Entity*, uint16 category_bits, uint16 mask_bits);
-	LevelEntity* findNextNode();
+	Node* findNextNode();
+	Node* findPreviousNode();
 	string getName();
 
 	void editEntity(string name, string parent, bool is_collidable, bool is_renderable);
@@ -265,8 +286,7 @@ private:
 	GameManager* gm;
 	AudioManager* am;
 	Camera* cam;
-	Player* p1;
-	Player* p2;
 	Entity* pointer;
+	Entity* pointer_mark;
 };
 

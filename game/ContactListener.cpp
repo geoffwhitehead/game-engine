@@ -41,6 +41,10 @@ void ContactListener::BeginContact(b2Contact* contact) {
 		    if (data_b->group == group_hub) {
 				valid_collision = true;
 			}
+			else if (data_b->group == group_connector) {
+				cout << "hub con" << endl;
+				valid_collision = true;
+			}
 			else if (data_b->group == group_env_block) {
 				valid_collision = true;
 			}
@@ -53,6 +57,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
 			else if (data_b->group == group_explosion) {
 				valid_collision_reverse = true;
 			}
+			
 		}
 		// --ENV ENTITY
 		
@@ -73,7 +78,7 @@ void ContactListener::BeginContact(b2Contact* contact) {
 		// --SHIELD
 		else if (data_a->group == group_shield) {
 			if (data_b->group == group_bomb) {
-				valid_collision_reverse = true;
+				valid_collision = true;
 			}
 			if (data_b->group == group_explosion) {
 				valid_collision_reverse = true;
@@ -89,14 +94,21 @@ void ContactListener::BeginContact(b2Contact* contact) {
 				valid_collision = true;
 			}
 		}
+		// CONNECTOR
 		else if (data_a->group == group_connector) {
 			if (data_b->group == group_connector) {
 				cout << "con con" << endl;
-				//valid_collision = true;
+				valid_collision = true;
 			}
 			if (data_b->group == group_hub) {
 				cout << "con - hub" << endl;
-				//valid_collision_reverse = true;
+				valid_collision_reverse = true;
+			}
+		}
+		// bomb
+		else if (data_a->group == group_bomb) {
+			if (data_b->group == group_shield) {
+				valid_collision_reverse = true;
 			}
 		}
 	}

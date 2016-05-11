@@ -32,7 +32,7 @@ public:
 
 	bool is_powered_on = false;
 	int resource_per_turn;
-
+	int lifespan = 150; // set to something large... how long the hub can stay alive before landing ona  resource patch
 	virtual ~NodeHubResource();
 };
 

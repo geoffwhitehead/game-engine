@@ -1,6 +1,5 @@
 #include "ConnectionManager.h"
  
-ConnectionManager::
 
 ConnectionManager::ConnectionManager() {
 
@@ -19,6 +18,20 @@ void ConnectionManager::addConnector(Node* node, Connector* con) {
 		}
 	}
 }
+Connector* ConnectionManager::getLastConnection(Node*n) {
+	for (int i = 0; i < edges.size(); i++) {
+		if (edges[i].first == n) {
+			Connector* latest = edges[i].second[0];
+			for (int j = 1; j < edges[i].second.size(); j++) {
+				if (edges[i].second[j]->created_on > latest->created_on) {
+					latest = edges[i].second[j];
+				}
+			}
+			return latest;
+		}
+	}
+}
+
 void ConnectionManager::removeConnector(Node* node, Connector* con) {
 	for (int i = 0; i < edges.size(); i++) {
 		if (edges[i].first == node) {
@@ -32,6 +45,13 @@ void ConnectionManager::removeNode(Node* node) {
 			edges.erase(std::remove(edges.begin(), edges.end(), edges[i]), edges.end());
 		}
 	}
+}
+
+bool ConnectionManager::isNodeConnected(Node* n) {
+	if (getEdges(n)->size() == 0) {
+		return false;
+	}
+	return true;
 }
 
 vector<Connector*>* ConnectionManager::getEdges(Node* n) {
