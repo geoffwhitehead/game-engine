@@ -66,7 +66,7 @@
     {
       "name": "p2_mesh_shield_hub",
       "function": "GenerateTriFan",
-      "radius": 1.0,
+      "radius": 2.0,
       "x": 0.0,
       "y": 0.0,
       "z": 1.0,
@@ -79,7 +79,7 @@
       "x": 0.0,
       "y": 0.0,
       "z": 1.0,
-      "w": 0.04
+      "w": 0.06
     },
     {
       "name": "mesh_bomb",
@@ -88,6 +88,42 @@
       "x": 0.0,
       "y": 0.0,
       "z": 0.0,
+      "w": 1.0
+    },
+    {
+      "name": "mesh_repair",
+      "function": "GenerateTriFan",
+      "radius": 1.0,
+      "x": 0.8,
+      "y": 0.2,
+      "z": 0.0,
+      "w": 0.7
+    },
+    {
+      "name": "mesh_ex_repair",
+      "function": "GenerateTriFan",
+      "radius": 1.5,
+      "x": 0.0,
+      "y": 0.4,
+      "z": 0.0,
+      "w": 0.7
+    },
+    {
+      "name": "mesh_bomb_surge",
+      "function": "GenerateTriFan",
+      "radius": 1.0,
+      "x": 0.0,
+      "y": 0.5,
+      "z": 1.0,
+      "w": 0.5
+    },
+    {
+      "name": "mesh_ex_surge",
+      "function": "GenerateTriFan",
+      "radius": 1.5,
+      "x": 0.0,
+      "y": 0.5,
+      "z": 0.6,
       "w": 0.5
     },
     {
@@ -334,7 +370,7 @@
       "group": "",
       "subgroup": "",
       "parent": "",
-      "position": [ 0.0, 0.0, 0.0 ],
+      "position": [ 0.0, 0.0, 14.0 ],
       "acceleration": [ 0.0, 0.0, 0.0 ],
       "velocity": [ 0.0, 0.0, 0.0 ],
       "mesh": "mesh_pointer",
@@ -354,7 +390,7 @@
       "group": "",
       "subgroup": "",
       "parent": "",
-      "position": [ 0.0, 0.0, 0.0 ],
+      "position": [ 0.0, 0.0, 14.0 ],
       "acceleration": [ 0.0, 0.0, 0.0 ],
       "velocity": [ 0.0, 0.0, 0.0 ],
       "mesh": "mesh_pointer_centre",
@@ -1194,7 +1230,7 @@
      {
       "name": "switch",
       "path": "./audio/switch.wav",
-      "default_volume": 0.5
+      "default_volume": 1.0
     },
     {
       "name": "fart-2",
@@ -1235,6 +1271,41 @@
       "name": "ex5-debris",
       "path": "./audio/ex5-debris.wav",
       "default_volume": 0.8
+    },
+    {
+      "name": "surge",
+      "path": "./audio/surge.wav",
+      "default_volume": 0.8
+    },
+    {
+      "name": "shield_collision",
+      "path": "./audio/shield_collision.wav",
+      "default_volume": 1.0
+    },
+    {
+      "name": "sweep",
+      "path": "./audio/sweep.wav",
+      "default_volume": 0.8
+    },
+    {
+      "name": "repair",
+      "path": "./audio/repair.wav",
+      "default_volume": 1.0
+    },
+    {
+      "name": "repair2",
+      "path": "./audio/repair2.wav",
+      "default_volume": 1.0
+    },
+    {
+      "name": "start",
+      "path": "./audio/start.wav",
+      "default_volume": 1.0
+    },
+     {
+      "name": "end",
+      "path": "./audio/end.wav",
+      "default_volume": 1.0
     }
   ]
 }

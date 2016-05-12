@@ -5,6 +5,6 @@ c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(77): warning
 c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(90): warning C4018: '<': signed/unsigned mismatch
 c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(97): warning C4018: '<': signed/unsigned mismatch
 c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(99): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(113): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(157): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(112): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\engine-base\gamemanager.cpp(156): warning C4018: '<': signed/unsigned mismatch
   engine-base.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-base.lib

@@ -74,7 +74,6 @@ void ConnectionManager::addNode(Node* n) {
 
 	}
 	if (!found) {
-		cout << "insert node" << endl;
 		vector<Connector*> cons;
 		edges.push_back(pair<Node*, vector<Connector*>>(n, cons));
 	}

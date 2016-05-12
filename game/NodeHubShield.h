@@ -32,7 +32,7 @@ public:
 
 	);
 
-	Shield* shield;
+	Shield* shield = 0;
 
 	virtual ~NodeHubShield();
 };

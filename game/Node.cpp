@@ -31,6 +31,8 @@ Node::Node(
 	
 	this->created_on = system_clock::now();
 	this->health = health;
+	this->max_health = health;
+
 	this->owner = owner;
 }
 

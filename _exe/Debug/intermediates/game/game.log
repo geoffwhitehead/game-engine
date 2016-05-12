@@ -1,39 +1,82 @@
 ﻿  GameLogic.cpp
-c:\users\geoff\source\repos\game-engine\game\gamelogic.h(189): warning C4305: 'initializing': truncation from 'double' to 'const float'
-c:\users\geoff\source\repos\game-engine\game\gamelogic.h(219): warning C4305: 'initializing': truncation from 'double' to 'const float'
-c:\users\geoff\source\repos\game-engine\game\gamelogic.h(225): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.h(77): warning C4305: 'initializing': truncation from 'double' to 'const float'
+c:\users\geoff\source\repos\game-engine\game\gamelogic.h(207): warning C4305: 'initializing': truncation from 'double' to 'const float'
+c:\users\geoff\source\repos\game-engine\game\gamelogic.h(217): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.h(247): warning C4305: 'initializing': truncation from 'double' to 'const float'
+c:\users\geoff\source\repos\game-engine\game\gamelogic.h(254): warning C4244: 'initializing': conversion from 'double' to 'const int', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.h(265): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(35): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(37): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(38): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(40): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
 c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(64): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(105): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(107): warning C4552: '!': operator has no effect; expected operator with side-effect
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(146): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(327): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(340): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(354): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(388): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(403): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(422): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(455): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(539): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(551): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(577): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(638): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(654): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(660): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(843): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(870): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(912): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(990): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1004): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1015): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(681): warning C4101: 'vel': unreferenced local variable
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1090): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1102): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1149): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1172): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1214): warning C4554: '|': check operator precedence for possible error; use parentheses to clarify precedence
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1220): warning C4554: '|': check operator precedence for possible error; use parentheses to clarify precedence
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1303): warning C4018: '<': signed/unsigned mismatch
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1098): warning C4715: 'GameLogic::findPreviousNode': not all control paths return a value
-c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1107): warning C4715: 'GameLogic::findNextNode': not all control paths return a value
-cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(80): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(128): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(130): warning C4552: '!': operator has no effect; expected operator with side-effect
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(133): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(169): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(218): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(220): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(233): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(248): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(263): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(292): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(310): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(348): warning C4244: 'argument': conversion from 'const int' to 'float32', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(396): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(421): warning C4553: '==': operator has no effect; did you intend '='?
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(432): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(463): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(470): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(481): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(490): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(501): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(511): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(519): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(524): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(532): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(537): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(544): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(552): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(577): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(593): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(687): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(699): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(739): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(739): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(831): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(847): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(854): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(891): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(912): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(950): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(968): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(972): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(981): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(985): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(998): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1011): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1099): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1104): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1133): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1142): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1160): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1203): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1203): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1211): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1221): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1302): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1328): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(880): warning C4101: 'vel': unreferenced local variable
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1387): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1390): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1407): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1419): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1472): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1497): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1545): warning C4554: '|': check operator precedence for possible error; use parentheses to clarify precedence
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1551): warning C4554: '|': check operator precedence for possible error; use parentheses to clarify precedence
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1666): warning C4018: '<': signed/unsigned mismatch
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1415): warning C4715: 'GameLogic::findPreviousNode': not all control paths return a value
+c:\users\geoff\source\repos\game-engine\game\gamelogic.cpp(1424): warning C4715: 'GameLogic::findNextNode': not all control paths return a value
   game.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\\_exe\Debug\game.exe

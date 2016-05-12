@@ -1,9 +1,5 @@
 ﻿  PhysicsObject.cpp
-  PhysicsManager.cpp
-c:\users\geoff\source\repos\game-engine\engine-physics\physicsmanager.h(39): warning C4091: 'static ': ignored on left of 'PhysicsManager' when no variable is declared
-c:\users\geoff\source\repos\game-engine\engine-physics\physicsmanager.cpp(55): warning C4244: '-=': conversion from 'const double' to 'float', possible loss of data
-c:\users\geoff\source\repos\game-engine\engine-physics\physicsmanager.cpp(58): warning C4244: 'argument': conversion from 'const double' to 'float32', possible loss of data
-  HelloWorld.cpp
   Generating Code...
-c:\users\geoff\source\repos\game-engine\engine-physics\physicsobject.cpp(26): warning C4172: returning address of local variable or temporary
+  Skipping... (no relevant changes detected)
+  PhysicsManager.cpp
   engine-physics.vcxproj -> C:\Users\Geoff\Source\Repos\game-engine\_libs\Debug\engine-physics.lib

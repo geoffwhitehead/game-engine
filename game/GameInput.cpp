@@ -78,6 +78,12 @@ void GameInput::handleKeyboard() {
 	else if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD5)) && !(Keyboard::KeyHeld(KeyboardKeys(KEY_NUMPAD5)))) {
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_PAD5);
 	}
+	else if (Keyboard::KeyDown(KeyboardKeys(KEY_NUMPAD6)) && !(Keyboard::KeyHeld(KeyboardKeys(KEY_NUMPAD6)))) {
+		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_PAD6);
+	}
+	else if (Keyboard::KeyDown(KeyboardKeys(KEY_ADD)) && !(Keyboard::KeyHeld(KeyboardKeys(KEY_ADD)))) {
+		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_KEY_ADD);
+	}
 	else if (Keyboard::KeyDown(KeyboardKeys(KEY_TAB)) && !(Keyboard::KeyHeld(KeyboardKeys(KEY_TAB)))) {
 		gl->in_input_events.push_back(GameLogic::eInputEvents::IE_KEY_TAB);
 	}

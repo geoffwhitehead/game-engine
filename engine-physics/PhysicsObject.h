@@ -33,7 +33,7 @@ public:
 	PhysicsObject(b2World* world, Vector3 start_pos, RenderObject *r, float pixels_per_m );
 	~PhysicsObject();
 
-	Vector3& getPos() ;
+	Vector3 getPos() ;
 
 	void update(float);
 
@@ -48,5 +48,5 @@ public:
 
 
 	b2Body* body;
-
+	float pos_z;
 };

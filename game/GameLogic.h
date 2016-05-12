@@ -42,44 +42,44 @@ public:
 
 	enum eGameState { GS_PLAYING, GS_FIRING, GS_BUILDING, GS_EXPLODING, GS_CHARGING, 
 		GS_CONTACT, GS_CAMERA_MOVING, GS_GAME_END, GS_FIRING_CLUSTERS, GS_COLLIDING, 
-		GS_ACTIVATING_CONNECTORS, GS_DESTROYING_CONNECTORS
+		GS_ACTIVATING_CONNECTORS, GS_DESTROYING_CONNECTORS, GS_SURGE
 	};
 	enum eInputEvents { IE_LEFT_CLICK, IE_ENTER, IE_SPACE, IE_KEY_TAB, IE_LEFT, 
-		IE_RIGHT, IE_PAD1, IE_PAD2, IE_PAD3, IE_PAD4, IE_PAD5, IE_KEY_A, IE_KEY_D
+		IE_RIGHT, IE_PAD1, IE_PAD2, IE_PAD3, IE_PAD4, IE_PAD5, IE_PAD6, IE_KEY_A, IE_KEY_D, IE_KEY_ADD
 	};
 	enum eAudioEvents { AE_TURN_SWAP, AE_EXPLOSION_BOMB, AE_MOVE, AE_POWERUP, 
 		AE_HUB_DAMAGED, AE_HUB_DESTROYED, AE_INSUF_RESOURCE, AE_POWERUP_RESOURCE,
 		AE_POWERDOWN_RESOURCE, AE_CHARGE_1, AE_CHARGE_2, AE_CHARGE_FULL, AE_LAUNCH,
-		AE_SELECT, AE_SHIELD_ON, AE_SHIELD_OFF, AE_CONNECTOR_PLACED, AE_CONNECTOR_DOWN
+		AE_SELECT, AE_SHIELD_ON, AE_SHIELD_OFF, AE_CONNECTOR_PLACED, AE_CONNECTOR_DOWN,
+		AE_SURGE_EXPLOSION, AE_SHIELD_COLLISION, AE_SURGE_EXPLOSION_INIT, AE_REPAIR, AE_START, AE_END
 	};
 	enum eGameEvents { GE_QUIT, GE_NODE_DESTROYED };
 
-	enum eActionSelection {AS_HUB, AS_RESOURCE_HUB, AS_BOMB, AS_CLUSTER, AS_SHIELD_HUB};
+	enum eActionSelection {AS_HUB, AS_RESOURCE_HUB, AS_BOMB, AS_CLUSTER, AS_SHIELD_HUB, 
+		AS_SURGE_BOMB, AS_REPAIR
+	};
 
 	enum eConDirection {CD_LEFT, CD_RIGHT};
 
 	//game vars
-	#define ROTATION 0.002f
-	#define MAX_CHARGE 20.0f
-	#define MAX 20
-	#define pointer_offset 15.0f
-	#define charge_speed 0.020f
+	const float ROTATION = 0.002f;
+	const float MAX_CHARGE = 20.0f;
+	const int MAX = 20;
+	const float pointer_offset = 12.0f;
+	const float charge_speed = 0.020f;
 	const float initial_charge = 0.0125f;
-	#define starting_resource 11
-	#define ppm 30
-	#define node_damage 2
-	#define kill 50
-	#define board_depth -7.5
-	vector<Bomb*> vec_clusters;
-	#define damping 0.00033f
-	#define damping_cluster 0.00044 
-	#define vec0 Vector3(0.0,0.0,0.0)
-	#define VEC_STILL Vector3(0.0,0.0,5.0)
-	#define CAM_OFFSET 20.0f
-	#define pointer_z 10.0f
+	const int starting_resource = 11;
+	const float ppm = 30;
+	const float node_damage = 1;
+	const int kill = 50;
+	const float board_depth = -7.5;
+	const float damping = 0.00033f;
+	const float damping_cluster = 0.00044;
+	const Vector3 vec0 = Vector3(0.0, 0.0, 0.0);
+	const Vector3 VEC_STILL = Vector3(0.0, 0.0, 5.0);
 
-	const Vector3 p1_start_loc = Vector3(-25, 0, 0);
-	const Vector3 p2_start_loc = Vector3(25, 0, 0);
+	const Vector3 p1_start_loc = Vector3(-80, -70, 0);
+	const Vector3 p2_start_loc = Vector3(80, 70, 0);
 	Player* p1;
 	Player* p2;
 	eGameState game_state;
@@ -91,7 +91,8 @@ public:
 	const int c_steps = 5; // used to cause a lag for when to check connector collisions. Avoids different collision events occuring at the same time.
 	int c_step;
 	const int wait = 80; // frames to wait between connections destroyed
-
+	const int surge_lag = 12;
+	
 	enum eFilter {
 		eNoCollide = 0x000,
 		eNode = 0x0001,
@@ -99,14 +100,12 @@ public:
 		eExplosion = 0x0004,
 		eShield = 0x0008,
 		eBlock = 0x0010,
+		eResource = 0x0011,
 		ePointer = 0x0012,
 		eConnector = 0x0014,
 		eDisablers = 0x0016
 	};
 
-	
-
-	
 
 	// camera stuff
 	const int camera_steps = 15;
@@ -123,8 +122,8 @@ public:
 	const int cluster_to_follow = 1;
 
 	// charge stuff
-	#define clamp 0.033f
-	#define charge_arr_size 5 
+	const float clamp = 0.033f;
+	const int charge_arr_size = 5;
 	bool fully_charged;
 	const float charge_step = ((clamp) / 5);
 	const float charge_arr[5] = { initial_charge +(charge_step), initial_charge + (charge_step*2), initial_charge + (charge_step*3), initial_charge + (charge_step*4), initial_charge + (charge_step*5) };
@@ -136,47 +135,66 @@ public:
 
 	// mesh selection stuff
 	const string node_hub = "hub";
+	const string mesh_surge_bomb = "mesh_bomb_surge";
 	const string node_resource_hub = "resource_hub";
 	const string node_shield_hub = "shield_hub";
 	const string p1_mesh = "p1_mesh_";
 	const string p2_mesh = "p2_mesh_";
 	const string mesh_connector = "connector";
+	const string mesh_ex_surge = "mesh_ex_surge";
+	const string mesh_repair = "mesh_repair";
+	const string mesh_ex_repair = "mesh_ex_repair";
+
+	const int explosion_z = 10;
+	const int bomb_z = 8;
+	const int shield_z = 0;
+	const int hub_z = 4;
+	const int camera_z = 20;
+	const int pointer_z = 14;
+	const int connector_z = 2;
+
 
 	//subgroup
-	#define subgroup_hub_shield "shield_hub"
-	#define subgroup_hub_resource "resource_hub"
-	#define subgroup_hub ""
+	const string subgroup_hub_shield = "shield_hub";
+	const string subgroup_hub_resource = "resource_hub";
+	const string subgroup_hub = "";
+	const string subgroup_bomb = "bomb";
+	const string subgroup_surge = "surge";
+	const string subgroup_surge_initial = "surge_initial";
+	const string subgroup_repair = "repair";
 
 	// groups
-	#define group_bomb "bombs"
-	#define group_env_resource "resource"
-	#define group_env_block "impas"
-	#define group_explosion "explosions"
-	#define group_shield "shields"
-	#define group_hub "hubs"
-	#define group_connector "connectors"
+	const string group_bomb = "bombs";
+	const string group_surge_bomb = "surge";
+	const string group_env_resource = "resource";
+	const string group_env_block = "impas";
+	const string group_explosion = "explosions";
+	const string group_shield = "shields";
+	const string group_hub = "hubs";
+	const string group_connector = "connectors";
+	const string group_repair = "repair";
 
 	// explosion energy
 	const string mesh_ex_energy = "mesh_explosion_10";
 	const float ex_energy_radius = 10.0;
 	const float ex_energy_damage = 5.0;
-	const float ex_energy_lifetime = 100;
+	const float ex_energy_lifetime = 30;
 
 	//bomb
-	#define bomb_radius 1.0
+	const float bomb_radius = 1.0;
 	const string mesh_ex_bomb = "mesh_explosion_2";
 	const int bomb_cost = 1;
 
 	// bomb explosion
-	#define ex_bomb_radius 2.0
-	#define ex_bomb_lifetime 30
-	#define ex_bomb_damage 3.0
+	const float ex_bomb_radius = 2.0;
+	const int ex_bomb_lifetime = 30;
+	const float ex_bomb_damage = 3.0;
 
 	// resource hub
-	#define resource_hub_strength 3
-	#define resource_hub_health 5
+	const int resource_hub_strength = 3;
+	const int resource_hub_health = 5;
 	const int resource_hub_cost = 7;
-	#define resource_hub_radius 2.0
+	const float resource_hub_radius = 2.0;
 
 	// connectors
 	const float con_spread = 2.5;
@@ -193,21 +211,31 @@ public:
 	bool collision_flag;
 	bool hub_connector_collision_flag;
 	bool con_con_collision_flag = false;
+	bool activation_collision_flag;
 
 	// node hub
-	#define hub_radius 2.0
+	const int hub_radius = 2.0;
 	const int hub_cost = 7;
-	#define hub_health 5
+	const int hub_health = 5;
 
 	// shield hub
-	#define shield_hub_health 5
-	#define shield_hub_radius 2.0
-	#define shield_radius 15.0
+	const int shield_hub_health = 5;
+	const float shield_hub_radius = 2.0;
+	const float shield_radius = 15.0;
+
+	// repair
+	const int repair_cost = 1;
+	const int repair_amount = 1;
+	const float repair_radius = 1.0;
+	const float ex_repair_radius = 1.5;
+	const int ex_repair_lifetime = 40;
+	bool repair_flag;
 
 	// shield
 	#define mesh_shield "mesh_shield"
 	const int shield_power = 1;
 	const int shield_hub_cost = 7;
+	bool shield_collision_flag;
 
 	// cluster bomb
 	const int cluster_firing_time = 20;
@@ -217,12 +245,34 @@ public:
 	const float bomb_cluster_radius = 1.5;
 	const int bomb_cluster_cost = 1;
 	const float cluster_spread = 0.12;
+	vector<Bomb*> vec_clusters;
 	
 	// cluster explosion
 	const string mesh_explosion_cluster = "mesh_explosion_2";
 	const float explosion_cluster_radius = 2.0;
 	const int explosion_cluster_lifetime = 20;
 	const int explosion_cluster_damage = 1.5;
+
+	//surge bomb
+	const float surge_bomb_radius = 1;
+	const int surge_cost = 3;
+	const int surge_max_damage = 3;
+	const int surge_min_damage = 1;
+	const float ex_surge_radius = 1.5;
+	const int ex_surge_lifetime = 20;
+	bool surge_flag = false;
+	float current_surge_damage;
+	float surge_deterioration_speed = 0.1;
+	float surge_left_damage;
+	float surge_right_damage;
+	Connector* surge_left;
+	Connector* surge_right;
+	Node* left_node_surge;
+	Node* right_node_surge;
+	bool right_surged;
+	bool left_surged;
+	bool surge_priority_found;
+	Connector* first_surge_contact;
 
 
 	GameLogic(GameManager* gm, GameLogicManager* glm, b2World* world, AudioManager* am, Camera* cam);
@@ -244,8 +294,10 @@ public:
 	void setPointer();
 	bool sufficientResource();
 	void checkResourceHubs();
+	void showInstructions();
+	void applyRepair(Node*n, float repair_amt);
 
-	void createExplosion(Vector3 pos, string mesh, float ex_radius, int lifetime, int damage);
+	void createExplosion(Vector3 pos, string subgroup, string mesh, float ex_radius, int lifetime, int damage);
 	void destroyNode(Node* n);
 	b2Vec2 getTrajectory(Entity* origin);
 	void fireWeapon(Entity* e);
@@ -259,9 +311,10 @@ public:
 	void applyDamage(Shield* shield, float damage);
 	void powerupShields(Player* p);
 	Connector* placeConnector(Vector3 pos, string mesh, float con_radius, float health, float cost);
+	void surge(Connector*c);
+	Vector3 constructVector(Vector3 pos, float z);
 
-
-	void moveCamera(Vector3 target);
+	void moveCamera(Node* n);
 	void applyResource(NodeHubResource* n);
 	void detachResource(NodeHubResource* n);
 	bool exists(vector<LevelEntity*>* vector, LevelEntity* to_find);

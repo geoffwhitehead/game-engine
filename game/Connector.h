@@ -31,11 +31,11 @@ public:
 
 	);
 
-	Connector* left = nullptr;
-	Connector* right = nullptr;
+	Connector* left = 0;
+	Connector* right = 0;
 
-	NodeHub* left_node = nullptr;
-	NodeHub* right_node = nullptr;
+	NodeHub* left_node = 0;
+	NodeHub* right_node = 0;
 
 	time_point<system_clock> created_on;
 	Player* owner;

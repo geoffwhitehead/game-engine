@@ -22,7 +22,7 @@ void PhysicsObject::updateRenderObject() {
 PhysicsObject::~PhysicsObject(){
 }
 
-Vector3& PhysicsObject::getPos() { 
+Vector3 PhysicsObject::getPos() { 
 	return Vector3(body->GetPosition().x, body->GetPosition().y, start_pos.z);
 }
 
@@ -31,6 +31,7 @@ void PhysicsObject::update(float dt) {
 };
 
 void PhysicsObject::createFixture(b2Shape* shape, bool is_sensor) {
+	
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = shape;
 	if (is_sensor) {

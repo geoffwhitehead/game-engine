@@ -25,6 +25,13 @@
 #define explosion4 "ex4"
 #define con_placed "beep1"
 #define con_down "beep2"
+#define surge "surge"
+#define shield_collision "shield_collision"
+#define surge_init "sweep"
+#define repair "repair"
+#define repair2 "repair2"
+#define start "start"
+#define end "end"
 
 int r;
 int min = 1;
@@ -125,7 +132,25 @@ void GameAudio::handleEvents() {
 		case GameLogic::eAudioEvents::AE_CONNECTOR_DOWN:
 			am->play2D(con_down);
 			break;
-			
+		case GameLogic::eAudioEvents::AE_SURGE_EXPLOSION:
+			am->play2D(surge);
+			break;
+		case GameLogic::eAudioEvents::AE_SHIELD_COLLISION:
+			am->play2D(shield_collision);
+			break;
+		case GameLogic::eAudioEvents::AE_SURGE_EXPLOSION_INIT:
+			am->play2D(surge_init);
+			break;
+		case GameLogic::eAudioEvents::AE_REPAIR:
+			am->play2D(repair);
+			am->play2D(repair2);
+			break;
+		case GameLogic::eAudioEvents::AE_START:
+			am->play2D(start);
+			break;
+		case GameLogic::eAudioEvents::AE_END:
+			am->play2D(end);
+			break;
 		}
 	}
 }
