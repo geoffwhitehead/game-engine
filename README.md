@@ -1,88 +1,77 @@
-# Project Title
+# Lightweight OpenGL 2D Game Engine
 
-One Paragraph of project description goes here
+A lightweight game engine i created in OpenGL. It uses the NCLGL framework, JsonCPP, Klang Audio, and Box2d.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisities
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+Clone and run the engine with Visual Studio. It contains a copy of the moonbase commander strategy game i created to demo the engine. Check the game/ folder to get an idea of how to use the engine.
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
-
-Stay what the step will be
-
-```
-Give the example
-```
-
-And repeat
+To create a game you will need to extend the engine base classes in order to use their functionality.
+Inlude the following base classes and then instantiate them in the main class for your game:
 
 ```
-until finished
+#include "../engine-base/Camera.h"
+#include "../engine-base/GameManager.h"
+#include "../engine-audio/AudioManager.h"
+#include "../engine-input/InputManager.h"
+#include "../engine-base/GameLogicManager.h"
+#include "../engine-physics/PhysicsManager.h"
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+These are known as system "system managers". Each "system manager" can have "sub systems" which you can register with it. Sub systems must use the base class SubSystem and can contain all your game code.
 
 ```
-Give an example
+First initiate the system Manager.
+GameManager *gm = new GameManager(W_X, W_Y); // provide the screen size X and Y
+```
+You can then instantiate all the other system managers shown above.
+eg.
+
+```
+GameLogicManager* glm = new GameLogicManager();
+```
+Then add the instantiated systemManagers to the game manager
+```
+gm->addSystemManager(glm);
 ```
 
-### And coding style tests
+Excluding the gameManager, each manager contains a function called addSubSystem(). You can create game classes that have "SubSytem" as their base class and then register them with the manager using the addSubSystem() method. By doing this, your game classes will be called once per frame.
+```
+class GameLogic :
+	public SubSystem
+```
+You will have to create certain methods such as init() when you do this.
 
-Explain what these tests test and why
+Then instantiate and register your created game classes to its manager. eg.
 
 ```
-Give an example
+GameLogic* gl = new GameLogic(gm, glm, pm->b2_world, am, camera); // in this case (shown in the game demo) my GameLogic class requires a reference to the GameManager, GameLogicManager, the box2d world, AudioManager, and the camera instance.
+
+glm->addSubSystem(gl);
 ```
 
-## Deployment
+Call GameManager()->run() to start the game.
 
-Add additional notes about how to deploy this on a live system
+```
+gm->run();
+```
 
 ## Built With
 
-* Dropwizard - Bla bla bla
-* Maven - Maybe
-* Atom - ergaerga
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+* Visual Studio 2015
+* Box2D
+* GLEW
+* SOIL
+* irrKlang
+* jsonCPP
+* NCLGL
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Geoff Whitehead - (https://github.com/geoffwhitehead)
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
-
